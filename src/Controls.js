@@ -19,11 +19,23 @@ export default class Controls extends Component {
 
   };
 
+  addToBasket() {
+    alert('Not implemented');
+  }
+
+  addToDish() {
+    alert('Not implemented');
+  }
+
   render() {
     const {  } = this.props;
     return <div style={styles.container}>
-      <button style={styles.button}>Add an orange to your basket</button>
-      <button style={styles.button}>Add an orange to your disk</button>
+      <button style={styles.button} onClick={this.addToBasket}>
+        Add an orange to your basket
+      </button>
+      <button style={styles.button} onClick={this.addToDish}>
+        Add an orange to your dish
+      </button>
     </div>;
   }
 }
