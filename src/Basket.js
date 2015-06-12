@@ -5,19 +5,8 @@ import theme from './Theme';
 const styles = {
   container: {
     ...theme,
-    height: '12rem',
-    width: '12rem',
-    marginRight: '1.5rem',
-    marginBottom: '1.5rem',
-    padding: '1rem',
-    textAlign: 'center',
-    fontSize: '1rem',
-    lineHeight: 'normal',
-    float: 'left'
-  },
-  orange: {
-    width: 75,
-    height: 73
+    width: 450,
+    height: 450
   }
 };
 
@@ -32,39 +21,28 @@ const dustbinTarget = {
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop()
 }))
-export default class Dustbin extends Component {
+export default class Basket extends Component {
   static propTypes = {
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired,
     canDrop: PropTypes.bool.isRequired,
     accepts: PropTypes.arrayOf(PropTypes.string).isRequired,
-    lastDroppedItem: PropTypes.object,
     onDrop: PropTypes.func.isRequired
   };
 
   render() {
-    const { color, accepts, isOver, canDrop, connectDropTarget, lastDroppedItem } = this.props;
+    const { accepts, isOver, canDrop, connectDropTarget, lastDroppedItem } = this.props;
     const isActive = isOver && canDrop;
-    let backgroundColor = color;
+    let backgroundColor = 'darkkhaki';
     if (isActive) {
       backgroundColor = 'darkgreen';
     } else if (canDrop) {
-      backgroundColor = 'darkkhaki';
+      backgroundColor = '#69F';
     }
 
     return connectDropTarget(
       <div style={{ ...styles.container, backgroundColor }}>
-
-        {isActive ?
-          'Release to drop' :
-          'This dustbin accepts: ' + accepts.join(', ')
-        }
-
-        {lastDroppedItem &&
-          <p>Last dropped: {JSON.stringify(lastDroppedItem)}</p>
-        }
-
-        <img style={styles.orange} src="/images/orange.png" />
+        { isActive ? 'Release to drop' : 'Your basket' }
       </div>
     );
   }

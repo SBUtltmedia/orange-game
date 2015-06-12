@@ -1,7 +1,4 @@
 export default {
-    borderRadius: 10,
-    backgroundColor: '#ffad00',
-    color: '#000',
+    borderRadius: 16,
     fontFamily: 'comic sans ms, fantasy'
-
 };

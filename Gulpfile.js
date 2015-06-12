@@ -39,10 +39,18 @@ gulp.task('html:copy', function() {
         .pipe(copy(paths.build_path));
 });
 
+gulp.task('css:copy', function() {
+    return gulp.src('style.css')
+        .pipe(copy(paths.build_path));
+});
+
 gulp.task('server:run', function() {
     server.listen( { path: paths.server_file } );
 });
 
 gulp.task('default', function() {
-    runSequence(['client:browserify', 'images:copy', 'html:copy'], 'server:run');
+    runSequence(
+      ['client:browserify', 'images:copy', 'html:copy', 'css:copy'],
+      'server:run'
+    );
 });
