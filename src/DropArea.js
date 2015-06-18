@@ -34,7 +34,7 @@ export default class DropArea extends Component {
   };
 
   render() {
-    const { name, oranges, accepts, isOver, canDrop, connectDropTarget } = this.props;
+    const { name, label, oranges, accepts, isOver, canDrop, connectDropTarget } = this.props;
 	  const isActive = isOver && canDrop;
     let backgroundColor = 'darkkhaki';
     if (isActive) {
@@ -50,7 +50,7 @@ export default class DropArea extends Component {
 	  >
           <div style={styles.inner}>
               <p>{ isActive ? 'Release to drop' : name }</p>
-              <p>Oranges: { oranges }</p>
+              <p>{label}: { oranges }</p>
               {
                   Array.apply(0, Array(oranges)).map((x, i) => {
                       return <Orange key={i} />;
