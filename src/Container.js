@@ -39,7 +39,7 @@ export default class Container extends Component {
       <div style={styles.container}>
           <div style={styles.row}>
               <Basket onDrop={this.onBasketDrop.bind(this)} oranges={this.state.basket} />
-              <Controls oranges={this.state.oranges} />
+              <Controls onNewDay={this.onNewDay.bind(this)} oranges={this.state.oranges} />
     	        <Dish onDrop={this.onDishDrop.bind(this)} oranges={this.state.dish} />
           </div>
           <div style={styles.row}>

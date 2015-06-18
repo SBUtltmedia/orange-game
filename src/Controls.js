@@ -16,10 +16,14 @@ const styles = {
 };
 
 export default class Controls extends Component {
+  static propTypes = {
+    onNewDay: PropTypes.func.isRequired
+  };
   render() {
+    const { onNewDay } = this.props;
     return <div style={styles.container}>
 	     <OrangeBox {...this.props} />
-       <button style={styles.button}>Let a new day begin</button>
+       <button style={styles.button} onClick={onNewDay}>Let a new day begin</button>
     </div>;
   }
 }
