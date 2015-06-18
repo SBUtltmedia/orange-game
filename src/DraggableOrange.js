@@ -1,12 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { DragSource } from 'react-dnd';
 import ItemTypes from './ItemTypes';
-
-const style = {
-    width: 75,
-    height: 73,
-    margin: 5
-};
+import Orange from './Orange';
 
 const boxSource = {
   beginDrag(props) {
@@ -30,7 +25,7 @@ export default class DraggableOrange extends Component {
     const { connectDragSource, isDragging } = this.props;
     const opacity = isDragging ? 0.4 : 1;
 	   return connectDragSource(
-       <img style={{...style, opacity}} src="/images/orange.png" />
+      <Orange style={{opacity}} src="/images/orange.png" />
     );
   }
 }
