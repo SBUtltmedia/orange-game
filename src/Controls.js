@@ -17,7 +17,7 @@ export default class Controls extends Component {
   render() {
     const {  } = this.props;
     return <div style={styles.container}>
-	  <OrangeBox/>
+	     <OrangeBox {...this.props} />
     </div>;
   }
 }

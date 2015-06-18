@@ -4,17 +4,22 @@ import { verticalCenter } from './Themes';
 
 const styles = {
     box: {
+        ...verticalCenter,
         backgroundColor: 'yellow',
         width: "100%",
-        marginTop: "70%",
         height: "30%"
     }
 };
 
 export default class OrangeBox extends Component {
   render() {
+    const { oranges } = this.props;
     return <div style={styles.box}>
-      <DraggableOrange foo="blah"/>
+        {
+            Array.apply(0, Array(oranges)).map((x, i) => {
+              return <DraggableOrange key={i} />;
+            })
+        }
     </div>;
   }
 l}

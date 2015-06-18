@@ -6,6 +6,7 @@ import ItemTypes from './ItemTypes';
 const styles = {
   container: {
     ...areaTheme,
+    textAlign: 'center'
   }
 };
 
@@ -30,8 +31,7 @@ export default class DropArea extends Component {
   };
 
   render() {
-  const { accepts, isOver, canDrop, connectDropTarget } = this.props;
-   //const {connectDropTarget, isOver, canDrop, accepts, onDrop} = this.props;
+    const { name, oranges, accepts, isOver, canDrop, connectDropTarget } = this.props;
 	  const isActive = isOver && canDrop;
     let backgroundColor = 'darkkhaki';
     if (isActive) {
@@ -45,7 +45,8 @@ export default class DropArea extends Component {
 //	  		accepts={[ItemTypes.ORANGE]}
   //            onDrop={(item) => this.handleDrop()}
 	  >
-        { isActive ? 'Release to drop' : 'Your basket' }
+        <p>{ isActive ? 'Release to drop' : name }</p>
+        <p>Oranges: { oranges }</p>
       </div>
     );
   }

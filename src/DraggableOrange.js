@@ -28,7 +28,7 @@ export default class DraggableOrange extends Component {
   render() {
     const { connectDragSource, isDragging } = this.props;
     const opacity = isDragging ? 0.4 : 1;
-	return connectDragSource(
+	   return connectDragSource(
       <img style={{...style, opacity}} src="/images/orange.png" />
     );
   }

@@ -6,8 +6,9 @@ export const areaTheme = {
 };
 
 export const verticalCenter = {
+    position: 'relative',
     top: '50%',
-    '-webkit-transform': 'translateY(-50%)',
-    '-ms-transform': 'translateY(-50%)',
+    WebkitTransform: 'translateY(-50%)',
+    msTransform: 'translateY(-50%)',
     transform: 'translateY(-50%)'
 };

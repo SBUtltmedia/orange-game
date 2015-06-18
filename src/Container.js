@@ -23,7 +23,9 @@ export default class Container extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+        oranges: 3,
+        basket: 0,
+        dish: 0
     };
   }
 
@@ -36,18 +38,24 @@ export default class Container extends Component {
 
     return (
       <div style={styles.container}>
-          <Basket
-           />
-          <Controls />
-		  <Dish/>
+          <Basket onDrop={this.onBasketDrop.bind(this)} {...this.state} />
+          <Controls {...this.state} />
+	        <Dish onDrop={this.onDishDrop.bind(this)} {...this.state} />
       </div>
     );
   }
 
-  handleDrop() {
-    console.log("You dropped an orange!");
-    this.setState(update(this.state, {
+  onBasketDrop() {
+    this.setState({
+        oranges: this.state.oranges - 1,
+        basket: this.state.basket + 1
+    });
+  }
 
-    }));
+  onDishDrop() {
+    this.setState({
+        oranges: this.state.oranges - 1,
+        dish: this.state.dish + 1
+    });
   }
 }

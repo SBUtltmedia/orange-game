@@ -5,15 +5,9 @@ import ItemTypes from './ItemTypes';
 export default class Basket{
 
   render() {
-
-    return (
-<DropArea
-
-		  accepts={[ItemTypes.ORANGE]}
-              onDrop={(item) => this.handleDrop()}
->
-{this.props.children}
-</DropArea>
-    );
+    return <DropArea accepts={[ItemTypes.ORANGE]} name="Basket"
+                onDrop={this.props.onDrop} oranges={this.props.basket}>
+        {this.props.children}
+    </DropArea>;
   }
 }
