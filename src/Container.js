@@ -7,13 +7,18 @@ import Controls from './Controls';
 import OrangeBox from './OrangeBox';
 import Basket from './Basket';
 import Dish from './Dish';
+import Stats from './Stats';
+import { areaTheme } from './Themes';
 
 const styles = {
   container: {
-    display: "flex",
     backgroundColor: '#ffad00',
     color: '#000',
     height: "100%"
+  },
+  row: {
+      display: "flex",
+      height: areaTheme.height + areaTheme.margin
   }
 }
 
@@ -31,9 +36,14 @@ export default class Container extends Component {
   render() {
     return (
       <div style={styles.container}>
-          <Basket onDrop={this.onBasketDrop.bind(this)} oranges={this.state.basket} />
-          <Controls oranges={this.state.oranges} />
-	        <Dish onDrop={this.onDishDrop.bind(this)} oranges={this.state.dish} />
+          <div style={styles.row}>
+              <Basket onDrop={this.onBasketDrop.bind(this)} oranges={this.state.basket} />
+              <Controls oranges={this.state.oranges} />
+    	        <Dish onDrop={this.onDishDrop.bind(this)} oranges={this.state.dish} />
+          </div>
+          <div style={styles.row}>
+              <Stats />
+          </div>
       </div>
     );
   }

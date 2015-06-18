@@ -11,17 +11,12 @@ const styles = {
     ...buttonTheme,
     margin: 16,
     position: 'relative',
-    top: 120
+    top: 50
   }
 };
 
 export default class Controls extends Component {
-  static propTypes = {
-
-  };
-
   render() {
-    const {  } = this.props;
     return <div style={styles.container}>
 	     <OrangeBox {...this.props} />
        <button style={styles.button}>Let a new day begin</button>

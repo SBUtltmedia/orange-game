@@ -1,7 +1,7 @@
 export const areaTheme = {
     borderRadius: 16,
     width: "450px",
-    height: "450px",
+    height: "350px",
     margin: 10,
     textAlign: 'center',
     fontFamily: 'comic sans ms, fantasy'
