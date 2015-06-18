@@ -3,8 +3,13 @@ export const areaTheme = {
     width: "450px",
     height: "450px",
     margin: 10,
+    textAlign: 'center',
     fontFamily: 'comic sans ms, fantasy'
 };
+
+export const buttonTheme = {
+    borderRadius: 16
+}
 
 export const verticalCenter = {
     position: 'relative',

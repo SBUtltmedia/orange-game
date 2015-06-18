@@ -5,8 +5,7 @@ import ItemTypes from './ItemTypes';
 
 const styles = {
   container: {
-    ...areaTheme,
-    textAlign: 'center'
+    ...areaTheme
   },
   inner: {
       ...verticalCenter
