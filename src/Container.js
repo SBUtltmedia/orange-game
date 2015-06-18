@@ -29,7 +29,8 @@ export default class Container extends Component {
     this.state = {
         oranges: 10,
         basket: 0,
-        dish: 0
+        dish: 0,
+        totalDays: 0
     };
   }
 
@@ -42,23 +43,35 @@ export default class Container extends Component {
     	        <Dish onDrop={this.onDishDrop.bind(this)} oranges={this.state.dish} />
           </div>
           <div style={styles.row}>
-              <Stats />
+              <Stats totalDays={this.state.totalDays} />
           </div>
       </div>
     );
   }
 
   onBasketDrop() {
-    this.setState({
-        oranges: this.state.oranges - 1,
-        basket: this.state.basket + 1
-    });
+      this.increment('basket');
+      this.decrement('oranges');
   }
 
   onDishDrop() {
-    this.setState({
-        oranges: this.state.oranges - 1,
-        dish: this.state.dish + 1
-    });
+      this.increment('dish');
+      this.decrement('oranges');
+  }
+
+  onNewDay() {
+      this.increment('totalDays');
+  }
+
+  increment(field) {
+      this.setState({
+        field: this.state[field] += 1
+      });
+  }
+
+  decrement(field) {
+      this.setState({
+        field: this.state[field] -= 1
+      });
   }
 }

@@ -18,10 +18,11 @@ export default class Stats extends Component {
   };
 
   render() {
-    const {  } = this.props;
+    const { totalDays } = this.props;
     return <div style={styles.container}>
         <div style={styles.inner}>
-	         Health points, days, etc.
+	         <p>Health points, days, etc.</p>
+           <p>Total days: {totalDays}</p>
        </div>
     </div>;
   }
