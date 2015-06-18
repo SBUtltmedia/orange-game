@@ -1,16 +1,11 @@
 import React, { PropTypes, Component } from 'react';
-import theme from './Theme';
+import { areaTheme } from './Themes';
+import OrangeBox from './OrangeBox';
 
 const styles = {
   container: {
-    ...theme,
+    ...areaTheme,
     backgroundColor: '#F7EAC8',
-    width: 450,
-    height: 450
-  },
-  button: {
-    ...theme,
-    margin: 16
   }
 };
 
@@ -19,23 +14,10 @@ export default class Controls extends Component {
 
   };
 
-  addToBasket() {
-    alert('Not implemented');
-  }
-
-  addToDish() {
-    alert('Not implemented');
-  }
-
   render() {
     const {  } = this.props;
     return <div style={styles.container}>
-      <button style={styles.button} onClick={this.addToBasket}>
-        Add an orange to your basket
-      </button>
-      <button style={styles.button} onClick={this.addToDish}>
-        Add an orange to your dish
-      </button>
+	  <OrangeBox/>
     </div>;
   }
 }

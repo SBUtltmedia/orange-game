@@ -25,10 +25,6 @@ gulp.task('client:browserify', function () {
         .pipe(gulp.dest(paths.build_path));
 });
 
-gulp.task('watch', ['default'], function () {
-    gulp.watch(paths.scripts, ['client:browserify']);
-});
-
 gulp.task('images:copy', function() {
     return gulp.src(paths.images)
         .pipe(copy(paths.build_path));
@@ -53,4 +49,8 @@ gulp.task('default', function() {
       ['client:browserify', 'images:copy', 'html:copy', 'css:copy'],
       'server:run'
     );
+});
+
+gulp.task('watch', ['default'], function () {
+    gulp.watch(paths.scripts, ['client:browserify']);
 });

@@ -6,6 +6,7 @@ import update from 'react/lib/update';
 import Controls from './Controls';
 import OrangeBox from './OrangeBox';
 import Basket from './Basket';
+import Dish from './Dish';
 
 const styles = {
   container: {
@@ -35,11 +36,10 @@ export default class Container extends Component {
 
     return (
       <div style={styles.container}>
-          <Basket accepts={[ItemTypes.ORANGE]}
-              onDrop={(item) => this.handleDrop()}
+          <Basket
            />
           <Controls />
-          <OrangeBox />
+		  <Dish/>
       </div>
     );
   }

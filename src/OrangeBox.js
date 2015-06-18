@@ -1,20 +1,20 @@
 import React, { PropTypes, Component } from 'react';
-import theme from './Theme';
 import DraggableOrange from './DraggableOrange';
+import { verticalCenter } from './Themes';
 
 const styles = {
     box: {
-      ...theme,
-      backgroundColor: 'yellow',
-      width: 450,
-      height: 450
+        backgroundColor: 'yellow',
+        width: "100%",
+        marginTop: "70%",
+        height: "30%"
     }
 };
 
 export default class OrangeBox extends Component {
   render() {
     return <div style={styles.box}>
-      <DraggableOrange />
+      <DraggableOrange foo="blah"/>
     </div>;
   }
-}
+l}

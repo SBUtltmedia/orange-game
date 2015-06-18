@@ -1,12 +1,11 @@
 import React, { PropTypes, Component } from 'react';
 import { DropTarget } from 'react-dnd';
-import theme from './Theme';
+import { areaTheme } from './Themes';
+import ItemTypes from './ItemTypes';
 
 const styles = {
   container: {
-    ...theme,
-    width: 450,
-    height: 450
+    ...areaTheme,
   }
 };
 
@@ -21,7 +20,7 @@ const dustbinTarget = {
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop()
 }))
-export default class Basket extends Component {
+export default class DropArea extends Component {
   static propTypes = {
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired,
@@ -31,8 +30,9 @@ export default class Basket extends Component {
   };
 
   render() {
-    const { accepts, isOver, canDrop, connectDropTarget, lastDroppedItem } = this.props;
-    const isActive = isOver && canDrop;
+  const { accepts, isOver, canDrop, connectDropTarget } = this.props;
+   //const {connectDropTarget, isOver, canDrop, accepts, onDrop} = this.props;
+	  const isActive = isOver && canDrop;
     let backgroundColor = 'darkkhaki';
     if (isActive) {
       backgroundColor = 'darkgreen';
@@ -41,7 +41,10 @@ export default class Basket extends Component {
     }
 
     return connectDropTarget(
-      <div style={{ ...styles.container, backgroundColor }}>
+      <div style={{ ...styles.container, backgroundColor }}
+//	  		accepts={[ItemTypes.ORANGE]}
+  //            onDrop={(item) => this.handleDrop()}
+	  >
         { isActive ? 'Release to drop' : 'Your basket' }
       </div>
     );
