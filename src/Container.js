@@ -31,9 +31,9 @@ export default class Container extends Component {
   render() {
     return (
       <div style={styles.container}>
-          <Basket onDrop={this.onBasketDrop.bind(this)} {...this.state} />
-          <Controls {...this.state} />
-	        <Dish onDrop={this.onDishDrop.bind(this)} {...this.state} />
+          <Basket onDrop={this.onBasketDrop.bind(this)} oranges={this.state.basket} />
+          <Controls oranges={this.state.oranges} />
+	        <Dish onDrop={this.onDishDrop.bind(this)} oranges={this.state.dish} />
       </div>
     );
   }

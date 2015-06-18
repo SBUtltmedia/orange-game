@@ -5,8 +5,7 @@ import ItemTypes from './ItemTypes';
 export default class Dish {
 
   render() {
-    return <DropArea accepts={[ItemTypes.ORANGE]} name="Dish"
-                onDrop={this.props.onDrop} oranges={this.props.dish}>
+    return <DropArea accepts={[ItemTypes.ORANGE]} name="Dish" {...this.props}>
         {this.props.children}
     </DropArea>;
   }
