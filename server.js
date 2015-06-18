@@ -1,7 +1,7 @@
 var express = require('express'),
        path = require('path'),
         app = express(),
-       port = 3000;
+       port = process.env.PORT || 5000;;
 
 // Include static assets. Not advised for production
 app.use(express.static(path.join(__dirname, 'build')));
