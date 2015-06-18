@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { DropTarget } from 'react-dnd';
 import { areaTheme, verticalCenter } from './Themes';
 import ItemTypes from './ItemTypes';
+import DraggableOrange from './DraggableOrange';
 
 const styles = {
   container: {
@@ -50,6 +51,11 @@ export default class DropArea extends Component {
           <div style={styles.inner}>
               <p>{ isActive ? 'Release to drop' : name }</p>
               <p>Oranges: { oranges }</p>
+              {
+                  Array.apply(0, Array(oranges)).map((x, i) => {
+                      return <DraggableOrange key={i} />;
+                  })
+              }
           </div>
       </div>
     );

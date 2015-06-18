@@ -17,7 +17,7 @@ export default class OrangeBox extends Component {
     return <div style={styles.box}>
         {
             Array.apply(0, Array(oranges)).map((x, i) => {
-              return <DraggableOrange key={i} />;
+                return <DraggableOrange key={i} />;
             })
         }
     </div>;
