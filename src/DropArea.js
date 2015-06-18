@@ -1,12 +1,15 @@
 import React, { PropTypes, Component } from 'react';
 import { DropTarget } from 'react-dnd';
-import { areaTheme } from './Themes';
+import { areaTheme, verticalCenter } from './Themes';
 import ItemTypes from './ItemTypes';
 
 const styles = {
   container: {
     ...areaTheme,
     textAlign: 'center'
+  },
+  inner: {
+      ...verticalCenter
   }
 };
 
@@ -45,8 +48,10 @@ export default class DropArea extends Component {
 //	  		accepts={[ItemTypes.ORANGE]}
   //            onDrop={(item) => this.handleDrop()}
 	  >
-        <p>{ isActive ? 'Release to drop' : name }</p>
-        <p>Oranges: { oranges }</p>
+          <div style={styles.inner}>
+              <p>{ isActive ? 'Release to drop' : name }</p>
+              <p>Oranges: { oranges }</p>
+          </div>
       </div>
     );
   }

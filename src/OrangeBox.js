@@ -7,7 +7,7 @@ const styles = {
         ...verticalCenter,
         backgroundColor: 'yellow',
         width: "100%",
-        height: "30%"
+        height: 250
     }
 };
 

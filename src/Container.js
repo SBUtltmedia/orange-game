@@ -13,8 +13,7 @@ const styles = {
     display: "flex",
     backgroundColor: '#ffad00',
     color: '#000',
-    height: "100%",
-    width: "100%"
+    height: "100%"
   }
 }
 
@@ -23,19 +22,13 @@ export default class Container extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        oranges: 3,
+        oranges: 10,
         basket: 0,
         dish: 0
     };
   }
 
-  isDropped(boxName) {
-    return this.state.droppedBoxNames.indexOf(boxName) > -1;
-  }
-
   render() {
-    const { boxes, dustbins } = this.state;
-
     return (
       <div style={styles.container}>
           <Basket onDrop={this.onBasketDrop.bind(this)} {...this.state} />

@@ -4,7 +4,8 @@ import ItemTypes from './ItemTypes';
 
 const style = {
     width: 75,
-    height: 73
+    height: 73,
+    margin: 5
 };
 
 const boxSource = {
