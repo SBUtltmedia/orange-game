@@ -56,3 +56,4 @@ gulp.task('watch', ['default'], function () {
 });
 
 gulp.task('heroku:dev', ['default']);
+gulp.task('build', ['default']);
