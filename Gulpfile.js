@@ -55,4 +55,4 @@ gulp.task('watch', ['default'], function () {
     gulp.watch(paths.scripts, ['client:browserify']);
 });
 
-grunt.registerTask('heroku:production', ['default']);
+gulp.task('heroku:dev', ['default']);
