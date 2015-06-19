@@ -19,6 +19,13 @@
   "license": "MIT",
   "homepage": "http://stonybrook.edu/tlt",
   "devDependencies": {
+
+  },
+  "dependencies": {
+    "express": "^4.12.4",
+    "react": "^0.13.3",
+    "react-dnd": "^1.1.2",
+    "react-tools": "^0.13.3",
     "babel-core": "^5.4.7",
     "babel-eslint": "^3.1.9",
     "babel-loader": "^5.1.2",
@@ -32,11 +39,5 @@
     "gulp-sourcemaps": "^1.5.2",
     "gulp-watch": "^4.2.4",
     "run-sequence": "^1.1.0"
-  },
-  "dependencies": {
-    "express": "^4.12.4",
-    "react": "^0.13.3",
-    "react-dnd": "^1.1.2",
-    "react-tools": "^0.13.3"
   }
 }
