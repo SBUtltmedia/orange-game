@@ -12,11 +12,15 @@ const styles = {
       ...verticalCenter
   }
 };
-
 const dustbinTarget = {
   drop(props, monitor) {
     props.onDrop(monitor.getItem());
+  },
+  hover(props,monitor)
+  {
+	props.onHover(monitor.getItemType());
   }
+
 };
 
 @DropTarget(props => props.accepts, dustbinTarget, (connect, monitor) => ({
@@ -45,8 +49,6 @@ export default class DropArea extends Component {
 
     return connectDropTarget(
       <div style={{ ...styles.container, backgroundColor }}
-//	  		accepts={[ItemTypes.ORANGE]}
-  //            onDrop={(item) => this.handleDrop()}
 	  >
           <div style={styles.inner}>
               <p>{ isActive ? 'Release to drop' : name }</p>
