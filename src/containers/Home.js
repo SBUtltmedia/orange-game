@@ -23,9 +23,7 @@ const styles = {
   }
 }
 
-@connect(state => ({
-    state: state
-}))
+@connect(state => ({}))
 @DragDropContext(HTML5Backend)
 export default class Container extends Component {
 
