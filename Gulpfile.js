@@ -22,7 +22,7 @@ var paths = {
 
 gulp.task('client:browserify', function () {
     return browserify(paths.main_client_script, {
-              debug: true //it's necessary to a source map generate
+        debug: true //it's necessary to a source map generate
     })
     .transform(babelify, { stage: 0, optional: ["runtime"] })
     .bundle()

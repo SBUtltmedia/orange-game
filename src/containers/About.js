@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
     page: {
         margin: 'auto',
         fontSize: 14,
-        width: 400
+        width: 400,
+        height: '100%'
     },
     label: {
         float: "left",
@@ -21,14 +22,14 @@ export default class About {
         return <div styles={[styles.page]}>
             <p>
                 <div styles={[styles.label]}>Github:</div>
-                <a href="https://github.com/kenfehling/isomorphic-react-example">
-                    kenfehling/isomorphic-react-example
+                <a href="https://github.com/SBUtltmedia/orange-game">
+                    SBUtltmedia/orange-game
                 </a>
             </p>
             <p>
                 <div styles={[styles.label]}>forked from:</div>
-                <a href="https://github.com/DavidWells/isomorphic-react-example">
-                    DavidWells/isomorphic-react-example
+                <a href="https://github.com/kenfehling/isomorphic-react-example/tree/es6-flux-redux-jest">
+                    kenfehling/isomorphic-react-example
                 </a>
             </p>
         </div>;

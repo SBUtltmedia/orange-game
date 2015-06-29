@@ -9,24 +9,65 @@ const styles = {
   },
   inner: {
       ...verticalCenter
+  },
+  value: {
+    fontWeight: 'bold'
   }
 };
 
+function getFitnessChangeColor(change) {
+    if (change > 0) {
+      return 'green';
+    }
+    else if (change < 0) {
+      return 'red';
+    }
+    else {
+      return 'black';
+    }
+}
+
+function formatChange(change) {
+    if (change > 0) {
+      return '+' + change;
+    }
+    else {
+      return change;
+    }
+}
+
 @connect(state => ({
-    day: state.stats.day
+    stats: state.stats
 }))
 export default class Stats extends Component {
   static propTypes = {
-      day: PropTypes.number.isRequired
+      stats: PropTypes.object.isRequired
   };
 
   render() {
-    const { day } = this.props;
+    const { stats } = this.props;
+    const change = stats.fitnessChange;
+    var fitnessChangeColor = getFitnessChangeColor(change);
 
     return <div style={styles.container}>
         <div style={styles.inner}>
-	         <p>Health points, days, etc.</p>
-           <p>Day: {day}</p>
+           <p>
+              <span>Day:</span>
+              &nbsp;
+              <span style={styles.value}>{stats.day}</span>
+          </p>
+           <p>
+              <span>Fitness:</span>
+              &nbsp;
+              <span style={styles.value}>{stats.fitness}</span>
+           </p>
+           <p>
+              <span>Change:</span>
+              &nbsp;
+              <span style={{...styles.value, color: fitnessChangeColor}}>
+                  {formatChange(change)}
+              </span>
+           </p>
        </div>
     </div>;
   }

@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 const styles = StyleSheet.create({
     menu: {
         textAlign: "center",
-        marginTop: 4,
+        paddingTop: 16,
         marginBottom: 16
     },
     item: {
