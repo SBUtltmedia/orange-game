@@ -69,3 +69,6 @@ gulp.task('watch', ['default'], function () {
     gulp.watch([paths.scripts], ['server:restart']);
     gulp.watch(paths.sass, ['sass']);
 });
+
+gulp.task('heroku:dev', ['default']);
+gulp.task('build', ['default']);

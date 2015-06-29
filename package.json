@@ -7,7 +7,9 @@
     "body-parser": "~1.0.0",
     "browserify": "^10.2.4",
     "cookie-parser": "~1.0.0",
-    "express": "~4.0.0",
+    "express": "~4.0.0"
+  },
+  "devDependencies": {
     "gulp": "~3.9.0",
     "gulp-concat": "~2.4.1",
     "gulp-copy": "0.0.2",
