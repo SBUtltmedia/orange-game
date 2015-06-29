@@ -4,7 +4,7 @@ import ItemTypes from './ItemTypes';
 import { connect } from 'redux/react';
 
 @connect(state => ({
-    oranges: state.oranges.basket
+    oranges: state.game.oranges.basket
 }))
 export default class Basket{
   static propTypes = {

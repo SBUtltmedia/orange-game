@@ -1,2 +1,1 @@
-export oranges from './oranges';
-export stats from './stats';
+export game from './game';

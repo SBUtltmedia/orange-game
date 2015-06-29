@@ -4,7 +4,7 @@ import ItemTypes from './ItemTypes';
 import { connect } from 'redux/react';
 
 @connect(state => ({
-    oranges: state.oranges.dish
+    oranges: state.game.oranges.dish
 }))
 export default class Dish {
   static propTypes = {

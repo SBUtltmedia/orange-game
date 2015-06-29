@@ -8,9 +8,7 @@ export function fetchOranges() {
   return dispatch => {
       dispatch({
           type: FETCH_ORANGES,
-          oranges: 7,
-          basketOranges: 0,
-          dishOranges: 0
+          oranges: 10
       });
     };
 }

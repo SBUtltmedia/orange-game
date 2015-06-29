@@ -13,22 +13,22 @@ const styles = {
 };
 
 @connect(state => ({
-    oranges: state.oranges.box
+    oranges: state.game.oranges.box
 }))
 export default class OrangeBox extends Component {
-  static propTypes = {
-      oranges: PropTypes.number.isRequired,
-      actions: PropTypes.object.isRequired
-  };
+    static propTypes = {
+        oranges: PropTypes.number.isRequired,
+        actions: PropTypes.object.isRequired
+    };
 
-  render() {
-    const { actions, oranges } = this.props;
-    return <div style={styles.box}>
-        {
-            Array.apply(0, Array(oranges)).map((x, i) => {
-                return <DraggableOrange key={i} />;
-            })
-        }
-    </div>;
-  }
+    render() {
+        const { actions, oranges } = this.props;
+        return <div style={styles.box}>
+            {
+                Array.apply(0, Array(oranges)).map((x, i) => {
+                    return <DraggableOrange key={i} />;
+                })
+            }
+        </div>;
+    }
 }

@@ -37,7 +37,7 @@ function formatChange(change) {
 }
 
 @connect(state => ({
-    stats: state.stats
+    stats: state.game
 }))
 export default class Stats extends Component {
   static propTypes = {
