@@ -9,8 +9,29 @@ const styles = {
         backgroundColor: 'yellow',
         width: "100%",
         height: 250
+    },
+    noOrangesMessage: {
+        ...verticalCenter
     }
 };
+
+function renderOranges(oranges) {
+    return <div style={styles.box}>
+        {
+            Array.apply(0, Array(oranges)).map((x, i) => {
+                return <DraggableOrange key={i} />;
+            })
+        }
+    </div>;
+}
+
+function renderNoOranges(oranges) {
+    return <div style={styles.box}>
+        <div style={style.noOrangesMessage}>
+            Sorry, no oranges today :(
+        </div>
+    </div>;
+}
 
 @connect(state => ({
     oranges: state.game.oranges.box
@@ -24,11 +45,7 @@ export default class OrangeBox extends Component {
     render() {
         const { actions, oranges } = this.props;
         return <div style={styles.box}>
-            {
-                Array.apply(0, Array(oranges)).map((x, i) => {
-                    return <DraggableOrange key={i} />;
-                })
-            }
+            { oranges > 0 ? renderOranges(oranges) : renderNoOranges() }
         </div>;
     }
 }

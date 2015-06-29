@@ -2,7 +2,7 @@ import { FETCH_ORANGES, DROP_IN_DISH, DROP_IN_BASKET, NEW_DAY }
         from '../constants/ActionTypes';
 
 function getRandomNumberOfOranges() {
-    return Math.round(Math.random() * 10) + 1;
+    return Math.round(Math.random() * 11);
 }
 
 const initialState = {
