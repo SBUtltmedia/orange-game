@@ -27,8 +27,8 @@ function renderOranges(oranges) {
 
 function renderNoOranges(oranges) {
     return <div style={styles.box}>
-        <div style={style.noOrangesMessage}>
-            Sorry, no oranges today :(
+        <div style={styles.noOrangesMessage}>
+            No oranges in box
         </div>
     </div>;
 }
