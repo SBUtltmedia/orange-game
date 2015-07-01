@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react/addons';
 import DraggableOrange from './DraggableOrange';
 import { verticalCenter } from '../styles/Themes';
 import { connect } from 'redux/react';
+import { range } from '../utils';
 
 const styles = {
     box: {
@@ -17,11 +18,7 @@ const styles = {
 
 function renderOranges(oranges) {
     return <div style={styles.box}>
-        {
-            Array.apply(0, Array(oranges)).map((x, i) => {
-                return <DraggableOrange key={i} />;
-            })
-        }
+        { range(oranges).map((x, i) => <DraggableOrange key={i} /> ) }
     </div>;
 }
 

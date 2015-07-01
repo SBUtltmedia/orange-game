@@ -1,4 +1,5 @@
 export const FETCH_ORANGES = 'FETCH_ORANGES';
-export const DROP_IN_BASKET = 'DROP_IN_BASKET';
-export const DROP_IN_DISH = 'DROP_IN_DISH';
+export const BOX_TO_BASKET = 'BOX_TO_BASKET';
+export const BOX_TO_DISH = 'BOX_TO_DISH';
+export const BASKET_TO_DISH = 'BASKET_TO_DISH';
 export const NEW_DAY = 'NEW_DAY';

@@ -14,7 +14,7 @@ export default class Dish {
 
   render() {
     const { actions, oranges } = this.props;
-    return <DropArea accepts={[ItemTypes.ORANGE]} onDrop={actions.dropInDish}
+    return <DropArea accepts={[ItemTypes.ORANGE]} onDrop={actions.boxToDish}
               name="Dish" label="Oranges eaten" oranges={oranges} />
   }
 }

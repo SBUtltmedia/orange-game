@@ -3,6 +3,7 @@ import { DropTarget } from 'react-dnd';
 import { areaTheme, verticalCenter } from '../styles/Themes';
 import ItemTypes from './ItemTypes';
 import Orange from './Orange';
+import { range } from '../utils';
 
 const styles = {
   container: {
@@ -36,26 +37,22 @@ export default class DropArea extends Component {
 
   render() {
     const { name, label, oranges, accepts, isOver, canDrop, connectDropTarget } = this.props;
-	  const isActive = isOver && canDrop;
+    const isActive = isOver && canDrop;
     let backgroundColor = 'darkkhaki';
     if (isActive) {
-      backgroundColor = 'darkgreen';
-    } else if (canDrop) {
-      backgroundColor = '#69F';
+        backgroundColor = 'darkgreen';
     }
-
+    else if (canDrop) {
+        backgroundColor = '#69F';
+    }
     return connectDropTarget(
-      <div style={{ ...styles.container, backgroundColor }}>
-          <div style={styles.inner}>
-              <p>{ isActive ? 'Release to drop' : name }</p>
-              <p>{label}: { oranges }</p>
-              {
-                  Array.apply(0, Array(oranges)).map((x, i) => {
-                      return <Orange key={i} />;
-                  })
-              }
-          </div>
-      </div>
+        <div style={{ ...styles.container, backgroundColor }}>
+            <div style={styles.inner}>
+                <p>{ isActive ? 'Release to drop' : name }</p>
+                <p>{label}: { oranges }</p>
+                { range(oranges).map((x, i) => <Orange key={i} />) }
+            </div>
+        </div>
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'isomorphic-fetch';
-import { FETCH_ORANGES, DROP_IN_BASKET, DROP_IN_DISH, NEW_DAY } from '../constants/ActionTypes';
+import { FETCH_ORANGES, BOX_TO_BASKET, BOX_TO_DISH, BASKET_TO_DISH, NEW_DAY } from '../constants/ActionTypes';
 import { API_HOST } from '../constants/Settings';
 
 // Right now it just fakes everything and doesn't use the API server
@@ -13,17 +13,22 @@ export function fetchOranges() {
     };
 }
 
-export function dropInBasket() {
+export function boxToBasket() {
   return {
-      type: DROP_IN_BASKET
+      type: BOX_TO_BASKET
   };
 }
 
-export function dropInDish() {
+export function boxToDish() {
   return {
-      type: DROP_IN_DISH
+      type: BOX_TO_DISH
   };
 }
+
+export function basketToDish() {
+  return {
+      type: BASKET_TO_DISH
+  };}
 
 export function newDay() {
   return {

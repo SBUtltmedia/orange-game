@@ -14,7 +14,7 @@ export default class Basket{
 
   render() {
     const { actions, oranges } = this.props;
-    return <DropArea accepts={[ItemTypes.ORANGE]} onDrop={actions.dropInBasket}
+    return <DropArea accepts={[ItemTypes.ORANGE]} onDrop={actions.boxToBasket}
               name="Basket" label="Oranges saved" oranges={oranges} />
   }
 }
