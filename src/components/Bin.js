@@ -1,14 +1,11 @@
 import React, { PropTypes, Component } from 'react/addons';
 import DraggableOrange from './DraggableOrange';
 import { DropTarget } from 'react-dnd';
-import { areaTheme, verticalCenter } from '../styles/Themes';
+import { verticalCenter } from '../styles/Themes';
 import { forRange } from '../utils';
 import ItemTypes from '../constants/ItemTypes';
 
 const styles = {
-  container: {
-    ...areaTheme
-  },
   inner: {
       ...verticalCenter
   }
@@ -47,7 +44,7 @@ export default class Bin extends Component {
     render() {
         const { style, name, label, oranges, isOver, canDrop, connectDropTarget } = this.props;
         const isActive = isOver && canDrop;
-        let backgroundColor = 'darkkhaki';
+        let backgroundColor = style.backgroundColor || 'darkkhaki';
         if (isActive) {
             backgroundColor = 'darkgreen';
         }
@@ -55,7 +52,7 @@ export default class Bin extends Component {
             backgroundColor = '#69F';
         }
         return connectDropTarget(
-            <div style={{ ...styles.container, ...style, backgroundColor }}>
+            <div style={{ ...style, backgroundColor }}>
                 <div style={styles.inner}>
                     <p>{ isActive ? 'Release to drop' : name }</p>
                     <p>{ label }: { oranges }</p>

@@ -27,6 +27,6 @@ export default class OrangeBox extends Component {
     render() {
         const { oranges, actions } = this.props;
         return <Bin style={styles.box} actions={actions}
-                    oranges={oranges} name="Box" />
+                    oranges={oranges} name="Box" showName={false} />
     }
 }

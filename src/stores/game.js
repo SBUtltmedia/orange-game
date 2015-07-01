@@ -2,7 +2,7 @@ import { FETCH_ORANGES, DROP_ORANGE, NEW_DAY }
         from '../constants/ActionTypes';
 
 function getRandomNumberOfOranges() {
-    return Math.round(Math.random() * 11);
+    return Math.floor(Math.random() * 11);
 }
 
 const initialState = {
@@ -19,17 +19,24 @@ const initialState = {
 export default function game(state=initialState, action) {
     switch (action.type) {
         case DROP_ORANGE:
-            console.log(action);
-            return {
-                oranges: {
-                    box: state.oranges.box - 1,
-                    dish: state.oranges.dish + 1,
-                    basket: state.oranges.basket
-                },
-                day: state.day,
-                fitness: state.fitness + 10 - state.oranges.dish,
-                fitnessChange: state.fitnessChange + 10 - state.oranges.dish
+        const source = action.source.toLowerCase();
+        const dest = action.dest.toLowerCase();
+            if (source === dest) {
+                return state;
             }
+            if (dest === 'dish') {
+                const fitnessBoost = 10 - state.oranges.dish;
+                state.fitness += fitnessBoost;
+                state.fitnessChange += fitnessBoost;
+            }
+            else if (source === 'dish') {
+                const fitnessBoost = state.oranges.dish - 11;
+                state.fitness += fitnessBoost;
+                state.fitnessChange += fitnessBoost;
+            }
+            state.oranges[source] -= 1;
+            state.oranges[dest] += 1;
+            return state;
         case NEW_DAY:
             return {
                 oranges: {

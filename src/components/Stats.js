@@ -37,35 +37,38 @@ function formatChange(change) {
 }
 
 @connect(state => ({
-    stats: state.game
+    day: state.game.day,
+    fitness: state.game.fitness,
+    fitnessChange: state.game.fitnessChange
 }))
 export default class Stats extends Component {
   static propTypes = {
-      stats: PropTypes.object.isRequired
+      day: PropTypes.number.isRequired,
+      fitness: PropTypes.number.isRequired,
+      fitnessChange: PropTypes.number.isRequired
   };
 
   render() {
-    const { stats } = this.props;
-    const change = stats.fitnessChange;
-    var fitnessChangeColor = getFitnessChangeColor(change);
+    const { day, fitness, fitnessChange } = this.props;
+    var fitnessChangeColor = getFitnessChangeColor(fitnessChange);
 
     return <div style={styles.container}>
         <div style={styles.inner}>
            <p>
               <span>Day:</span>
               &nbsp;
-              <span style={styles.value}>{stats.day}</span>
+              <span style={styles.value}>{day}</span>
           </p>
            <p>
               <span>Fitness:</span>
               &nbsp;
-              <span style={styles.value}>{stats.fitness}</span>
+              <span style={styles.value}>{fitness}</span>
            </p>
            <p>
               <span>Change:</span>
               &nbsp;
               <span style={{...styles.value, color: fitnessChangeColor}}>
-                  {formatChange(change)}
+                                {formatChange(fitnessChange)}
               </span>
            </p>
        </div>
