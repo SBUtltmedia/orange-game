@@ -32,6 +32,7 @@ export default class Dish {
   render() {
     const { oranges, actions } = this.props;
     return <Bin actions={actions} style={styles.container}
+                textual={true} graphical={true}
               name="Dish" label="Oranges eaten" oranges={oranges} />
   }
 }

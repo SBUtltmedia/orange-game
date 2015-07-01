@@ -22,6 +22,7 @@ export default class Basket{
   render() {
     const { actions, oranges } = this.props;
     return <Bin actions={actions} style={styles.container}
+                textual={true} graphical={true}
               name="Basket" label="Oranges saved" oranges={oranges} />
   }
 }

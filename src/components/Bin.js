@@ -25,6 +25,23 @@ function renderNoOranges(oranges) {
     return <div style={styles.inner}>Empty</div>;
 }
 
+function renderTextual(oranges, name, label, isActive) {
+    return <div>
+        <p>{ isActive ? 'Release to drop' : name }</p>
+        <p>{ label }: { oranges }</p>
+    </div>;
+}
+
+function renderGraphical(oranges, name) {
+    if (oranges > 0) {
+        return renderOranges(oranges, name);
+    }
+    else {
+        return renderNoOranges();
+    }
+}
+
+
 @DropTarget(ItemTypes.ORANGE, dustbinTarget, (connect, monitor) => ({
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
@@ -37,12 +54,14 @@ export default class Bin extends Component {
         canDrop: PropTypes.bool.isRequired,
         oranges: PropTypes.number.isRequired,
         style: PropTypes.object,
+        textual: PropTypes.bool,
+        graphical: PropTypes.bool,
         name: PropTypes.string.isRequired,
-        actions: PropTypes.object.isRequired
+        actions: PropTypes.object.isRequired,
     };
 
     render() {
-        const { style, name, label, oranges, isOver, canDrop, connectDropTarget } = this.props;
+        const { style, name, textual, graphical, label, oranges, isOver, canDrop, connectDropTarget } = this.props;
         const isActive = isOver && canDrop;
         let backgroundColor = style.backgroundColor || 'darkkhaki';
         if (isActive) {
@@ -54,9 +73,8 @@ export default class Bin extends Component {
         return connectDropTarget(
             <div style={{ ...style, backgroundColor }}>
                 <div style={styles.inner}>
-                    <p>{ isActive ? 'Release to drop' : name }</p>
-                    <p>{ label }: { oranges }</p>
-                    { oranges > 0 ? renderOranges(oranges, name) : renderNoOranges() }
+                    { textual ? renderTextual(oranges, name, label, isActive) : '' }
+                    { graphical ? renderGraphical(oranges, name) : '' }
                 </div>
             </div>
         );
