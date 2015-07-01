@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-import DropArea from './DropArea';
-import ItemTypes from './ItemTypes';
+import Bin from './Bin';
+import ItemTypes from '../constants/ItemTypes';
 import { connect } from 'redux/react';
 
 @connect(state => ({
@@ -14,7 +14,7 @@ export default class Basket{
 
   render() {
     const { actions, oranges } = this.props;
-    return <DropArea accepts={[ItemTypes.ORANGE]} onDrop={actions.boxToBasket}
+    return <Bin actions={actions}
               name="Basket" label="Oranges saved" oranges={oranges} />
   }
 }

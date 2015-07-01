@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { DragSource } from 'react-dnd';
-import ItemTypes from './ItemTypes';
+import ItemTypes from '../constants/ItemTypes';
 import Orange from './Orange';
 
 const boxSource = {
@@ -11,7 +11,7 @@ const boxSource = {
   }
 };
 
-@DragSource("orange", boxSource, (connect, monitor) => ({
+@DragSource(ItemTypes.ORANGE, boxSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
 }))

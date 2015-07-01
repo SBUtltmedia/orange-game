@@ -1,8 +1,7 @@
 import React, { PropTypes, Component } from 'react/addons';
-import DraggableOrange from './DraggableOrange';
 import { verticalCenter } from '../styles/Themes';
 import { connect } from 'redux/react';
-import { range } from '../utils';
+import Bin from './Bin';
 
 const styles = {
     box: {
@@ -16,20 +15,6 @@ const styles = {
     }
 };
 
-function renderOranges(oranges) {
-    return <div style={styles.box}>
-        { range(oranges).map((x, i) => <DraggableOrange key={i} source="Box" />) }
-    </div>;
-}
-
-function renderNoOranges(oranges) {
-    return <div style={styles.box}>
-        <div style={styles.noOrangesMessage}>
-            No oranges in box
-        </div>
-    </div>;
-}
-
 @connect(state => ({
     oranges: state.game.oranges.box
 }))
@@ -40,9 +25,8 @@ export default class OrangeBox extends Component {
     };
 
     render() {
-        const { actions, oranges } = this.props;
-        return <div style={styles.box}>
-            { oranges > 0 ? renderOranges(oranges) : renderNoOranges() }
-        </div>;
+        const { oranges, actions } = this.props;
+        return <Bin style={styles.box} actions={actions}
+                    oranges={oranges} name="Box" />
     }
 }
