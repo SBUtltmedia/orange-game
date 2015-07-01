@@ -14,24 +14,25 @@ export function fetchOranges() {
 }
 
 export function boxToBasket() {
-  return {
-      type: BOX_TO_BASKET
-  };
+    return {
+        type: BOX_TO_BASKET
+    };
 }
 
 export function boxToDish() {
-  return {
-      type: BOX_TO_DISH
-  };
+    return {
+        type: BOX_TO_DISH
+    };
 }
 
 export function basketToDish() {
-  return {
-      type: BASKET_TO_DISH
-  };}
+    return {
+        type: BASKET_TO_DISH
+    };
+}
 
 export function newDay() {
-  return {
-      type: NEW_DAY
-  };
+    return {
+        type: NEW_DAY
+    };
 }

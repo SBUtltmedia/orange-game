@@ -6,7 +6,7 @@ import Orange from './Orange';
 const boxSource = {
   beginDrag(props) {
     return {
-      name: props.name
+      source: props.source
     };
   }
 };
@@ -18,7 +18,8 @@ const boxSource = {
 export default class DraggableOrange extends Component {
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
-    isDragging: PropTypes.bool.isRequired
+    isDragging: PropTypes.bool.isRequired,
+    source: PropTypes.string.isRequired
   };
 
   render() {

@@ -12,9 +12,19 @@ export default class Dish {
     actions: PropTypes.object.isRequired
   };
 
+  onDrop(item) {
+      const { actions } = this.props;
+      if (item.source === 'Box') {
+          actions.boxToDish();
+      }
+      else {
+          actions.basketToDish();
+      }
+  }
+
   render() {
-    const { actions, oranges } = this.props;
-    return <DropArea accepts={[ItemTypes.ORANGE]} onDrop={actions.boxToDish}
+    const { oranges } = this.props;
+    return <DropArea accepts={[ItemTypes.ORANGE]} onDrop={this.onDrop.bind(this)}
               name="Dish" label="Oranges eaten" oranges={oranges} />
   }
 }

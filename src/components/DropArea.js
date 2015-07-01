@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { DropTarget } from 'react-dnd';
 import { areaTheme, verticalCenter } from '../styles/Themes';
 import ItemTypes from './ItemTypes';
-import Orange from './Orange';
+import DraggableOrange from './Orange';
 import { range } from '../utils';
 
 const styles = {
@@ -32,7 +32,8 @@ export default class DropArea extends Component {
     canDrop: PropTypes.bool.isRequired,
     accepts: PropTypes.arrayOf(PropTypes.string).isRequired,
     onDrop: PropTypes.func.isRequired,
-    oranges: PropTypes.number.isRequired
+    oranges: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired
   };
 
   render() {
@@ -49,8 +50,8 @@ export default class DropArea extends Component {
         <div style={{ ...styles.container, backgroundColor }}>
             <div style={styles.inner}>
                 <p>{ isActive ? 'Release to drop' : name }</p>
-                <p>{label}: { oranges }</p>
-                { range(oranges).map((x, i) => <Orange key={i} />) }
+                <p>{ label }: { oranges }</p>
+                { range(oranges).map((x, i) => <DraggableOrange key={i} source={name} />) }
             </div>
         </div>
     );

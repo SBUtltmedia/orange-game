@@ -18,7 +18,7 @@ const styles = {
 
 function renderOranges(oranges) {
     return <div style={styles.box}>
-        { range(oranges).map((x, i) => <DraggableOrange key={i} /> ) }
+        { range(oranges).map((x, i) => <DraggableOrange key={i} source="Box" />) }
     </div>;
 }
 
