@@ -22,7 +22,7 @@ function renderOranges(oranges, name) {
 }
 
 function renderNoOranges(oranges) {
-    return <div style={styles.inner}>Empty</div>;
+    return 'Empty';
 }
 
 function renderTextual(oranges, name, label, isActive) {
