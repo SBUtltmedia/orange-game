@@ -24,3 +24,8 @@ export const orangeStyle = {
     height: 73,
     margin: 5
 }
+
+export const dnd = {
+    isActive: 'darkgreen',
+    canDrop: '#69F'
+}
