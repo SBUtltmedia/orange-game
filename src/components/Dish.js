@@ -19,16 +19,6 @@ export default class Dish {
     actions: PropTypes.object.isRequired
   };
 
-  onDrop(item) {
-      const { actions } = this.props;
-      if (item.source === 'Box') {
-          actions.boxToDish();
-      }
-      else {
-          actions.basketToDish();
-      }
-  }
-
   render() {
     const { oranges, actions } = this.props;
     return <Bin actions={actions} style={styles.container}

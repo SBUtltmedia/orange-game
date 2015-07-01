@@ -41,7 +41,6 @@ function renderGraphical(oranges, name) {
     }
 }
 
-
 @DropTarget(ItemTypes.ORANGE, dustbinTarget, (connect, monitor) => ({
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
