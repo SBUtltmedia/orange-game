@@ -1,9 +1,7 @@
-var exports = module.exports = {}
-
 var orangeArray = [];
 var currentDay = 0;
 
-exports.returnOranges = function(day){
+export function returnOranges(day) {
     if (!orangeArray[day]) {
         orangeArray[day] = Math.floor(Math.random() * 11);
     }

@@ -2,6 +2,7 @@ var gulp        = require('gulp'),
     browserify  = require('browserify'),
     sass        = require('gulp-sass'),
     sourcemaps  = require('gulp-sourcemaps'),
+    babel       = require('gulp-babel'),
     babelify    = require('babelify'),
     copy        = require('gulp-copy'),
     server      = require('gulp-develop-server'),
@@ -16,9 +17,20 @@ var paths = {
     sass: ['src/**/*.s?ss'],
     main_client_script: 'src/main.js',
     main_sass: 'src/styles/main.scss',
-    server_file: 'server.js',
-    build_path: 'build/'
+    server_path: 'server/',
+    server_files: 'server/**/*.js',
+    main_server_script: 'server.js',
+    build_path: 'build/',
+    public_build_path: 'build/public/'
 };
+
+gulp.task('server:babel', function () {
+    return gulp.src(paths.server_files)
+        .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
+        .pipe(babel({ stage: 0, optional: ["runtime"] }))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(paths.build_path));
+});
 
 gulp.task('client:browserify', function () {
     return browserify(paths.main_client_script, {
@@ -28,32 +40,35 @@ gulp.task('client:browserify', function () {
     .bundle()
     .pipe(plumber())
     .pipe(source('main.js'))
-    .pipe(gulp.dest(paths.build_path));
+    .pipe(gulp.dest(paths.public_build_path));
 });
 
 gulp.task('sass', function () {
     return gulp.src([paths.main_sass])
         .pipe(sass())
-        .pipe(gulp.dest(paths.build_path));
+        .pipe(gulp.dest(paths.public_build_path));
 });
 
 gulp.task('images:copy', function() {
     return gulp.src('images/**')
-        .pipe(copy(paths.build_path));
+        .pipe(copy(paths.public_build_path));
 });
 
 gulp.task('html:copy', function() {
     return gulp.src('index.html')
-        .pipe(copy(paths.build_path));
+        .pipe(copy(paths.public_build_path));
 });
 
-gulp.task('server:run', ['client:browserify', 'sass', 'html:copy', 'images:copy'], function() {
-    server.listen( { path: paths.server_file } );
+gulp.task('server:run', ['client:compile', 'server:babel'], function() {
+    server.listen( { path: paths.build_path + paths.main_server_script } );
 });
 
-gulp.task('server:restart', ['client:browserify', 'sass', 'html:copy', 'images:copy'], function() {
+gulp.task('client:compile', ['client:browserify', 'sass', 'html:copy', 'images:copy'], function() {
+
+});
+
+gulp.task('server:compile', ['server:babel'], function() {
     server.restart();
-    //livereload();
 });
 
 gulp.task('clean', function() {
@@ -66,8 +81,9 @@ gulp.task('default', ['clean'], function() {
 
 gulp.task('watch', ['default'], function () {
     //livereload.listen();
-    gulp.watch([paths.scripts], ['server:restart']);
+    gulp.watch([paths.scripts], ['client:compile']);
     gulp.watch(paths.sass, ['sass']);
+    gulp.watch(paths.server_files, ['server:compile'])
 });
 
 gulp.task('heroku:dev', ['default']);
