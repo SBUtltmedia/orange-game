@@ -1,1 +1,2 @@
-export const API_HOST = 'http://restify-api.herokuapp.com'; // http://localhost:9000
+export const MAX_FITNESS_BOOST = 10;
+export const DAILY_FITNESS_LOSS = 10;

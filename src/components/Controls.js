@@ -27,19 +27,16 @@ export default class Controls extends Component {
 
   componentDidMount() {
       const { actions, day } = this.props;
-      actions.fetchOranges(day);
-  }
-
-  newDay() {
-      const { actions, day } = this.props;
-      actions.newDay();
-      actions.fetchOranges(day);
+      actions.newDay(1);
   }
 
   render() {
+    const { actions, day } = this.props;
     return <div style={styles.container}>
 	     <OrangeBox {...this.props} />
-       <button style={styles.button} onClick={this.newDay.bind(this)}>Let a new day begin</button>
+       <button style={styles.button} onClick={actions.newDay.bind(this, day + 1)}>
+            Let a new day begin
+        </button>
     </div>;
   }
 }
