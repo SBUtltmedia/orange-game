@@ -14,8 +14,8 @@ const initialState = {
 export default function game(state=initialState, action) {
     switch (action.type) {
         case DROP_ORANGE:
-        const source = action.source.toLowerCase();
-        const dest = action.dest.toLowerCase();
+            const source = action.source.toLowerCase();
+            const dest = action.dest.toLowerCase();
             if (source === dest) {
                 return state;
             }

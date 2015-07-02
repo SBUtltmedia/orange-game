@@ -13,7 +13,7 @@ app.get('/', function(req, res){
   res.sendFile('/index.html');
 });
 
-app.get('/getOranges', function(req, res){
+app.get('/oranges', function(req, res){
     var day = req.param('day');
     res.send({ oranges: orangeServer.returnOranges(day) });
 });

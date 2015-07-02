@@ -13,7 +13,7 @@ export function dropOrange(source, dest) {
 
 export function newDay(day) {
     return dispatch => {
-      fetch(`/getOranges?day=${day}`)
+      fetch(`/oranges?day=${day}`)
       .then(res => res.json())
       .then(res => dispatch({
           type: NEW_DAY,
