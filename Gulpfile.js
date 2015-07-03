@@ -26,7 +26,7 @@ var paths = {
 
 gulp.task('server:babel', function () {
     return gulp.src(paths.server_files)
-        .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
+        .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(babel({ stage: 0, optional: ["runtime"] }))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(paths.build_path));
