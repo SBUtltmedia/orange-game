@@ -11,6 +11,10 @@ import { bindActionCreators } from 'redux';
 import * as OrangeActions from '../actions/OrangeActions';
 import { connect } from 'redux/react';
 
+import rebase from 're-base';
+import { FIREBASE_APP_URL } from '../constants/Settings';
+const base = rebase.createClass(FIREBASE_APP_URL);
+
 const styles = {
   container: {
     backgroundColor: '#ffad00',
@@ -25,21 +29,27 @@ const styles = {
 
 @connect(state => ({}))
 @DragDropContext(HTML5Backend)
-export default class Container extends Component {
+export default class Game extends Component {
 
-  render() {
-    const { dispatch } = this.props;
-    const orangeActions = bindActionCreators(OrangeActions, dispatch);
+    /*
+    init() {
+        this.ref = base.bindToState();
+    }
+    */
 
-    return <div style={styles.container}>
-      <div style={styles.row}>
-          <Basket actions={orangeActions} />
-          <Controls actions={orangeActions} />
-          <Dish actions={orangeActions} />
-      </div>
-      <div style={styles.row}>
-          <Stats actions={orangeActions} />
-      </div>
-    </div>;
-  }
+    render() {
+        const { dispatch } = this.props;
+        const orangeActions = bindActionCreators(OrangeActions, dispatch);
+
+        return <div style={styles.container}>
+          <div style={styles.row}>
+              <Basket actions={orangeActions} />
+              <Controls actions={orangeActions} />
+              <Dish actions={orangeActions} />
+          </div>
+          <div style={styles.row}>
+              <Stats actions={orangeActions} />
+          </div>
+        </div>;
+    }
 }
