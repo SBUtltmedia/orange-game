@@ -2,7 +2,9 @@ import React, { PropTypes, Component } from 'react/addons';
 
 const styles = {
     container: {
-        backgroundColor: 'purple',
+        color: 'lightblue',
+        backgroundColor: 'blue',
+        marginTop: 16
     }
 };
 
@@ -12,7 +14,7 @@ export default class Player extends Component {
     };
 
     render() {
-        const { name } = this.props; 
+        const { name } = this.props;
         return <div style={styles.container}>
             {name}
         </div>;

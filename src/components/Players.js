@@ -45,7 +45,7 @@ export default class Players extends Component {
                 userRef.onDisconnect().remove();
                 userRef.set(true);
 
-                const player = { name: 'Ken', userId: 300 };
+                const player = { name: 'Player ' + Math.ceil(Math.random() * 100)};
                 this.setState({
                     players: this.state.players.concat([player])
                 });
