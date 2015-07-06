@@ -21,6 +21,7 @@ var paths = {
     server_files: 'server/**/*.js',
     main_server_script: 'server.js',
     build_path: 'build/',
+    static_files: 'public/**/*.*',
     public_build_path: 'build/public/'
 };
 
@@ -49,21 +50,16 @@ gulp.task('sass', function () {
         .pipe(gulp.dest(paths.public_build_path));
 });
 
-gulp.task('images:copy', function() {
-    return gulp.src('images/**')
-        .pipe(copy(paths.public_build_path));
-});
-
-gulp.task('html:copy', function() {
-    return gulp.src('index.html')
-        .pipe(copy(paths.public_build_path));
+gulp.task('static:copy', function() {
+    return gulp.src(paths.static_files)
+        .pipe(copy(paths.build_path));
 });
 
 gulp.task('server:run', ['client:compile', 'server:babel'], function() {
     server.listen( { path: paths.build_path + paths.main_server_script } );
 });
 
-gulp.task('client:compile', ['client:browserify', 'sass', 'html:copy', 'images:copy'], function() {
+gulp.task('client:compile', ['client:browserify', 'sass', 'static:copy'], function() {
 
 });
 

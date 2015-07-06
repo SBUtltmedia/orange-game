@@ -31,11 +31,10 @@ const styles = {
 @DragDropContext(HTML5Backend)
 export default class Game extends Component {
 
-    /*
     init() {
+        console.log("INIT");
         this.ref = base.bindToState();
     }
-    */
 
     render() {
         const { dispatch } = this.props;
