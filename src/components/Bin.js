@@ -61,7 +61,8 @@ export default class Bin extends Component {
     };
 
     render() {
-        const { style, name, textual, graphical, label, oranges, isOver, canDrop, connectDropTarget } = this.props;
+        const { style, name, textual, graphical, label, oranges, isOver,
+                    canDrop, connectDropTarget } = this.props;
         const isActive = isOver && canDrop;
         let backgroundColor = style.backgroundColor || styles.defaultBgColor;
         if (isActive) {

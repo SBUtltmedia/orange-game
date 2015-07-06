@@ -1,4 +1,3 @@
-import 'isomorphic-fetch';
 import { DROP_ORANGE, NEW_DAY } from '../constants/ActionTypes';
 import { API_HOST } from '../constants/Settings';
 import 'whatwg-fetch';

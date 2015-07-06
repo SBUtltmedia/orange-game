@@ -6,14 +6,11 @@ import OrangeBox from '../components/OrangeBox';
 import Basket from '../components/Basket';
 import Dish from '../components/Dish';
 import Stats from '../components/Stats';
+import Players from '../components/Players';
 import { areaTheme } from '../styles/Themes';
 import { bindActionCreators } from 'redux';
 import * as OrangeActions from '../actions/OrangeActions';
 import { connect } from 'redux/react';
-
-import rebase from 're-base';
-import { FIREBASE_APP_URL } from '../constants/Settings';
-const base = rebase.createClass(FIREBASE_APP_URL);
 
 const styles = {
   container: {
@@ -25,16 +22,11 @@ const styles = {
       display: "flex",
       height: areaTheme.height + areaTheme.margin
   }
-}
+};
 
 @connect(state => ({}))
 @DragDropContext(HTML5Backend)
 export default class Game extends Component {
-
-    init() {
-        console.log("INIT");
-        this.ref = base.bindToState();
-    }
 
     render() {
         const { dispatch } = this.props;
@@ -48,6 +40,7 @@ export default class Game extends Component {
           </div>
           <div style={styles.row}>
               <Stats actions={orangeActions} />
+              <Players actions={orangeActions} />
           </div>
         </div>;
     }
