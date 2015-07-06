@@ -2,10 +2,9 @@ import React, { PropTypes, Component } from 'react/addons';
 import { areaTheme } from '../styles/Themes';
 import Player from './Player';
 import _ from 'lodash';
+import Firebase from 'firebase';
 
-import Rebase from 're-base';
 import { FIREBASE_APP_URL } from '../constants/Settings';
-const base = Rebase.createClass(FIREBASE_APP_URL + '/games');
 
 var userId = Math.ceil(Math.random() * 99999999999999);
 var amOnline = new Firebase(`${FIREBASE_APP_URL}/.info/connected`);
@@ -32,16 +31,16 @@ export default class Players extends Component {
     }
 
     componentWillMount() {
-      /*
-       * Here we call 'bindToState', which will update
-       * our local 'messages' state whenever our 'chats'
-       * Firebase endpoint changes.
-       */
-        this.ref = base.syncState('game', {
-            context: this,
-            state: 'players',
-            asArray: true
-        });
+        this.firebaseRef = new Firebase(FIREBASE_APP_URL + '/players');
+        this.firebaseRef.on("child_added", function(dataSnapshot) {
+
+            console.log("new player", dataSnapshot.val());
+
+            this.setState({
+                players: this.state.players.concat([dataSnapshot.val()])
+            });
+        }.bind(this));
+
         amOnline.on('value', function(online) {
             if (online.val()) {
                 //userRef.onDisconnect().remove();
@@ -51,6 +50,8 @@ export default class Players extends Component {
                 this.setState({
                     players: this.state.players.concat([player])
                 });
+
+                this.firebaseRef.push(player);
             }
             else {
                 const players = this.state.players;
@@ -69,8 +70,8 @@ export default class Players extends Component {
         }.bind(this));
     }
 
-    componentWillUnmount(){
-        base.removeBinding(this.ref);
+    componentWillUnmount() {
+        this.firebaseRef.off();
     }
 
     render() {
