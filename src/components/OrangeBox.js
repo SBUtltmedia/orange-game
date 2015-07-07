@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react/addons';
+import React, { PropTypes, Component } from 'react';
 import { verticalCenter } from '../styles/Themes';
 import { connect } from 'redux/react';
 import Bin from './Bin';

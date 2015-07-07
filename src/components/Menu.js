@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 import StyleSheet from'react-style';
 import { Link } from 'react-router';
 

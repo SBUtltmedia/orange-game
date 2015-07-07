@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react/addons';
+import React, { PropTypes, Component } from 'react';
 import { areaTheme, buttonTheme } from '../styles/Themes';
 import OrangeBox from './OrangeBox';
 import { connect } from 'redux/react';

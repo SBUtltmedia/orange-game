@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react/addons';
+import React, { PropTypes, Component } from 'react';
 import DraggableOrange from './DraggableOrange';
 import { DropTarget } from 'react-dnd';
 import { verticalCenter, dnd } from '../styles/Themes';

@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react/addons';
+import React, { PropTypes, Component } from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend, { NativeTypes } from 'react-dnd/modules/backends/HTML5';
 import Controls from '../components/Controls';

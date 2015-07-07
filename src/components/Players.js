@@ -1,9 +1,8 @@
-import React, { PropTypes, Component } from 'react/addons';
+import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
 import Player from './Player';
 import _ from 'lodash';
 import Firebase from 'firebase';
-
 import { FIREBASE_APP_URL } from '../constants/Settings';
 
 var userId = Math.ceil(Math.random() * 99999999999999);
@@ -14,6 +13,7 @@ const styles = {
     container: {
         ...areaTheme,
         backgroundColor: 'lightblue',
+        overflow: 'scroll'
     }
 };
 
@@ -33,9 +33,6 @@ export default class Players extends Component {
     componentWillMount() {
         this.firebaseRef = new Firebase(FIREBASE_APP_URL + '/players');
         this.firebaseRef.on("child_added", function(dataSnapshot) {
-
-            console.log("new player", dataSnapshot.val());
-
             this.setState({
                 players: this.state.players.concat([dataSnapshot.val()])
             });
@@ -55,9 +52,6 @@ export default class Players extends Component {
             }
             else {
                 const players = this.state.players;
-
-                console.log(players);
-
                 const me = _.findWhere(players, { name: this.state.me.name });
 
                 if (me) {
@@ -76,9 +70,6 @@ export default class Players extends Component {
 
     render() {
         const { players } = this.state;
-
-        console.log(players);
-
         return <div style={styles.container}>
             { players.map((p, i) => <Player key={i} name={p.name} />) }
         </div>

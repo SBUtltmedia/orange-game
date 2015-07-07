@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react/addons';
+import React, { PropTypes, Component } from 'react';
 
 const styles = {
     container: {
