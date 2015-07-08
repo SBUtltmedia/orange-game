@@ -30,32 +30,53 @@ export default class Players extends Component {
         };
     }
 
+    addPlayer(player) {
+        const { players } = this.state;
+        this.setState({
+            players: players.concat([player])
+          });
+        this.firebaseRef.push(player);
+    }
+
+    setupAmOnline() {
+      const { userId } = this.props;
+      const { players } = this.state;
+      this.amOnline.on('value', function(online) {
+          if (online.val()) {
+              //this.userRef.onDisconnect().remove();
+              this.userRef.set(true);
+              const existingPlayer = _.find(players, p => p.userId === userId);
+              if (!existingPlayer) {
+                  this.addPlayer({
+                      name: '' + userId,
+                      userId: userId,
+                      online: true
+                  });
+              }
+          }
+          else {
+              // User left
+          }
+        }.bind(this));
+    }
+
     componentWillMount() {
         const { userId } = this.props;
+        const { players } = this.state;
         this.firebaseRef = new Firebase(FIREBASE_APP_URL + '/players');
         this.amOnline = new Firebase(`${FIREBASE_APP_URL}/.info/connected`);
         this.userRef = new Firebase(`${FIREBASE_APP_URL}/presence/${userId}`);
         this.firebaseRef.on("child_added", function(dataSnapshot) {
             this.setState({
-                players: this.state.players.concat([dataSnapshot.val()])
+                players: players.concat([dataSnapshot.val()])
             });
         }.bind(this));
 
-        this.amOnline.on('value', function(online) {
-            if (online.val()) {
-                //this.userRef.onDisconnect().remove();
-                this.userRef.set(true);
-
-                const player = { name: '' + userId, online: true };
-                this.setState({
-                    players: this.state.players.concat([player])
-                });
-
-                this.firebaseRef.push(player);
-            }
-            else {
-                const players = this.state.players;
-            }
+        this.firebaseRef.on("value", function(snapshot) {
+            this.setState({
+                players: _.values(snapshot.val())
+            })
+            this.setupAmOnline();
         }.bind(this));
     }
 
@@ -66,7 +87,7 @@ export default class Players extends Component {
     render() {
         const { players } = this.state;
         return <div style={styles.container}>
-            { players.map((p, i) => <Player key={i} name={p.name} />) }
+            { _.map(players, (p, i) => <Player key={i} name={p.name} />) }
         </div>
     }
 }

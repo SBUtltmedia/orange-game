@@ -29,9 +29,10 @@ const styles = {
 @connect(state => ({}))
 @DragDropContext(HTML5Backend)
 export default class Game extends Component {
-
+  
     onAuth(authData, x) {
         if (authData) {
+          console.log("User newly authenticated " + auth.uid);
           this.actions.userAuthed(authData.uid);
         }
         else {
@@ -46,6 +47,8 @@ export default class Game extends Component {
 
         const auth = ref.getAuth();
         if (auth) {  // if already authorized
+
+            console.log("User already authenticated: " + auth.uid);
             this.actions.userAuthed(auth.uid);
         }
         else {
