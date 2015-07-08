@@ -11,6 +11,8 @@ import { areaTheme } from '../styles/Themes';
 import { bindActionCreators } from 'redux';
 import * as OrangeActions from '../actions/OrangeActions';
 import { connect } from 'redux/react';
+import Firebase from 'firebase';
+import { FIREBASE_APP_URL } from '../constants/Settings';
 
 const styles = {
   container: {
@@ -28,19 +30,39 @@ const styles = {
 @DragDropContext(HTML5Backend)
 export default class Game extends Component {
 
-    render() {
-        const { dispatch } = this.props;
-        const orangeActions = bindActionCreators(OrangeActions, dispatch);
+    onAuth(authData, x) {
+        if (authData) {
+          this.actions.userAuthed(authData.uid);
+        }
+        else {
+          console.error("Client unauthenticated.")
+        }
+    }
 
+    componentWillMount() {
+        const { dispatch } = this.props;
+        this.actions = bindActionCreators(OrangeActions, dispatch);
+        const ref = new Firebase(FIREBASE_APP_URL);
+
+        const auth = ref.getAuth();
+        if (auth) {  // if already authorized
+            this.actions.userAuthed(auth.uid);
+        }
+        else {
+            ref.authAnonymously(this.onAuth);
+        }
+    }
+
+    render() {
         return <div style={styles.container}>
           <div style={styles.row}>
-              <Basket actions={orangeActions} />
-              <Controls actions={orangeActions} />
-              <Dish actions={orangeActions} />
+              <Basket actions={this.actions} />
+              <Controls actions={this.actions} />
+              <Dish actions={this.actions} />
           </div>
           <div style={styles.row}>
-              <Stats actions={orangeActions} />
-              <Players actions={orangeActions} />
+              <Stats actions={this.actions} />
+              <Players actions={this.actions} />
           </div>
         </div>;
     }

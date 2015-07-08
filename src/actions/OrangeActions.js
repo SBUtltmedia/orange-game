@@ -1,6 +1,13 @@
-import { DROP_ORANGE, NEW_DAY } from '../constants/ActionTypes';
+import { DROP_ORANGE, NEW_DAY, USER_AUTHED } from '../constants/ActionTypes';
 import { API_HOST } from '../constants/Settings';
 import 'whatwg-fetch';
+
+export function userAuthed(uid) {
+    return {
+        type: USER_AUTHED,
+        userId: uid
+    }
+}
 
 export function dropOrange(source, dest) {
     return {

@@ -2,12 +2,9 @@ import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
 import Player from './Player';
 import _ from 'lodash';
+import { connect } from 'redux/react';
 import Firebase from 'firebase';
 import { FIREBASE_APP_URL } from '../constants/Settings';
-
-var userId = Math.ceil(Math.random() * 99999999999999);
-var amOnline = new Firebase(`${FIREBASE_APP_URL}/.info/connected`);
-var userRef = new Firebase(`${FIREBASE_APP_URL}/presence/${userId}`);
 
 const styles = {
     container: {
@@ -17,31 +14,37 @@ const styles = {
     }
 };
 
+@connect(state => ({
+    userId: state.player.userId
+}))
 export default class Players extends Component {
     static propTypes = {
-
+        userId: PropTypes.string.isRequired,
+        actions: PropTypes.object.isRequired
     };
 
     constructor(props) {
         super(props);
         this.state = {
-            players: [],
-            me: { name: '' + userId }
+            players: []
         };
     }
 
     componentWillMount() {
+        const { userId } = this.props;
         this.firebaseRef = new Firebase(FIREBASE_APP_URL + '/players');
+        this.amOnline = new Firebase(`${FIREBASE_APP_URL}/.info/connected`);
+        this.userRef = new Firebase(`${FIREBASE_APP_URL}/presence/${userId}`);
         this.firebaseRef.on("child_added", function(dataSnapshot) {
             this.setState({
                 players: this.state.players.concat([dataSnapshot.val()])
             });
         }.bind(this));
 
-        amOnline.on('value', function(online) {
+        this.amOnline.on('value', function(online) {
             if (online.val()) {
-                //userRef.onDisconnect().remove();
-                userRef.set(true);
+                //this.userRef.onDisconnect().remove();
+                this.userRef.set(true);
 
                 const player = { name: '' + userId, online: true };
                 this.setState({
@@ -52,14 +55,6 @@ export default class Players extends Component {
             }
             else {
                 const players = this.state.players;
-                const me = _.findWhere(players, { name: this.state.me.name });
-
-                if (me) {
-                    me.online = false;
-                    this.setState({
-                        players: players
-                    });
-                }
             }
         }.bind(this));
     }
