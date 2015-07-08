@@ -27,7 +27,8 @@ export default class Controls extends Component {
 
   componentDidMount() {
       const { actions, day } = this.props;
-      actions.newDay(1);
+      actions.newDay(1);  // TODO: Probably remove this after transition
+                          // TODO: from REST to Firebase
   }
 
   render() {

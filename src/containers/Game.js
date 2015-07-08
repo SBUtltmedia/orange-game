@@ -11,8 +11,6 @@ import { areaTheme } from '../styles/Themes';
 import { bindActionCreators } from 'redux';
 import * as OrangeActions from '../actions/OrangeActions';
 import { connect } from 'redux/react';
-import Firebase from 'firebase';
-import { FIREBASE_APP_URL } from '../constants/Settings';
 
 const styles = {
   container: {
@@ -30,30 +28,10 @@ const styles = {
 @DragDropContext(HTML5Backend)
 export default class Game extends Component {
 
-    onAuth(authData, x) {
-        if (authData) {
-          console.log("User newly authenticated " + auth.uid);
-          this.actions.userAuthed(authData.uid);
-        }
-        else {
-          console.error("Client unauthenticated.");
-        }
-    }
-
     componentWillMount() {
         const { dispatch } = this.props;
         this.actions = bindActionCreators(OrangeActions, dispatch);
-        const ref = new Firebase(FIREBASE_APP_URL);
-
-        const auth = ref.getAuth();
-        if (auth) {  // if already authorized
-
-            console.log("User already authenticated: " + auth.uid);
-            this.actions.userAuthed(auth.uid);
-        }
-        else {
-            ref.authAnonymously(this.onAuth);
-        }
+        this.actions.loginUser();
     }
 
     render() {
