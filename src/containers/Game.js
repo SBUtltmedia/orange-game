@@ -29,14 +29,14 @@ const styles = {
 @connect(state => ({}))
 @DragDropContext(HTML5Backend)
 export default class Game extends Component {
-  
+
     onAuth(authData, x) {
         if (authData) {
           console.log("User newly authenticated " + auth.uid);
           this.actions.userAuthed(authData.uid);
         }
         else {
-          console.error("Client unauthenticated.")
+          console.error("Client unauthenticated.");
         }
     }
 

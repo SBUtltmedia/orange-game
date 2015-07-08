@@ -75,7 +75,7 @@ export default class Players extends Component {
         this.firebaseRef.on("value", function(snapshot) {
             this.setState({
                 players: _.values(snapshot.val())
-            })
+            });
             this.setupAmOnline();
         }.bind(this));
     }
@@ -88,6 +88,6 @@ export default class Players extends Component {
         const { players } = this.state;
         return <div style={styles.container}>
             { _.map(players, (p, i) => <Player key={i} name={p.name} />) }
-        </div>
+        </div>;
     }
 }
