@@ -2,7 +2,6 @@ require('source-map-support').install();
 
 import express from 'express';
 import path from 'path';
-import { returnOranges } from './orangeServer';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -16,7 +15,7 @@ app.get('/', function(req, res) {
 
 app.get('/oranges', function(req, res) {
     const day = req.param('day');
-    res.send({ oranges: returnOranges(day) });
+    res.send({ oranges: 5 });
 });
 
 app.listen(port);
