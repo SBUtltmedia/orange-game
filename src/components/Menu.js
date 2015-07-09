@@ -22,6 +22,7 @@ export default class Menu {
         return <div styles={[styles.menu]}>
             <Link to="/" styles={[styles.item]}>Lobby</Link>
             <Link to="game" styles={[styles.item]}>Game</Link>
+            <Link to="admin" styles={[styles.item]}>Admin</Link>
             <Link to="about" styles={[styles.item]}>About</Link>
         </div>;
     }

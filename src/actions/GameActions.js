@@ -5,13 +5,14 @@ import _ from 'lodash';
 
 export function loginUser() {
     return dispatch => {
+        const ref = new Firebase(FIREBASE_APP_URL);
         function sendBackResults(authData) {
+            ref.off();
             dispatch({
                 type: USER_AUTHED,
                 userId: authData.uid
             });
         }
-        const ref = new Firebase(FIREBASE_APP_URL);
         const auth = ref.getAuth();
         if (auth) {  // if already authorized
             sendBackResults(auth);
@@ -33,6 +34,7 @@ export function joinGame(userId) {
     const ref = new Firebase(`${FIREBASE_APP_URL}/players`);
     return dispatch => {
         function sendBackResults(name, userId, playerId) {
+            ref.off();
             dispatch({
                 type: JOIN_GAME,
                 name: name,
@@ -40,7 +42,7 @@ export function joinGame(userId) {
                 playerId: playerId
             });
         }
-        ref.on("value", function(snapshot) {
+        ref.on("value", snapshot => {
             const players = snapshot.val();
             const existingKey = _.findKey(players, p => p.userId === userId);
             if (existingKey) {

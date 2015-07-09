@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from 'react';
 import StyleSheet from'react-style';
 
 const styles = StyleSheet.create({
@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     }
 });
 
-export default class NotFound {
+export default class NotFound extends Component {
     render() {
         return <div styles={[styles.page]}>
             404: Page not found

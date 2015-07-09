@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { connect } from 'redux/react';
 import Firebase from 'firebase';
 import { FIREBASE_APP_URL } from '../constants/Settings';
+import { subscribeToFirebaseList } from '../utils';
 
 const styles = {
     container: {
@@ -53,18 +54,19 @@ export default class Players extends Component {
         this.amOnline = new Firebase(`${FIREBASE_APP_URL}/.info/connected`);
         this.userRef = new Firebase(`${FIREBASE_APP_URL}/presence/${userId}`);
 
-        this.firebaseRef.on("child_added", function(dataSnapshot) {
-            this.setState({
-                players: players.concat([dataSnapshot.val()])
-            });
-        }.bind(this));
-
-        this.firebaseRef.on("value", function(snapshot) {
-            this.setState({
-                players: _.values(snapshot.val())
-            });
-            this.setupAmOnline();
-        }.bind(this));
+        subscribeToFirebaseList(this.firebaseRef, {
+            itemsLoaded: (items) => {
+                this.setState({
+                    players: _.values(items)
+                });
+                this.setupAmOnline();
+            },
+            itemAdded: (item) => {
+                this.setState({
+                    players: players.concat([item])
+                });
+            }
+        });
     }
 
     componentWillUnmount() {

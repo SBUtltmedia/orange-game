@@ -9,7 +9,7 @@ import Stats from '../components/Stats';
 import Players from '../components/Players';
 import { areaTheme } from '../styles/Themes';
 import { bindActionCreators } from 'redux';
-import * as OrangeActions from '../actions/OrangeActions';
+import * as GameActions from '../actions/GameActions';
 import { connect } from 'redux/react';
 
 const styles = {
@@ -30,7 +30,7 @@ export default class Game extends Component {
 
     componentWillMount() {
         const { dispatch } = this.props;
-        this.actions = bindActionCreators(OrangeActions, dispatch);
+        this.actions = bindActionCreators(GameActions, dispatch);
         this.actions.loginUser();
     }
 
