@@ -21,7 +21,7 @@ export default class LobbyGame extends Component {
     render() {
         const { players } = this.props;
         return <div style={styles.container}>
-            Game ({players} players)
+            Game ({players.length}&nbsp;players)
         </div>;
     }
 }

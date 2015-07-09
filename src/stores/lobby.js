@@ -9,7 +9,8 @@ export default function lobby(state=initialState, action) {
         case CREATE_GAME:
             return [{
                  id: action.id,
-                 players: []
+                 players: action.players,
+                 maxPlayers: action.maxPlayers
                }, ...state];
     }
     return state;

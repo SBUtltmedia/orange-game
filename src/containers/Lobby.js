@@ -53,7 +53,7 @@ export default class extends Component {
     render() {
         const { games } = this.state;
         return <div styles={[styles.page]}>
-            { _.map(games, game => <LobbyGame players={game.players} />) }
+            { _.map(games, game => <LobbyGame players={game.players || []} />) }
         </div>;
     }
 }

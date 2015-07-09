@@ -2,7 +2,7 @@ import { CREATE_GAME } from '../constants/ActionTypes';
 import { FIREBASE_APP_URL, MAX_PLAYERS } from '../constants/Settings';
 import Firebase from 'firebase';
 
-export function createGame(maxPlayers=MAX_PLAYERS) {
+export function createGame() {
     const ref = new Firebase(`${FIREBASE_APP_URL}/games`);
     const game = {
         maxPlayers: MAX_PLAYERS
@@ -11,6 +11,7 @@ export function createGame(maxPlayers=MAX_PLAYERS) {
     //ref.off();
     return {
         type: CREATE_GAME,
-        gameId: gameId
+        ...game,
+        gameId, gameId
     };
 }
