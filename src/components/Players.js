@@ -46,9 +46,7 @@ export default class Players extends Component {
     componentWillMount() {
         const { userId, actions } = this.props;
         const { players } = this.state;
-
         actions.joinGame(userId);
-
         this.firebaseRef = new Firebase(`${FIREBASE_APP_URL}/players`);
 
         // TODO: Consider removing presence stuff
@@ -76,7 +74,7 @@ export default class Players extends Component {
     render() {
         const { players } = this.state;
         return <div style={styles.container}>
-            { _.map(players, (p, i) => <Player key={i} name={p.name} />) }
+            { _.map(players, (p, i) => <Player key={i} {...p} />) }
         </div>;
     }
 }
