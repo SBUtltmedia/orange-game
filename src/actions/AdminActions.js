@@ -5,10 +5,10 @@ import Firebase from 'firebase';
 export function createGame(maxPlayers=MAX_PLAYERS) {
     const ref = new Firebase(`${FIREBASE_APP_URL}/games`);
     const game = {
-        maxPlayers: maxPlayers
+        maxPlayers: MAX_PLAYERS
     };
     const gameId = ref.push(game).key();
-    ref.off();
+    //ref.off();
     return {
         type: CREATE_GAME,
         gameId: gameId

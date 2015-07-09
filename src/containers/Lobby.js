@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import StyleSheet from'react-style';
 import Firebase from 'firebase';
 import * as LobbyActions from '../actions/LobbyActions';
+import LobbyGame from '../components/LobbyGame';
 import { FIREBASE_APP_URL } from '../constants/Settings';
 import { subscribeToFirebaseList } from '../utils';
 import { bindActionCreators } from 'redux';
@@ -27,7 +28,7 @@ export default class extends Component {
     }
 
     componentWillMount() {
-        const { dispatch } = this.props;
+        const { dispatch, games } = this.props;
         this.actions = bindActionCreators(LobbyActions, dispatch);
 
         this.firebaseRef = new Firebase(`${FIREBASE_APP_URL}/games`);
@@ -50,8 +51,9 @@ export default class extends Component {
     }
 
     render() {
+        const { games } = this.state;
         return <div styles={[styles.page]}>
-            Lobby
+            { _.map(games, game => <LobbyGame players={game.players} />) }
         </div>;
     }
 }
