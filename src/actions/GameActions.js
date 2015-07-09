@@ -7,7 +7,7 @@ export function loginUser() {
     const ref = new Firebase(FIREBASE_APP_URL);
     return dispatch => {
         function sendBackResults(authData) {
-            ref.off();
+            //ref.off();
             dispatch({
                 type: USER_AUTHED,
                 userId: authData.uid
@@ -34,7 +34,7 @@ export function joinGame(userId) {
     const ref = new Firebase(`${FIREBASE_APP_URL}/players`);
     return dispatch => {
         function sendBackResults(name, userId, playerId) {
-            ref.off();
+            //ref.off();
             dispatch({
                 type: JOIN_GAME,
                 name: name,
@@ -52,7 +52,13 @@ export function joinGame(userId) {
             else {
                 const player = {
                     name: '' + userId,
-                    userId: userId
+                    userId: userId,
+                    oranges: {
+                        box: 0,
+                        basket: 0,
+                        dish: 0
+                    },
+                    fitness: 0
                 };
                 const playerId = ref.push(player).key();
                 sendBackResults(player.name, player.userId, playerId);

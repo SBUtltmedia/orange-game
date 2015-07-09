@@ -55,13 +55,13 @@ export default class Players extends Component {
         this.userRef = new Firebase(`${FIREBASE_APP_URL}/presence/${userId}`);
 
         subscribeToFirebaseList(this.firebaseRef, {
-            itemsLoaded: (items) => {
+            itemsLoaded: items => {
                 this.setState({
                     players: _.values(items)
                 });
                 this.setupAmOnline();
             },
-            itemAdded: (item) => {
+            itemAdded: item => {
                 this.setState({
                     players: players.concat([item])
                 });
