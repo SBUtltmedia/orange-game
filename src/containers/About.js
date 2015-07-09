@@ -26,12 +26,6 @@ export default class About {
                     SBUtltmedia/orange-game
                 </a>
             </p>
-            <p>
-                <div styles={[styles.label]}>forked from:</div>
-                <a href="https://github.com/kenfehling/isomorphic-react-example/tree/es6-flux-redux-jest">
-                    kenfehling/isomorphic-react-example
-                </a>
-            </p>
         </div>;
     }
 }

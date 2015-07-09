@@ -20,7 +20,8 @@ export default class Menu {
 
     render() {
         return <div styles={[styles.menu]}>
-            <Link to="/" styles={[styles.item]}>Home</Link>
+            <Link to="/" styles={[styles.item]}>Lobby</Link>
+            <Link to="game" styles={[styles.item]}>Game</Link>
             <Link to="about" styles={[styles.item]}>About</Link>
         </div>;
     }
