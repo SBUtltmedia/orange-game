@@ -4,6 +4,7 @@ import { DropTarget } from 'react-dnd';
 import { verticalCenter, dnd } from '../styles/Themes';
 import { forRange } from '../utils';
 import ItemTypes from '../constants/ItemTypes';
+import _ from 'lodash';
 
 const styles = {
   inner: {
@@ -13,9 +14,9 @@ const styles = {
 };
 
 const dustbinTarget = {
-  drop(props, monitor) {
-    props.actions.dropOrange(monitor.getItem().source, props.name);  // source, dest
-  }
+    drop(props, monitor) {
+        props.actions.dropOrange(monitor.getItem().source, props.name);
+    }
 };
 
 function renderOranges(oranges, name) {
@@ -28,7 +29,7 @@ function renderNoOranges(oranges) {
 
 function renderTextual(oranges, name, label, isActive) {
     return <div>
-        <p>{ isActive ? 'Release to drop' : name }</p>
+        <p>{ isActive ? 'Release to drop' : _.capitalize(name) }</p>
         <p>{ label }: { oranges }</p>
     </div>;
 }

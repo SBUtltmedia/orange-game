@@ -11,7 +11,6 @@ export default function player(state=initialState, action) {
                 userId: action.userId
             };
         case JOIN_GAME:
-            console.log("playerID = " + action.playerId);
             return {
                 userId: action.userId,
                 playerId: action.playerId,
