@@ -9,16 +9,18 @@ import { FIREBASE_APP_URL } from '../constants/Settings';
 
 @connect((state, props) => ({
     oranges: state.game.oranges[props.name],
+    fitness: state.game.fitness,
     playerId: state.player.playerId
 }))
 export default class Bin extends Component {
     static propTypes = {
-        oranges: PropTypes.number.isRequired,
         style: PropTypes.object,
         textual: PropTypes.bool,
         graphical: PropTypes.bool,
         name: PropTypes.string.isRequired,
         actions: PropTypes.object.isRequired,
+        oranges: PropTypes.number.isRequired,
+        fitness: PropTypes.number.isRequired,
         playerId: PropTypes.string.isRequired
     };
 
@@ -31,12 +33,13 @@ export default class Bin extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { playerId, oranges, name } = nextProps;
+        const { name, playerId, oranges, fitness } = nextProps;
         if (playerId) {
-            const ref = new Firebase(`${FIREBASE_APP_URL}/players`);
-            const data = {};
+            const ref = new Firebase(`${FIREBASE_APP_URL}/players/${playerId}`);
+            const data = { };
             data[name] = oranges;
-            ref.child(`${playerId}/oranges`).update(data);    
+            ref.child('oranges').update(data);
+            ref.child('fitness').update({ fitness: fitness });
         }
     }
 

@@ -15,16 +15,15 @@ const styles = {
 export default class Player extends Component {
     static propTypes = {
         name: PropTypes.string.isRequired,
-        oranges: PropTypes.object.isRequired
+        oranges: PropTypes.object.isRequired,
+        fitness: PropTypes.number.isRequired
     };
 
     render() {
-        const { name, oranges } = this.props;
-
-        console.log(oranges);
-
+        const { name, oranges, fitness } = this.props;
         return <div style={styles.container}>
             <div style={styles.info}>{name}</div>
+            <div style={styles.info}>Fitness: {fitness || '-'}</div>
             <div style={styles.info}>Box: {oranges.box}</div>
             <div style={styles.info}>Basket: {oranges.basket}</div>
             <div style={styles.info}>Dish: {oranges.dish}</div>
