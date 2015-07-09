@@ -13,10 +13,5 @@ app.get('/', function(req, res) {
   res.sendFile('/index.html');
 });
 
-app.get('/oranges', function(req, res) {
-    const day = req.param('day');
-    res.send({ oranges: 5 });
-});
-
 app.listen(port);
 console.log('Server running http://localhost:' + port);

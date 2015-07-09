@@ -1,5 +1,5 @@
 import { DROP_ORANGE, NEW_DAY } from '../constants/ActionTypes';
-import { MAX_FITNESS_BOOST, DAILY_FITNESS_LOSS } from '../constants/Settings';
+import { MAX_ORANGES, MAX_FITNESS_BOOST, DAILY_FITNESS_LOSS } from '../constants/Settings';
 const initialState = {
     oranges: {
         box: 0,
@@ -35,7 +35,7 @@ export default function game(state=initialState, action) {
         case NEW_DAY:
             return {
                 oranges: {
-                    box: action.oranges,
+                    box: Math.floor(Math.random() * MAX_ORANGES),
                     dish: 0,
                     basket: state.oranges.basket
                 },

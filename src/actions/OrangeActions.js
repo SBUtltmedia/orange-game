@@ -1,8 +1,7 @@
 import { DROP_ORANGE, NEW_DAY, USER_AUTHED, JOIN_GAME } from '../constants/ActionTypes';
-import { API_HOST, FIREBASE_APP_URL } from '../constants/Settings';
+import { FIREBASE_APP_URL } from '../constants/Settings';
 import Firebase from 'firebase';
 import _ from 'lodash';
-import 'whatwg-fetch';
 
 export function loginUser() {
     return dispatch => {
@@ -69,12 +68,7 @@ export function dropOrange(source, dest) {
 }
 
 export function newDay(day) {
-    return dispatch => {
-      fetch(`/oranges?day=${day}`)
-      .then(res => res.json())
-      .then(res => dispatch({
-          type: NEW_DAY,
-          oranges: res.oranges
-      }));
-    }
+    return {
+        type: NEW_DAY
+    };
 }
