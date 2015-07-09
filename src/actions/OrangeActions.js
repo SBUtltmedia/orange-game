@@ -6,24 +6,25 @@ import 'whatwg-fetch';
 
 export function loginUser() {
     return dispatch => {
+        function sendBackResults(authData) {
+            dispatch({
+                type: USER_AUTHED,
+                userId: authData.uid
+            });
+        }
+
         const ref = new Firebase(FIREBASE_APP_URL);
         const auth = ref.getAuth();
         if (auth) {  // if already authorized
-            dispatch({
-                type: USER_AUTHED,
-                userId: auth.uid
-            });
+            sendBackResults(auth);
         }
         else {
-            ref.authAnonymously((authData) => {
+            ref.authAnonymously((error, authData) => {
                 if (authData) {
-                    dispatch({
-                        type: USER_AUTHED,
-                        userId: authData.uid
-                    });
+                    sendBackResults(authData);
                 }
                 else {
-                  console.error("Client unauthenticated.");
+                    console.error("Client unauthenticated.");
                 }
             });
         }
