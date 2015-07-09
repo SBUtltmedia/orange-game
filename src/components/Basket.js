@@ -15,7 +15,7 @@ const styles = {
 
 @connect(state => ({
     oranges: state.game.oranges.basket,
-    userId: state.player.userId
+    playerId: state.player.playerId
 }))
 export default class Basket{
   static propTypes = {
@@ -24,9 +24,11 @@ export default class Basket{
   };
 
   componentWillReceiveProps(nextProps) {
-      const { userId } = this.props;
+      const { playerId, oranges } = nextProps;
       console.log("Props changed", nextProps);
-      this.firebaseRef.child('').update()
+      this.firebaseRef.child(`${playerId}/oranges`).update({
+          basket: oranges
+      });
   }
 
   componentWillMount() {
