@@ -30,29 +30,12 @@ export default class Players extends Component {
         };
     }
 
-    addPlayer(player) {
-        const { players } = this.state;
-        this.setState({
-            players: players.concat([player])
-          });
-        this.firebaseRef.push(player);
-    }
-
+    // TODO: Consider removing presence stuff
     setupAmOnline() {
-      const { userId } = this.props;
-      const { players } = this.state;
       this.amOnline.on('value', function(online) {
           if (online.val()) {
               //this.userRef.onDisconnect().remove();
               this.userRef.set(true);
-              const existingPlayer = _.find(players, p => p.userId === userId);
-              if (!existingPlayer) {
-                  this.addPlayer({
-                      name: '' + userId,
-                      userId: userId,
-                      online: true
-                  });
-              }
           }
           else {
               // User left
@@ -61,11 +44,17 @@ export default class Players extends Component {
     }
 
     componentWillMount() {
-        const { userId } = this.props;
+        const { userId, actions } = this.props;
         const { players } = this.state;
-        this.firebaseRef = new Firebase(FIREBASE_APP_URL + '/players');
+
+        actions.joinGame(userId);
+
+        this.firebaseRef = new Firebase(`${FIREBASE_APP_URL}/players`);
+
+        // TODO: Consider removing presence stuff
         this.amOnline = new Firebase(`${FIREBASE_APP_URL}/.info/connected`);
         this.userRef = new Firebase(`${FIREBASE_APP_URL}/presence/${userId}`);
+
         this.firebaseRef.on("child_added", function(dataSnapshot) {
             this.setState({
                 players: players.concat([dataSnapshot.val()])
