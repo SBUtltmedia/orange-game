@@ -31,14 +31,13 @@ export default class Bin extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-
-        console.log(nextProps);
-
         const { playerId, oranges, name } = nextProps;
-        const ref = new Firebase(`${FIREBASE_APP_URL}/players`);
-        const data = {};
-        data[name] = oranges;
-        ref.child(`${playerId}/oranges`).update(data);
+        if (playerId) {
+            const ref = new Firebase(`${FIREBASE_APP_URL}/players`);
+            const data = {};
+            data[name] = oranges;
+            ref.child(`${playerId}/oranges`).update(data);    
+        }
     }
 
     render() {
