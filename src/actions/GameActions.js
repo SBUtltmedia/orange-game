@@ -4,8 +4,8 @@ import Firebase from 'firebase';
 import _ from 'lodash';
 
 export function loginUser() {
+    const ref = new Firebase(FIREBASE_APP_URL);
     return dispatch => {
-        const ref = new Firebase(FIREBASE_APP_URL);
         function sendBackResults(authData) {
             ref.off();
             dispatch({
