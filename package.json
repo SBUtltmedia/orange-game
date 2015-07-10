@@ -12,6 +12,7 @@
     "lodash": "^3.9.3"
   },
   "devDependencies": {
+    "chai": "^3.0.0",
     "gulp": "~3.9.0",
     "gulp-babel": "^5.1.0",
     "gulp-concat": "~2.4.1",
@@ -22,6 +23,7 @@
     "gulp-rimraf": "^0.1.1",
     "gulp-sass": "^2.0.1",
     "gulp-sourcemaps": "^1.5.2",
+    "mocha": "^2.2.5",
     "node-jsx": "^0.13.3",
     "path": "*",
     "react": "^0.13.3",

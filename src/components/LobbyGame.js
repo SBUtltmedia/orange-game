@@ -9,21 +9,26 @@ const styles = {
         display: 'flex'
     },
     section: {
-        margin: 5
+        margin: 10
     }
 };
 
 export default class LobbyGame extends Component {
     static propTypes = {
-        players: PropTypes.object.isRequired
+        game: PropTypes.object.isRequired
     };
 
     render() {
-        const { players } = this.props;
+        const { game } = this.props;
+        const { id, players } = game;
+
+        console.log(game);
+
         return <div style={styles.container}>
-            <div style={styles.section}>Game ({players.length}&nbsp;players)</div>
+            <div style={styles.section}>{id}</div>
+            <div style={styles.section}>({players.length}&nbsp;players)</div>
             <div style={styles.section}>
-                <Link to="game">Join game</Link>
+                <Link to="game" query={{id: id}}>Join game</Link>
             </div>
         </div>;
     }
