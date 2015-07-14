@@ -5,7 +5,8 @@ import Firebase from 'firebase';
 import _ from 'lodash';
 
 function isNameAcceptable(name) {
-    return trimString(name) !== '';
+    //return trimString(name) !== '';
+    return true;
 }
 
 export function loginUser(name) {
@@ -49,9 +50,9 @@ export function loginUser(name) {
 
 export function joinGame(gameId, userId) {
 
-    console.log("JOIN GAME");
+    console.log(gameId, userId);
 
-    const ref = new Firebase(`${FIREBASE_APP_URL}/games/${gameId}/users`);
+    const ref = new Firebase(`${FIREBASE_APP_URL}/games/${gameId}/players`);
     return dispatch => {
         function sendBackResults(name, userId, playerId) {
             //ref.off();
@@ -66,8 +67,8 @@ export function joinGame(gameId, userId) {
             const users = snapshot.val();
             const existingKey = _.findKey(users, p => p.userId === userId);
             if (existingKey) {
-                const player = players[existingKey];
-                sendBackResults(player.name, player.userId, existingKey);
+                const user = users[existingKey];
+                sendBackResults(user.name, user.userId, existingKey);
             }
             else {
                 const player = {

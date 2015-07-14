@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Link } from 'react-router';
+import { connect } from 'redux/react';
 
 const styles = {
     container: {
@@ -13,19 +13,23 @@ const styles = {
     }
 };
 
+@connect(state => ({
+    userId: state.player.userId
+}))
 export default class LobbyGame extends Component {
     static propTypes = {
         game: PropTypes.object.isRequired,
-        actions: PropTypes.object.isRequired
+        actions: PropTypes.object.isRequired,
+        userId: PropTypes.string.isRequired
     };
 
     joinGame() {
-        const { game, userId } = this.props;
+        const { game, userId, actions } = this.props;
         actions.joinGame(game.id, userId);
     }
 
     render() {
-        const { game, userId, actions } = this.props;
+        const { game } = this.props;
         const { id, players } = game;
         return <div style={styles.container}>
             <div style={styles.section}>{id}</div>
@@ -33,7 +37,7 @@ export default class LobbyGame extends Component {
                 ({(players || []).length}&nbsp;players)
             </div>
             <div style={styles.section}>
-                <a onclick={this.joinGame.bind(this)}>Join game</a>
+                <a onClick={this.joinGame.bind(this)}>Join game</a>
                 {/* <Link to="game" query={{id: id}}>Join game</Link> */}
             </div>
         </div>;
