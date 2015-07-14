@@ -40,7 +40,7 @@ export default class extends Component {
             },
             itemAdded: (item) => {
                 this.setState({
-                    games: games.concat([item])
+                    games: games ? games.concat([item]) : [item]
                 });
             }
         });
@@ -52,9 +52,6 @@ export default class extends Component {
 
     render() {
         const { games } = this.state;
-
-        console.log(games);
-
         return <div styles={[styles.page]}>
             { _.map(games, (g, i) => <LobbyGame game={g} key={i} />) }
         </div>;

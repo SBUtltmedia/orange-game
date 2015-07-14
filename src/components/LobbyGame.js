@@ -21,9 +21,6 @@ export default class LobbyGame extends Component {
     render() {
         const { game } = this.props;
         const { id, players } = game;
-
-        console.log(game);
-
         return <div style={styles.container}>
             <div style={styles.section}>{id}</div>
             <div style={styles.section}>
