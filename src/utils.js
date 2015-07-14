@@ -7,6 +7,10 @@ export function objectToArray(obj) {
     return _.map(_.keys(obj), key => { return { ...obj[key], id: key }});
 }
 
+export function trimString(s) {  // Strip whitespace
+      return (s || '').replace(/^\s+|\s+$/g, '');
+}
+
 export function subscribeToFirebaseList(ref, callbacks) {
     const itemsLoaded = callbacks.itemsLoaded || function() {};
     const itemAdded = callbacks.itemAdded || function() {};
