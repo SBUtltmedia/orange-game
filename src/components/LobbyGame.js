@@ -26,7 +26,9 @@ export default class LobbyGame extends Component {
 
         return <div style={styles.container}>
             <div style={styles.section}>{id}</div>
-            <div style={styles.section}>({players.length}&nbsp;players)</div>
+            <div style={styles.section}>
+                ({(players || []).length}&nbsp;players)
+            </div>
             <div style={styles.section}>
                 <Link to="game" query={{id: id}}>Join game</Link>
             </div>

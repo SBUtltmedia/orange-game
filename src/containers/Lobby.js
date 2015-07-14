@@ -56,7 +56,7 @@ export default class extends Component {
         console.log(games);
 
         return <div styles={[styles.page]}>
-            { _.map(games, game => <LobbyGame game={game} />) }
+            { _.map(games, (g, i) => <LobbyGame game={g} key={i} />) }
         </div>;
     }
 }
