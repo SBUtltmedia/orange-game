@@ -31,32 +31,13 @@ export default class Players extends Component {
         };
     }
 
-    // TODO: Consider removing presence stuff
-    setupAmOnline() {
-      this.amOnline.on('value', function(online) {
-          if (online.val()) {
-              //this.userRef.onDisconnect().remove();
-              this.userRef.set(true);
-          }
-          else {
-              // User left
-          }
-        }.bind(this));
-    }
-
     componentWillMount() {
         this.firebaseRef = new Firebase(`${FIREBASE_APP_URL}/players`);
-
-        // TODO: Consider removing presence stuff
-        this.amOnline = new Firebase(`${FIREBASE_APP_URL}/.info/connected`);
-        this.userRef = new Firebase(`${FIREBASE_APP_URL}/presence/${userId}`);
-
         subscribeToFirebaseList(this.firebaseRef, {
             itemsLoaded: items => {
                 this.setState({
                     players: _.values(items)
                 });
-                this.setupAmOnline();
             },
             itemAdded: item => {
                 this.setState({
