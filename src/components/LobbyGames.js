@@ -45,6 +45,10 @@ export default class LobbyGames extends Component {
         });
     }
 
+    componentWillUnmount() {
+        this.firebaseRef.off();
+    }
+
     render() {
         const { actions } = this.props;
         const { games } = this.state;

@@ -39,10 +39,6 @@ export default class Lobby extends Component {
         this.promptForPlayerName();
     }
 
-    componentWillUnmount() {
-        this.firebaseRef.off();
-    }
-
     render() {
         return <div style={styles.page}>
             <LobbyPlayerName actions={this.actions} />

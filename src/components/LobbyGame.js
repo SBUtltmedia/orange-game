@@ -19,6 +19,11 @@ export default class LobbyGame extends Component {
         actions: PropTypes.object.isRequired
     };
 
+    joinGame() {
+        const { game, userId } = this.props;
+        actions.joinGame(game.id, userId);
+    }
+
     render() {
         const { game, userId, actions } = this.props;
         const { id, players } = game;
@@ -28,7 +33,7 @@ export default class LobbyGame extends Component {
                 ({(players || []).length}&nbsp;players)
             </div>
             <div style={styles.section}>
-                <a onclick={actions.joinGame(userId)}>Join game</a>
+                <a onclick={this.joinGame.bind(this)}>Join game</a>
                 {/* <Link to="game" query={{id: id}}>Join game</Link> */}
             </div>
         </div>;
