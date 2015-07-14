@@ -14,18 +14,20 @@ const styles = {
 };
 
 @connect(state => ({
-    userId: state.player.userId
+    userId: state.player.userId,
+    userName: state.player.name
 }))
 export default class LobbyGame extends Component {
     static propTypes = {
         game: PropTypes.object.isRequired,
         actions: PropTypes.object.isRequired,
-        userId: PropTypes.string.isRequired
+        userId: PropTypes.string.isRequired,
+        userName: PropTypes.string.isRequired
     };
 
     joinGame() {
-        const { game, userId, actions } = this.props;
-        actions.joinGame(game.id, userId);
+        const { game, userId, userName, actions } = this.props;
+        actions.joinGame(game.id, userId, userName);
     }
 
     render() {

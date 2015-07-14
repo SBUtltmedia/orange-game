@@ -48,10 +48,7 @@ export function loginUser(name) {
     }
 }
 
-export function joinGame(gameId, userId) {
-
-    console.log(gameId, userId);
-
+export function joinGame(gameId, userId, userName) {
     const ref = new Firebase(`${FIREBASE_APP_URL}/games/${gameId}/players`);
     return dispatch => {
         function sendBackResults(name, userId, playerId) {
@@ -72,7 +69,7 @@ export function joinGame(gameId, userId) {
             }
             else {
                 const player = {
-                    name: '' + userId,
+                    name: userName,
                     userId: userId,
                     oranges: {
                         box: 0,
