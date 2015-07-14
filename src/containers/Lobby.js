@@ -3,10 +3,11 @@ import StyleSheet from'react-style';
 import Firebase from 'firebase';
 import * as LobbyActions from '../actions/LobbyActions';
 import LobbyGame from '../components/LobbyGame';
+import LobbyGames from '../components/LobbyGames';
+import LobbyPlayerName from '../components/LobbyPlayerName';
 import { FIREBASE_APP_URL } from '../constants/Settings';
 import { subscribeToFirebaseList, objectToArray } from '../utils';
 import { bindActionCreators } from 'redux';
-import _ from 'lodash';
 import { connect } from 'redux/react';
 
 const styles = StyleSheet.create({
@@ -15,35 +16,44 @@ const styles = StyleSheet.create({
     }
 });
 
-@connect(state => ({
-    games: state.lobby.games
-}))
-export default class extends Component {
-
+@connect(state => ({}))
+export default class Lobby extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            games: []
+            games: [],
+            playerName: null
         };
+    }
+
+    promptForPlayerName() {
+        const { actions } = this.props;
+        if (!this.state.playerName) {
+            const name = prompt("Please type your name");
+            this.actions.loginUser(name);
+        }
+        else {
+            console.log(this.state.playerName);
+        }
     }
 
     componentWillMount() {
         const { dispatch, games } = this.props;
         this.actions = bindActionCreators(LobbyActions, dispatch);
-
         this.firebaseRef = new Firebase(`${FIREBASE_APP_URL}/games`);
         subscribeToFirebaseList(this.firebaseRef, {
-            itemsLoaded: (items) => {
+            itemsLoaded: items => {
                 this.setState({
                     games: objectToArray(items)
                 });
             },
-            itemAdded: (item) => {
+            itemAdded: item => {
                 this.setState({
                     games: games ? games.concat([item]) : [item]
                 });
             }
         });
+        this.promptForPlayerName();
     }
 
     componentWillUnmount() {
@@ -51,9 +61,9 @@ export default class extends Component {
     }
 
     render() {
-        const { games } = this.state;
-        return <div styles={[styles.page]}>
-            { _.map(games, (g, i) => <LobbyGame game={g} key={i} />) }
+        return <div style={styles.page}>
+            <LobbyPlayerName actions={this.actions} />
+            <LobbyGames actions={this.actions} />
         </div>;
     }
 }

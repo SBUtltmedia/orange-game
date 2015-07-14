@@ -15,11 +15,12 @@ const styles = {
 
 export default class LobbyGame extends Component {
     static propTypes = {
-        game: PropTypes.object.isRequired
+        game: PropTypes.object.isRequired,
+        actions: PropTypes.object.isRequired
     };
 
     render() {
-        const { game } = this.props;
+        const { game, userId, actions } = this.props;
         const { id, players } = game;
         return <div style={styles.container}>
             <div style={styles.section}>{id}</div>
@@ -27,7 +28,8 @@ export default class LobbyGame extends Component {
                 ({(players || []).length}&nbsp;players)
             </div>
             <div style={styles.section}>
-                <Link to="game" query={{id: id}}>Join game</Link>
+                <a onclick={actions.joinGame(userId)}>Join game</a>
+                {/* <Link to="game" query={{id: id}}>Join game</Link> */}
             </div>
         </div>;
     }

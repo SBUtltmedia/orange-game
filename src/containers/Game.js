@@ -31,20 +31,19 @@ export default class Game extends Component {
     componentWillMount() {
         const { dispatch } = this.props;
         this.actions = bindActionCreators(GameActions, dispatch);
-        this.actions.loginUser();
     }
 
     render() {
         return <div style={styles.container}>
-          <div style={styles.row}>
-              <Basket actions={this.actions} />
-              <Controls actions={this.actions} />
-              <Dish actions={this.actions} />
-          </div>
-          <div style={styles.row}>
-              <Stats actions={this.actions} />
-              <Players actions={this.actions} />
-          </div>
+            <div style={styles.row}>
+                <Basket actions={this.actions} />
+                <Controls actions={this.actions} />
+                <Dish actions={this.actions} />
+            </div>
+            <div style={styles.row}>
+                <Stats actions={this.actions} />
+                <Players actions={this.actions} />
+            </div>
         </div>;
     }
 }
