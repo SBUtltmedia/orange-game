@@ -1,6 +1,7 @@
 import { USER_AUTHED, JOIN_GAME } from '../constants/ActionTypes';
 import { FIREBASE_APP_URL } from '../constants/Settings';
 import Firebase from 'firebase';
+import _ from 'lodash';
 
 export function loginUser(name) {
     const ref = new Firebase(FIREBASE_APP_URL);
@@ -35,16 +36,42 @@ export function loginUser(name) {
     };
 }
 
-export function joinGame(gameId) {
-    const ref = new Firebase(`${FIREBASE_APP_URL}/games/${gameId}/players`);
-    return dispatch => {
-        const player = {
+export function joinGame(gameId, userId) {
 
-        };
-        const gameId = ref.push(player).key();
-        ref.off();
-        dispatch({
-            type: JOIN_GAME
+    console.log("JOIN GAME");
+
+    const ref = new Firebase(`${FIREBASE_APP_URL}/games/${gameId}/users`);
+    return dispatch => {
+        function sendBackResults(name, userId, playerId) {
+            //ref.off();
+            dispatch({
+                type: JOIN_GAME,
+                name: name,
+                userId: userId,
+                playerId: playerId
+            });
+        }
+        ref.on("value", snapshot => {
+            const users = snapshot.val();
+            const existingKey = _.findKey(users, p => p.userId === userId);
+            if (existingKey) {
+                const player = players[existingKey];
+                sendBackResults(player.name, player.userId, existingKey);
+            }
+            else {
+                const player = {
+                    name: '' + userId,
+                    userId: userId,
+                    oranges: {
+                        box: 0,
+                        basket: 0,
+                        dish: 0
+                    },
+                    fitness: 0
+                };
+                const playerId = ref.push(player).key();
+                sendBackResults(player.name, player.userId, playerId);
+            }
         });
     };
 }

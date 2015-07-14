@@ -21,9 +21,6 @@ export default class LobbyGames extends Component {
 
     render() {
         const { games, actions } = this.props;
-
-        actions.joinGame(games);
-
         return <div styles={[styles.container]}>
             { _.map(games, (g, i) => <LobbyGame game={g} key={i} />) }
         </div>;
