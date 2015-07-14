@@ -4,7 +4,7 @@ import Firebase from 'firebase';
 import * as LobbyActions from '../actions/LobbyActions';
 import LobbyGame from '../components/LobbyGame';
 import { FIREBASE_APP_URL } from '../constants/Settings';
-import { subscribeToFirebaseList } from '../utils';
+import { subscribeToFirebaseList, objectToArray } from '../utils';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
 import { connect } from 'redux/react';
@@ -35,12 +35,12 @@ export default class extends Component {
         subscribeToFirebaseList(this.firebaseRef, {
             itemsLoaded: (items) => {
                 this.setState({
-                    games: _.values(items)
+                    games: objectToArray(items)
                 });
             },
             itemAdded: (item) => {
                 this.setState({
-                    games: games.concat([item])
+                    games: games ? games.concat([item]) : [item]
                 });
             }
         });
@@ -53,7 +53,7 @@ export default class extends Component {
     render() {
         const { games } = this.state;
         return <div styles={[styles.page]}>
-            { _.map(games, game => <LobbyGame players={game.players || []} />) }
+            { _.map(games, (g, i) => <LobbyGame game={g} key={i} />) }
         </div>;
     }
 }

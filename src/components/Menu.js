@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PropTypes, Component } from 'react';
 import StyleSheet from'react-style';
 import { Link } from 'react-router';
 
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     }
 });
 
-export default class Menu {
+export default class Menu extends Component {
 
     render() {
         return <div styles={[styles.menu]}>

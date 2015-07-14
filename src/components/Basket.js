@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import Bin from './Bin';
-import ItemTypes from '../constants/ItemTypes';
 import { areaTheme } from '../styles/Themes';
 
 const styles = {
@@ -9,7 +8,7 @@ const styles = {
     }
 }
 
-export default class Basket {
+export default class Basket extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired
   };
