@@ -8,7 +8,7 @@ var gulp        = require('gulp'),
     server      = require('gulp-develop-server'),
     clean       = require('gulp-rimraf'),
     plumber     = require('gulp-plumber'),
-    source      = require('vinyl-source-stream')
+    source      = require('vinyl-source-stream');
     //livereload  = require('gulp-livereload');
 
 var paths = {
@@ -24,6 +24,10 @@ var paths = {
     static_files: 'public/**/*.*',
     public_build_path: 'build/public/'
 };
+
+function babel(src, dest, function() {
+
+});
 
 gulp.task('server:babel', function () {
     return gulp.src(paths.server_files)
@@ -80,6 +84,10 @@ gulp.task('watch', ['default'], function () {
     gulp.watch([paths.scripts], ['client:compile']);
     gulp.watch(paths.sass, ['sass']);
     gulp.watch(paths.server_files, ['server:compile'])
+});
+
+gulp.task('tests', ['tests:babel'], function() {
+
 });
 
 gulp.task('heroku:dev', ['default']);
