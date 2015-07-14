@@ -118,4 +118,3 @@ gulp.task('tests', ['tests:babel'], function() {
 });
 
 gulp.task('heroku:dev', ['default']);
-gulp.task('build', ['default']);
