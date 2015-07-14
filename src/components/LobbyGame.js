@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'redux/react';
+import _ from 'lodash';
 
 const styles = {
     container: {
@@ -36,7 +37,7 @@ export default class LobbyGame extends Component {
         return <div style={styles.container}>
             <div style={styles.section}>{id}</div>
             <div style={styles.section}>
-                ({(players || []).length}&nbsp;players)
+                ({_.size(players)}&nbsp;players)
             </div>
             <div style={styles.section}>
                 <a onClick={this.joinGame.bind(this)}>Join game</a>
