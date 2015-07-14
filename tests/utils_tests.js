@@ -6,7 +6,7 @@ describe('utils', function() {
   describe('objectToArray', function() {
     it('should convert an object to an array', function() {
         var obj = { id123: { val: 1 }};
-        expect(utils.objectToArray(obj)).to.equal([{ id: 'id123', val: 1 }]);
+        expect(utils.objectToArray(obj)).to.deep.equal([{ id: 'id123', val: 1 }]);
     });
     });
 });
