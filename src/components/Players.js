@@ -41,7 +41,7 @@ export default class Players extends Component {
             },
             itemAdded: item => {
                 this.setState({
-                    players: players.concat([item])
+                    players: this.state.players.concat([item])
                 });
             }
         });

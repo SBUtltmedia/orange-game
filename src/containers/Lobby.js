@@ -12,7 +12,9 @@ const styles = StyleSheet.create({
     }
 });
 
-@connect(state => ({}))
+@connect(state => ({
+    userName: state.player.name
+}))
 export default class Lobby extends Component {
 
     constructor(props) {
@@ -34,9 +36,11 @@ export default class Lobby extends Component {
     }
 
     componentWillMount() {
-        const { dispatch, games } = this.props;
+        const { dispatch, games, userName } = this.props;
         this.actions = bindActionCreators(LobbyActions, dispatch);
-        this.promptForPlayerName();
+        if (!userName) {
+            this.promptForPlayerName();
+        }
     }
 
     render() {
