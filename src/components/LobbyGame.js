@@ -1,16 +1,22 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'redux/react';
+import { LINK_COLOR } from '../styles/Themes';
 import _ from 'lodash';
 
 const styles = {
     container: {
-        color: 'white',
-        backgroundColor: 'red',
+        color: 'black',
+        backgroundColor: 'lightgray',
         marginTop: 16,
+    },
+    row: {
         display: 'flex'
     },
     section: {
         margin: 10
+    },
+    link: {
+        color: LINK_COLOR
     }
 };
 
@@ -35,13 +41,23 @@ export default class LobbyGame extends Component {
         const { game } = this.props;
         const { id, players } = game;
         return <div style={styles.container}>
-            <div style={styles.section}>{id}</div>
-            <div style={styles.section}>
-                ({_.size(players)}&nbsp;players)
+            <div style={styles.row}>
+                <div style={styles.section}>{id}</div>
+                <div style={styles.section}>
+                    ({_.size(players)}&nbsp;players)
+                </div>
+                <div style={styles.section}>
+                    <a style={styles.link} onClick={this.joinGame.bind(this)}>
+                        Join game
+                    </a>
+                    {/* <Link to="game" query={{id: id}}>Join game</Link> */}
+                </div>
             </div>
-            <div style={styles.section}>
-                <a onClick={this.joinGame.bind(this)}>Join game</a>
-                {/* <Link to="game" query={{id: id}}>Join game</Link> */}
+            <div style={styles.row}>
+                <div style={styles.section}>
+                    Players joined:&nbsp;
+                    { _.map(players, p => p.name).join(', ') }
+                </div>
             </div>
         </div>;
     }

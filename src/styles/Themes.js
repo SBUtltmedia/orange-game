@@ -29,3 +29,5 @@ export const dnd = {
     isActive: 'darkgreen',
     canDrop: '#69F'
 }
+
+export const LINK_COLOR = "#36F";
