@@ -27,7 +27,7 @@ export default class Admin extends Component {
             <button style={styles.button} onClick={createGame}>
                 Create new game
             </button>
-            <LobbyGames isAdmin={true} />
+            <LobbyGames isAdmin={true} actions={this.actions} />
         </div>;
     }
 }

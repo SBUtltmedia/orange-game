@@ -6,7 +6,6 @@ import _ from 'lodash';
 const styles = {
     container: {
         color: 'black',
-        backgroundColor: 'lightgray',
         marginTop: 16,
     },
     row: {
@@ -70,8 +69,9 @@ export default class LobbyGame extends Component {
 
     render() {
         const { game, isAdmin } = this.props;
-        const { id, players } = game;
-        return <div style={styles.container}>
+        const { id, players, started } = game;
+        const backgroundColor = started ? 'lightblue' : 'lightgray';
+        return <div style={{ ...styles.container, backgroundColor }}>
             <div style={styles.row}>
                 <div style={styles.section}>{id}</div>
                 <div style={styles.section}>
