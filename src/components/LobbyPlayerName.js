@@ -4,7 +4,8 @@ import { connect } from 'redux/react';
 const styles = {
     container: {
         color: 'white',
-        backgroundColor: 'darkgray'
+        backgroundColor: 'darkgray',
+        paddingLeft: 10
     },
 };
 

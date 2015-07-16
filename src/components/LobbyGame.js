@@ -16,7 +16,8 @@ const styles = {
         margin: 10
     },
     link: {
-        color: LINK_COLOR
+        color: LINK_COLOR,
+        margin: 10
     }
 };
 
@@ -29,7 +30,8 @@ export default class LobbyGame extends Component {
         game: PropTypes.object.isRequired,
         actions: PropTypes.object.isRequired,
         userId: PropTypes.string.isRequired,
-        userName: PropTypes.string.isRequired
+        userName: PropTypes.string.isRequired,
+        isAdmin: PropTypes.bool
     };
 
     joinGame() {
@@ -37,8 +39,37 @@ export default class LobbyGame extends Component {
         actions.joinGame(game.id, userId, userName);
     }
 
+    startGame() {
+        const { game, actions } = this.props;
+        actions.startGame(game.id);
+    }
+
+    deleteGame() {
+        const { game, actions } = this.props;
+        actions.deleteGame(game.id);
+    }
+
+    renderUserButtons() {
+        return <div>
+            <a style={styles.link} onClick={this.joinGame.bind(this)}>
+                Join game
+            </a>
+        </div>;
+    }
+
+    renderAdminButtons() {
+        return <div>
+            <a style={styles.link} onClick={this.startGame.bind(this)}>
+                Start game
+            </a>
+            <a style={styles.link} onClick={this.deleteGame.bind(this)}>
+                Delete game
+            </a>
+        </div>;
+    }
+
     render() {
-        const { game } = this.props;
+        const { game, isAdmin } = this.props;
         const { id, players } = game;
         return <div style={styles.container}>
             <div style={styles.row}>
@@ -47,10 +78,7 @@ export default class LobbyGame extends Component {
                     ({_.size(players)}&nbsp;players)
                 </div>
                 <div style={styles.section}>
-                    <a style={styles.link} onClick={this.joinGame.bind(this)}>
-                        Join game
-                    </a>
-                    {/* <Link to="game" query={{id: id}}>Join game</Link> */}
+                    { isAdmin ? this.renderAdminButtons() : this.renderUserButtons() }
                 </div>
             </div>
             <div style={styles.row}>

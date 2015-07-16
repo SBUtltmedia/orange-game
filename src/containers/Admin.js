@@ -1,12 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import StyleSheet from'react-style';
 import * as AdminActions from '../actions/AdminActions';
+import LobbyGames from '../components/LobbyGames';
 import { bindActionCreators } from 'redux';
 import { connect } from 'redux/react';
 
 const styles = StyleSheet.create({
     page: {
-        height: '100%'
+        height: '100%',
+        textAlign: 'center'
     }
 });
 
@@ -25,6 +27,7 @@ export default class Admin extends Component {
             <button style={styles.button} onClick={createGame}>
                 Create new game
             </button>
+            <LobbyGames isAdmin={true} />
         </div>;
     }
 }

@@ -18,7 +18,8 @@ const styles = {
 export default class LobbyGames extends Component {
     static propTypes = {
         actions: PropTypes.object.isRequired,
-        playerName: PropTypes.string.isRequired
+        playerName: PropTypes.string.isRequired,
+        isAdmin: PropTypes.bool
     };
 
     constructor(props) {
@@ -49,10 +50,10 @@ export default class LobbyGames extends Component {
     }
 
     render() {
-        const { actions } = this.props;
         const { games } = this.state;
         return <div styles={[styles.container]}>
-            { _.map(games, (g, i) => <LobbyGame game={g} key={i} actions={actions} />) }
+            { _.map(games, (g, i) =>
+                            <LobbyGame game={g} key={i} {...this.props} />) }
         </div>;
     }
 }
