@@ -8,11 +8,13 @@ const initialState = {
 export default function lobby(state=initialState, action) {
     switch (action.type) {
         case CREATE_GAME:
-            return [{
+            return {
+                games: [{
                  id: action.id,
                  players: action.players,
                  maxPlayers: action.maxPlayers
-               }, ...state];
+               }, ...state]
+           };
        case START_GAME:
             _.find(state.games, g => g.id === action.id).started = true;
             return state;
