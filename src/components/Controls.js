@@ -18,11 +18,13 @@ const styles = {
 
 @connect(state => ({
     day: state.game.day,
+    canAdvanceDay: state.game.oranges.box === 0
 }))
 export default class Controls extends Component {
     static propTypes = {
         day: PropTypes.number.isRequired,
-        actions: PropTypes.object.isRequired
+        actions: PropTypes.object.isRequired,
+        canAdvanceDay: PropTypes.bool.isRequired
     };
 
     componentDidMount() {
@@ -32,11 +34,12 @@ export default class Controls extends Component {
     }
 
     render() {
-        const { actions, day } = this.props;
+        const { actions, day, canAdvanceDay } = this.props;
         const { newDay } = actions;
         return <div style={styles.container}>
             <OrangeBox {...this.props} />
-            <button style={styles.button} onClick={newDay.bind(this, day + 1)}>
+            <button style={styles.button} disabled={!canAdvanceDay}
+                                        onClick={newDay.bind(this, day + 1)}>
                 Let a new day begin
             </button>
             <button style={styles.button} onClick={() => alert('Not implemented')}>
