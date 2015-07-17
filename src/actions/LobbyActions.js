@@ -1,4 +1,4 @@
-import { USER_AUTHED, JOIN_GAME } from '../constants/ActionTypes';
+import { USER_AUTHED, JOIN_GAME, LEAVE_GAME } from '../constants/ActionTypes';
 import { FIREBASE_APP_URL } from '../constants/Settings';
 import Firebase from 'firebase';
 import _ from 'lodash';
@@ -43,9 +43,12 @@ export function joinGame(gameId, userId, userName) {
             //ref.off();
             dispatch({
                 type: JOIN_GAME,
-                name: name,
-                userId: userId,
-                playerId: playerId
+                id: gameId,
+                player: {
+                    name: name,
+                    userId: userId,
+                    playerId: playerId
+                }
             });
         }
         ref.on("value", snapshot => {
@@ -71,4 +74,14 @@ export function joinGame(gameId, userId, userName) {
             }
         });
     };
+}
+
+export function leaveGame(gameId, playerId) {
+    const ref = new Firebase(`${FIREBASE_APP_URL}/games/${gameId}/players/${playerId}`);
+    ref.remove();
+    return {
+        type: LEAVE_GAME,
+        id: gameId,
+        playerId: playerId
+    }
 }

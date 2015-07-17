@@ -1,4 +1,4 @@
-import { USER_AUTHED, JOIN_GAME } from '../constants/ActionTypes';
+import { USER_AUTHED } from '../constants/ActionTypes';
 
 const initialState = {
     userId: null,
@@ -13,12 +13,6 @@ export default function player(state=initialState, action) {
                 userId: action.userId,
                 playerId: state.playerId,
                 name: action.name
-            };
-        case JOIN_GAME:
-            return {
-                userId: action.userId,
-                playerId: action.playerId,
-                name: state.name
             };
     }
     return state;

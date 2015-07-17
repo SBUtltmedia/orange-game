@@ -22,6 +22,7 @@ const styles = {
 
 @connect(state => ({
     userId: state.player.userId,
+    playerId: state.player.playerId,
     userName: state.player.name
 }))
 export default class LobbyGame extends Component {
@@ -33,9 +34,18 @@ export default class LobbyGame extends Component {
         isAdmin: PropTypes.bool
     };
 
+    componentWillReceiveProps(newProps) {
+        //if (newProps.)
+    }
+
     joinGame() {
         const { game, userId, userName, actions } = this.props;
         actions.joinGame(game.id, userId, userName);
+    }
+
+    leaveGame() {
+        const { game, playerId, actions } = this.props;
+        actions.leaveGame(game.id, playerId);
     }
 
     startGame() {
@@ -52,6 +62,9 @@ export default class LobbyGame extends Component {
         return <div>
             <a style={styles.link} onClick={this.joinGame.bind(this)}>
                 Join game
+            </a>
+            <a style={styles.link} onClick={this.leaveGame.bind(this)}>
+                Leave game
             </a>
         </div>;
     }
