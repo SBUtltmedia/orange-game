@@ -9,26 +9,25 @@ const styles = {
     },
     section: {
         marginLeft: 10,
-        marginRight: 20
+        marginRight: 16
     }
 };
 
 @connect(state => ({
-    playerName: state.player.name,
-    playerId: state.player.playerId,
+    userName: state.player.name,
     userId: state.player.userId
 }))
 export default class LobbyGames extends Component {
     static propTypes = {
         actions: PropTypes.object.isRequired,
-        playerName: PropTypes.string.isRequired
+        userName: PropTypes.string.isRequired,
+        userId: PropTypes.string.isRequired
     };
 
     render() {
-        const { playerName, playerId, userId } = this.props;
+        const { userName, playerId, userId } = this.props;
         return <div styles={styles.container}>
-            <div styles={styles.section}>Player name: {playerName}</div>
-            <div styles={styles.section}>playerId: {playerId}</div>
+            <div styles={styles.section}>Player name: {userName}</div>
             <div styles={styles.section}>userId: {userId}</div>
         </div>;
     }

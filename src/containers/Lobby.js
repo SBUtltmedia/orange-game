@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import StyleSheet from'react-style';
 import * as LobbyActions from '../actions/LobbyActions';
 import LobbyGames from '../components/LobbyGames';
-import LobbyPlayerName from '../components/LobbyPlayerName';
+import LobbyUserName from '../components/LobbyUserName';
 import EnterName from '../components/EnterName';
 import { bindActionCreators } from 'redux';
 import { connect } from 'redux/react';
@@ -31,7 +31,7 @@ export default class Lobby extends Component {
     render() {
         const { userName } = this.props;
         return <div style={styles.page}>
-            <LobbyPlayerName actions={this.actions} />
+            <LobbyUserName actions={this.actions} />
             <LobbyGames actions={this.actions} />
             <EnterName open={userName === null} actions={this.actions} />
         </div>;

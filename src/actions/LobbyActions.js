@@ -37,6 +37,9 @@ export function loginUser(name) {
 }
 
 export function joinGame(gameId, userId, userName) {
+
+    console.log(userId + " joining game " + gameId);
+
     const ref = new Firebase(`${FIREBASE_APP_URL}/games/${gameId}/players`);
     return dispatch => {
         function sendBackResults(name, userId, playerId) {
@@ -76,12 +79,19 @@ export function joinGame(gameId, userId, userName) {
     };
 }
 
-export function leaveGame(gameId, playerId) {
-    const ref = new Firebase(`${FIREBASE_APP_URL}/games/${gameId}/players/${playerId}`);
-    ref.remove();
-    return {
-        type: LEAVE_GAME,
-        id: gameId,
-        playerId: playerId
-    }
+export function leaveGame(gameId, userId) {
+    const ref = new Firebase(`${FIREBASE_APP_URL}/games/${gameId}/players`);
+    ref.on("value", snapshot => {
+        const users = snapshot.val();
+        const existingKey = _.findKey(users, p => p.userId === userId);
+        if (existingKey) {
+            const user = users[existingKey];
+            ref.child(existingKey).remove();
+            return {
+                type: LEAVE_GAME,
+                id: gameId,
+                userId: userId
+            }
+        }
+    });
 }

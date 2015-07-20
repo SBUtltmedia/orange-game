@@ -13,12 +13,12 @@ const styles = {
 };
 
 @connect(state => ({
-    playerName: state.player.name
+    userName: state.player.name
 }))
 export default class LobbyGames extends Component {
     static propTypes = {
         actions: PropTypes.object.isRequired,
-        playerName: PropTypes.string.isRequired,
+        userName: PropTypes.string.isRequired,
         isAdmin: PropTypes.bool
     };
 

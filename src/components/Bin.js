@@ -36,7 +36,7 @@ export default class Bin extends Component {
         const { name, playerId, oranges, fitness } = nextProps;
         if (playerId) {
             const ref = new Firebase(`${FIREBASE_APP_URL}/players/${playerId}`);
-            const data = { };
+            const data = {};
             data[name] = oranges;
             ref.child('oranges').update(data);
             ref.child('fitness').update({ fitness: fitness });

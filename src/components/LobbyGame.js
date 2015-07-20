@@ -22,7 +22,6 @@ const styles = {
 
 @connect(state => ({
     userId: state.player.userId,
-    playerId: state.player.playerId,
     userName: state.player.name
 }))
 export default class LobbyGame extends Component {
@@ -44,8 +43,8 @@ export default class LobbyGame extends Component {
     }
 
     leaveGame() {
-        const { game, playerId, actions } = this.props;
-        actions.leaveGame(game.id, playerId);
+        const { game, userId, actions } = this.props;
+        actions.leaveGame(game.id, userId);
     }
 
     startGame() {
