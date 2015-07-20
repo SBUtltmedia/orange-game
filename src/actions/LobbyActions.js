@@ -43,7 +43,9 @@ export function joinGame(gameId, userId, userName) {
     const ref = getFbRef(`/games/${gameId}/players`);
     return dispatch => {
         function sendBackResults(name, userId) {
-            //ref.off();
+
+            ref.off();  // Otherwise it holds a reference to the object
+                        //and we can't remove it later
             dispatch({
                 type: JOIN_GAME,
                 id: gameId,
