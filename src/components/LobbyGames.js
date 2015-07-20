@@ -2,8 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'redux/react';
 import Firebase from 'firebase';
 import LobbyGame from './LobbyGame';
-import { FIREBASE_APP_URL } from '../constants/Settings';
-import { subscribeToFirebaseList, objectToArray } from '../utils';
+import { subscribeToFirebaseList, objectToArray, getFbRef } from '../utils';
 import _ from 'lodash';
 
 const styles = {
@@ -30,7 +29,7 @@ export default class LobbyGames extends Component {
     }
 
     componentWillMount() {
-        this.firebaseRef = new Firebase(`${FIREBASE_APP_URL}/games`);
+        this.firebaseRef = getFbRef('/games');
         subscribeToFirebaseList(this, this.firebaseRef, 'games');
     }
 

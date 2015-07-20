@@ -12,6 +12,9 @@ const initialState = {
 };
 
 export default function game(state=initialState, action) {
+    if (!action) {
+        return state;
+    }
     switch (action.type) {
         case DROP_ORANGE:
             const source = action.source.toLowerCase();

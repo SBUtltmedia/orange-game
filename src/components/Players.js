@@ -4,8 +4,7 @@ import Player from './Player';
 import _ from 'lodash';
 import { connect } from 'redux/react';
 import Firebase from 'firebase';
-import { FIREBASE_APP_URL } from '../constants/Settings';
-import { subscribeToFirebaseList } from '../utils';
+import { subscribeToFirebaseList, getFbRef } from '../utils';
 
 const styles = {
     container: {
@@ -32,7 +31,7 @@ export default class Players extends Component {
     }
 
     componentWillMount() {
-        this.firebaseRef = new Firebase(`${FIREBASE_APP_URL}/games/-JuONgeCXjCblsJQi2d4/players`);
+        this.firebaseRef = getFbRef(`/games/-JuONgeCXjCblsJQi2d4/players`);
         subscribeToFirebaseList(this, this.firebaseRef, 'players');
     }
 

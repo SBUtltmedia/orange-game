@@ -1,10 +1,10 @@
 import { USER_AUTHED, JOIN_GAME, LEAVE_GAME } from '../constants/ActionTypes';
-import { FIREBASE_APP_URL } from '../constants/Settings';
+import { getFbRef } from '../utils';
 import Firebase from 'firebase';
 import _ from 'lodash';
 
 export function loginUser(name) {
-    const ref = new Firebase(FIREBASE_APP_URL);
+    const ref = getFbRef('/');
     return dispatch => {
         function sendBackResults(authData) {
             //ref.off();
@@ -40,17 +40,16 @@ export function joinGame(gameId, userId, userName) {
 
     console.log(userId + " joining game " + gameId);
 
-    const ref = new Firebase(`${FIREBASE_APP_URL}/games/${gameId}/players`);
+    const ref = getFbRef(`/games/${gameId}/players`);
     return dispatch => {
-        function sendBackResults(name, userId, playerId) {
+        function sendBackResults(name, userId) {
             //ref.off();
             dispatch({
                 type: JOIN_GAME,
                 id: gameId,
                 player: {
                     name: name,
-                    userId: userId,
-                    playerId: playerId
+                    userId: userId
                 }
             });
         }
@@ -72,26 +71,36 @@ export function joinGame(gameId, userId, userName) {
                     },
                     fitness: 0
                 };
-                const playerId = ref.push(player).key();
-                sendBackResults(player.name, player.userId, playerId);
+                ref.push(player);
+                sendBackResults(player.name, player.userId);
             }
         });
     };
 }
 
 export function leaveGame(gameId, userId) {
-    const ref = new Firebase(`${FIREBASE_APP_URL}/games/${gameId}/players`);
-    ref.on("value", snapshot => {
-        const users = snapshot.val();
-        const existingKey = _.findKey(users, p => p.userId === userId);
-        if (existingKey) {
-            const user = users[existingKey];
-            ref.child(existingKey).remove();
-            return {
-                type: LEAVE_GAME,
-                id: gameId,
-                userId: userId
+    return dispatch => {
+        const ref = getFbRef(`/games/${gameId}/players`);
+        function onValue(snapshot) {
+
+            console.log('onValue');
+
+            ref.off('value', onValue);  // stop future updates
+            const users = snapshot.val();
+            const existingKey = _.findKey(users, p => p.userId === userId);
+
+            console.log('key', existingKey);
+
+            if (existingKey) {
+                const user = users[existingKey];
+                ref.child(existingKey).remove();
+                dispatch({
+                    type: LEAVE_GAME,
+                    id: gameId,
+                    userId: userId
+                });
             }
         }
-    });
+        ref.on("value", onValue);
+    };
 }

@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { verticalCenter, dnd } from '../styles/Themes';
 import { connect } from 'redux/react';
-import { forRange } from '../utils';
+import { forRange, getFbRef } from '../utils';
 import ItemTypes from '../constants/ItemTypes';
 import BinDisplay from './BinDisplay';
 import Firebase from 'firebase';
@@ -10,6 +10,7 @@ import { FIREBASE_APP_URL } from '../constants/Settings';
 @connect((state, props) => ({
     oranges: state.game.oranges[props.name],
     fitness: state.game.fitness,
+    gameId: state.player.gameId,
     playerId: state.player.playerId
 }))
 export default class Bin extends Component {
@@ -21,11 +22,12 @@ export default class Bin extends Component {
         actions: PropTypes.object.isRequired,
         oranges: PropTypes.number.isRequired,
         fitness: PropTypes.number.isRequired,
+        gameId: PropTypes.string.isRequired,
         playerId: PropTypes.string.isRequired
     };
 
     componentWillMount() {
-        this.firebaseRef = new Firebase(`${FIREBASE_APP_URL}/players`);
+        this.firebaseRef = getFbRef(`/games/${gameId}/players/${playerId}`);
     }
 
     componentWillUnmount() {
@@ -33,9 +35,9 @@ export default class Bin extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { name, playerId, oranges, fitness } = nextProps;
-        if (playerId) {
-            const ref = new Firebase(`${FIREBASE_APP_URL}/players/${playerId}`);
+        const { name, gameId, oranges, fitness } = nextProps;
+        if (gameId) {
+            const ref = new Firebase(`${FIREBASE_APP_URL}/games/${gameId}/players`);
             const data = {};
             data[name] = oranges;
             ref.child('oranges').update(data);

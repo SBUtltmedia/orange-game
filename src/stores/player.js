@@ -7,6 +7,9 @@ const initialState = {
 };
 
 export default function player(state=initialState, action) {
+    if (!action) {
+        return state;
+    }
     switch (action.type) {
         case USER_AUTHED:
             return {
