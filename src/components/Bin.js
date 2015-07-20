@@ -10,8 +10,8 @@ import { FIREBASE_APP_URL } from '../constants/Settings';
 @connect((state, props) => ({
     oranges: state.game.oranges[props.name],
     fitness: state.game.fitness,
-    gameId: state.player.gameId,
-    playerId: state.player.playerId
+    gameId: state.game.id,
+    playerId: state.game.playerId
 }))
 export default class Bin extends Component {
     static propTypes = {

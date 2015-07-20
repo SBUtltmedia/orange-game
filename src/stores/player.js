@@ -1,9 +1,8 @@
 import { USER_AUTHED } from '../constants/ActionTypes';
 
 const initialState = {
-    userId: null,
-    playerId: null,
-    name: null
+    name: null,
+    userId: null
 };
 
 export default function player(state=initialState, action) {
@@ -14,7 +13,6 @@ export default function player(state=initialState, action) {
         case USER_AUTHED:
             return {
                 userId: action.userId,
-                playerId: state.playerId,
                 name: action.name
             };
     }
