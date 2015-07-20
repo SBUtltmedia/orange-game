@@ -32,19 +32,8 @@ export default class Players extends Component {
     }
 
     componentWillMount() {
-        this.firebaseRef = new Firebase(`${FIREBASE_APP_URL}/players`);
-        subscribeToFirebaseList(this.firebaseRef, {
-            itemsLoaded: items => {
-                this.setState({
-                    players: _.values(items)
-                });
-            },
-            itemAdded: item => {
-                this.setState({
-                    players: this.state.players.concat([item])
-                });
-            }
-        });
+        this.firebaseRef = new Firebase(`${FIREBASE_APP_URL}/games/-JuONgeCXjCblsJQi2d4/players`);
+        subscribeToFirebaseList(this, this.firebaseRef, 'players');
     }
 
     componentWillUnmount() {

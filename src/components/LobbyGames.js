@@ -31,18 +31,7 @@ export default class LobbyGames extends Component {
 
     componentWillMount() {
         this.firebaseRef = new Firebase(`${FIREBASE_APP_URL}/games`);
-        subscribeToFirebaseList(this.firebaseRef, {
-            itemsLoaded: items => {
-                this.setState({
-                    games: objectToArray(items)
-                });
-            },
-            itemAdded: item => {
-                this.setState({
-                    games: this.state.games.concat([item])
-                });
-            }
-        });
+        subscribeToFirebaseList(this, this.firebaseRef, 'games');
     }
 
     componentWillUnmount() {

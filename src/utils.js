@@ -11,13 +11,21 @@ export function trimString(s) {  // Strip whitespace
       return (s || '').replace(/^\s+|\s+$/g, '');
 }
 
-export function subscribeToFirebaseList(ref, callbacks) {
-    const itemsLoaded = callbacks.itemsLoaded || function() {};
-    const itemAdded = callbacks.itemAdded || function() {};
-    const itemChanged = callbacks.itemChanged || function() {};
-    const itemRemoved = callbacks.itemRemoved || function() {};
-    ref.on("value", snapshot => itemsLoaded(snapshot.val()));
-    ref.on("child_added", snapshot => itemAdded(snapshot.val()));
-    ref.on("child_changed", snapshot => itemChanged(snapshot.val()));
-    ref.on("child_removed", snapshot => itemRemoved(snapshot.val()));
+export function subscribeToFirebaseList(component, ref, stateKey) {
+    ref.on("value", snapshot => {
+        const items = snapshot.val();
+        const data = {};
+        data[stateKey] = objectToArray(items);
+        component.setState(data);
+    });
+
+    ref.on("child_added", snapshot => {
+        const item = snapshot.val();
+        const data = {};
+        data[stateKey] = component.state[stateKey].concat([item])
+        component.setState(data);
+    });
+
+    //ref.on("child_changed", snapshot => itemChanged(snapshot.val()));
+    //ref.on("child_removed", snapshot => itemRemoved(snapshot.val()));
 }
