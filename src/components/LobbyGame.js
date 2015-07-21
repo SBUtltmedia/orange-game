@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'redux/react';
 import { LINK_COLOR } from '../styles/Themes';
+import { Link } from 'react-router';
 import _ from 'lodash';
 
 const styles = {
@@ -97,6 +98,9 @@ export default class LobbyGame extends Component {
                 <div style={styles.section}>
                     Players joined:&nbsp;
                     { _.map(players, p => p.name).join(', ') }
+                </div>
+                <div style={styles.section}>
+                    <Link to={`/game/${game.id}`}>Goto</Link>
                 </div>
             </div>
         </div>;
