@@ -1,14 +1,7 @@
-import { DROP_ORANGE, NEW_DAY, JOIN_GAME, SET_GAME_ID } from '../constants/ActionTypes';
+import { DROP_ORANGE, NEW_DAY, JOIN_GAME } from '../constants/ActionTypes';
 import { FIREBASE_APP_URL } from '../constants/Settings';
 import Firebase from 'firebase';
 import _ from 'lodash';
-
-export function setGameId(gameId) {
-    return {
-        type: SET_GAME_ID,
-        gameId: gameId
-    }
-}
 
 export function dropOrange(source, dest) {
     return {

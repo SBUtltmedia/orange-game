@@ -34,15 +34,16 @@ export default class Game extends Component {
     }
 
     render() {
+        const gameId = this.props.params.gameId;  // from URL params
         return <div style={styles.container}>
             <div style={styles.row}>
-                <Basket actions={this.actions} />
-                <Controls actions={this.actions} />
-                <Dish actions={this.actions} />
+                <Basket actions={this.actions} gameId={gameId} />
+                <Controls actions={this.actions} gameId={gameId} />
+                <Dish actions={this.actions} gameId={gameId} />
             </div>
             <div style={styles.row}>
-                <Stats actions={this.actions} />
-                <Players actions={this.actions} />
+                <Stats actions={this.actions} gameId={gameId} />
+                <Players actions={this.actions} gameId={gameId} />
             </div>
         </div>;
     }

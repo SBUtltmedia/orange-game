@@ -5,12 +5,10 @@ import { forRange, getFbRef } from '../utils';
 import ItemTypes from '../constants/ItemTypes';
 import BinDisplay from './BinDisplay';
 import Firebase from 'firebase';
-import { FIREBASE_APP_URL } from '../constants/Settings';
 
 @connect((state, props) => ({
     oranges: state.game.oranges[props.name],
     fitness: state.game.fitness,
-    gameId: state.game.id,
     playerId: state.game.playerId
 }))
 export default class Bin extends Component {
@@ -26,18 +24,10 @@ export default class Bin extends Component {
         playerId: PropTypes.string.isRequired
     };
 
-    componentWillMount() {
-        this.firebaseRef = getFbRef(`/games/${gameId}/players/${playerId}`);
-    }
-
-    componentWillUnmount() {
-        this.firebaseRef.off();
-    }
-
     componentWillReceiveProps(nextProps) {
-        const { name, gameId, oranges, fitness } = nextProps;
+        const { name, oranges, gameId, playerId, fitness } = nextProps;
         if (gameId) {
-            const ref = new Firebase(`${FIREBASE_APP_URL}/games/${gameId}/players`);
+            const ref = getFbRef(`/games/${gameId}/players`);
             const data = {};
             data[name] = oranges;
             ref.child('oranges').update(data);
