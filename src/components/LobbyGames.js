@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'redux/react';
-import Firebase from 'firebase';
 import LobbyGame from './LobbyGame';
 import { subscribeToFirebaseList, objectToArray, getFbRef } from '../utils';
 import _ from 'lodash';

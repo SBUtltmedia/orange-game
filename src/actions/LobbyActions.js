@@ -1,6 +1,5 @@
 import { USER_AUTHED, JOIN_GAME, LEAVE_GAME, GET_USER_DATA } from '../constants/ActionTypes';
 import { getFbRef } from '../utils';
-import Firebase from 'firebase';
 import _ from 'lodash';
 
 export function getUserData(authId) {

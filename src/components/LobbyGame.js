@@ -22,6 +22,17 @@ const styles = {
     }
 };
 
+function gotoGameIfJoinedAndStarted(props) {
+    const { game, authId } = props;
+    const players = objectToArray(game.players);
+    const joinedGame = _.some(players, p => {
+        return p.authId === authId;
+    });
+    if (game.started && joinedGame) {
+        window.location.href = `/?#/game/${game.id}`;
+    }
+}
+
 @connect(state => ({
     authId: state.user.authId,
     userName: state.user.name
@@ -35,15 +46,12 @@ export default class LobbyGame extends Component {
         isAdmin: PropTypes.bool
     };
 
+    componentWillMount() {
+        gotoGameIfJoinedAndStarted(this.props);
+    }
+
     componentWillReceiveProps(newProps) {
-        const { game, authId } = newProps;
-        const players = objectToArray(game.players);
-        const joinedGame = _.some(players, p => {
-            return p.authId === authId;
-        });
-        if (game.started && joinedGame) {
-            window.location.href = `/?#/game/${game.id}`;
-        }
+        gotoGameIfJoinedAndStarted(newProps);
     }
 
     joinGame() {

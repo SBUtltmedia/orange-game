@@ -3,7 +3,6 @@ import { areaTheme } from '../styles/Themes';
 import Player from './Player';
 import _ from 'lodash';
 import { connect } from 'redux/react';
-import Firebase from 'firebase';
 import { subscribeToFirebaseList, getFbRef } from '../utils';
 
 const styles = {

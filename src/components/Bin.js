@@ -4,7 +4,6 @@ import { connect } from 'redux/react';
 import { forRange, getFbRef } from '../utils';
 import ItemTypes from '../constants/ItemTypes';
 import BinDisplay from './BinDisplay';
-import Firebase from 'firebase';
 
 @connect((state, props) => ({
     oranges: state.game.oranges[props.name],
@@ -28,7 +27,7 @@ export default class Bin extends Component {
     componentWillReceiveProps(nextProps) {
         const { name, oranges, gameId, playerId, fitness } = nextProps;
         if (gameId) {
-            const ref = getFbRef(`/games/${gameId}/players`);
+            const ref = getFbRef(`/games/${gameId}/players/${playerId}`);
             const data = {};
             data[name] = oranges;
             ref.child('oranges').update(data);

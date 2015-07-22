@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Firebase from 'firebase';
 import { FIREBASE_APP_URL } from './constants/Settings';
 
 export function range(n) { return Array.apply(0, Array(n)); }
@@ -33,4 +34,11 @@ export function subscribeToFirebaseList(component, ref, stateKey) {
 
 export function getFbRef(url) {
     return new Firebase(`${FIREBASE_APP_URL}/${url}`);
+}
+
+export function getAuth() {
+    const ref = getFbRef('/');
+    const auth = ref.getAuth();
+    ref.off();
+    return auth;
 }
