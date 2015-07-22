@@ -3,9 +3,7 @@ import { areaTheme } from '../styles/Themes';
 import Player from './Player';
 import _ from 'lodash';
 import { connect } from 'redux/react';
-import Firebase from 'firebase';
-import { FIREBASE_APP_URL } from '../constants/Settings';
-import { subscribeToFirebaseList } from '../utils';
+import { subscribeToFirebaseList, getFbRef } from '../utils';
 
 const styles = {
     container: {
@@ -16,12 +14,13 @@ const styles = {
 };
 
 @connect(state => ({
-    userId: state.player.userId
+    authId: state.user.authId
 }))
 export default class Players extends Component {
     static propTypes = {
-        userId: PropTypes.string.isRequired,
-        actions: PropTypes.object.isRequired
+        authId: PropTypes.string.isRequired,
+        actions: PropTypes.object.isRequired,
+        gameId: PropTypes.string.isRequired
     };
 
     constructor(props) {
@@ -32,19 +31,9 @@ export default class Players extends Component {
     }
 
     componentWillMount() {
-        this.firebaseRef = new Firebase(`${FIREBASE_APP_URL}/players`);
-        subscribeToFirebaseList(this.firebaseRef, {
-            itemsLoaded: items => {
-                this.setState({
-                    players: _.values(items)
-                });
-            },
-            itemAdded: item => {
-                this.setState({
-                    players: this.state.players.concat([item])
-                });
-            }
-        });
+        const { gameId } = this.props;
+        this.firebaseRef = getFbRef(`/games/${gameId}/players`);
+        subscribeToFirebaseList(this, this.firebaseRef, 'players');
     }
 
     componentWillUnmount() {

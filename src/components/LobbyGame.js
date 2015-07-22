@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'redux/react';
 import { LINK_COLOR } from '../styles/Themes';
+import { Link } from 'react-router';
+import { objectToArray } from '../utils';
 import _ from 'lodash';
 
 const styles = {
@@ -20,22 +22,46 @@ const styles = {
     }
 };
 
+function gotoGameIfJoinedAndStarted(props) {
+    const { game, authId } = props;
+    const players = objectToArray(game.players);
+    const joinedGame = _.some(players, p => {
+        return p.authId === authId;
+    });
+    if (game.started && joinedGame) {
+        window.location.href = `/?#/game/${game.id}`;
+    }
+}
+
 @connect(state => ({
-    userId: state.player.userId,
-    userName: state.player.name
+    authId: state.user.authId,
+    userName: state.user.name
 }))
 export default class LobbyGame extends Component {
     static propTypes = {
         game: PropTypes.object.isRequired,
         actions: PropTypes.object.isRequired,
-        userId: PropTypes.string.isRequired,
+        authId: PropTypes.string.isRequired,
         userName: PropTypes.string.isRequired,
         isAdmin: PropTypes.bool
     };
 
+    componentWillMount() {
+        gotoGameIfJoinedAndStarted(this.props);
+    }
+
+    componentWillReceiveProps(newProps) {
+        gotoGameIfJoinedAndStarted(newProps);
+    }
+
     joinGame() {
-        const { game, userId, userName, actions } = this.props;
-        actions.joinGame(game.id, userId, userName);
+        const { game, authId, userName, actions } = this.props;
+        actions.joinGame(game.id, authId, userName);
+    }
+
+    leaveGame() {
+        const { game, authId, actions } = this.props;
+        actions.leaveGame(game.id, authId);
     }
 
     startGame() {
@@ -52,6 +78,9 @@ export default class LobbyGame extends Component {
         return <div>
             <a style={styles.link} onClick={this.joinGame.bind(this)}>
                 Join game
+            </a>
+            <a style={styles.link} onClick={this.leaveGame.bind(this)}>
+                Leave game
             </a>
         </div>;
     }
@@ -85,6 +114,9 @@ export default class LobbyGame extends Component {
                 <div style={styles.section}>
                     Players joined:&nbsp;
                     { _.map(players, p => p.name).join(', ') }
+                </div>
+                <div style={styles.section}>
+                    <Link to={`/game/${game.id}`}>Goto</Link>
                 </div>
             </div>
         </div>;

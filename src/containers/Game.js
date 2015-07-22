@@ -29,8 +29,9 @@ const styles = {
 export default class Game extends Component {
 
     componentWillMount() {
-        const { dispatch } = this.props;
+        const { dispatch, params } = this.props;
         this.actions = bindActionCreators(GameActions, dispatch);
+        this.actions.gameLoad(params.gameId);
     }
 
     render() {

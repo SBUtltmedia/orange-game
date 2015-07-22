@@ -1,9 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'redux/react';
-import Firebase from 'firebase';
 import LobbyGame from './LobbyGame';
-import { FIREBASE_APP_URL } from '../constants/Settings';
-import { subscribeToFirebaseList, objectToArray } from '../utils';
+import { subscribeToFirebaseList, objectToArray, getFbRef } from '../utils';
 import _ from 'lodash';
 
 const styles = {
@@ -13,12 +11,12 @@ const styles = {
 };
 
 @connect(state => ({
-    playerName: state.player.name
+    userName: state.user.name
 }))
 export default class LobbyGames extends Component {
     static propTypes = {
         actions: PropTypes.object.isRequired,
-        playerName: PropTypes.string.isRequired,
+        userName: PropTypes.string.isRequired,
         isAdmin: PropTypes.bool
     };
 
@@ -30,19 +28,8 @@ export default class LobbyGames extends Component {
     }
 
     componentWillMount() {
-        this.firebaseRef = new Firebase(`${FIREBASE_APP_URL}/games`);
-        subscribeToFirebaseList(this.firebaseRef, {
-            itemsLoaded: items => {
-                this.setState({
-                    games: objectToArray(items)
-                });
-            },
-            itemAdded: item => {
-                this.setState({
-                    games: this.state.games.concat([item])
-                });
-            }
-        });
+        this.firebaseRef = getFbRef('/games');
+        subscribeToFirebaseList(this, this.firebaseRef, 'games');
     }
 
     componentWillUnmount() {

@@ -31,7 +31,7 @@ export default class EnterName extends Component {
     }
 
     componentDidMount() {
-        React.findDOMNode(this.refs.textBox).focus();  // Doesn't work
+        //React.findDOMNode(this.refs.textBox).focus();  // Doesn't work
     }
 
     render() {

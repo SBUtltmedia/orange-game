@@ -1,4 +1,4 @@
-import { DROP_ORANGE, NEW_DAY } from '../constants/ActionTypes';
+import { DROP_ORANGE, NEW_DAY, GAME_LOAD } from '../constants/ActionTypes';
 import { MAX_ORANGES, MAX_FITNESS_BOOST, DAILY_FITNESS_LOSS } from '../constants/Settings';
 const initialState = {
     oranges: {
@@ -6,13 +6,22 @@ const initialState = {
         basket: 0,
         dish: 0
     },
-    day: 0,
-    fitness: 0,
-    fitnessChange: 0
+    day: 1,
+    fitness: 0 - DAILY_FITNESS_LOSS,
+    fitnessChange: 0 - DAILY_FITNESS_LOSS,
+    id: null,
+    playerId: null
 };
 
 export default function game(state=initialState, action) {
+    if (!action) {
+        return state;
+    }
     switch (action.type) {
+        case GAME_LOAD:
+            state.id = action.gameId;
+            state.playerId = action.playerId;
+            return state;
         case DROP_ORANGE:
             const source = action.source.toLowerCase();
             const dest = action.dest.toLowerCase();
@@ -41,7 +50,9 @@ export default function game(state=initialState, action) {
                 },
                 day: state.day + 1,
                 fitness: state.fitness - DAILY_FITNESS_LOSS,
-                fitnessChange: 0 - DAILY_FITNESS_LOSS
+                fitnessChange: 0 - DAILY_FITNESS_LOSS,
+                id: state.id,
+                playerId: state.authId
             }
     }
     return state;
