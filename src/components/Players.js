@@ -20,7 +20,8 @@ const styles = {
 export default class Players extends Component {
     static propTypes = {
         userId: PropTypes.string.isRequired,
-        actions: PropTypes.object.isRequired
+        actions: PropTypes.object.isRequired,
+        gameId: PropTypes.string.isRequired
     };
 
     constructor(props) {
@@ -31,7 +32,8 @@ export default class Players extends Component {
     }
 
     componentWillMount() {
-        this.firebaseRef = getFbRef(`/games/-JuONgeCXjCblsJQi2d4/players`);
+        const { gameId } = this.props;
+        this.firebaseRef = getFbRef(`/games/${gameId}/players`);
         subscribeToFirebaseList(this, this.firebaseRef, 'players');
     }
 
