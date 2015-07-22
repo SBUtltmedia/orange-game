@@ -37,9 +37,6 @@ export function loginUser(name) {
 }
 
 export function joinGame(gameId, userId, userName) {
-
-    console.log(userId + " joining game " + gameId);
-
     const ref = getFbRef(`/games/${gameId}/players`);
     return dispatch => {
         function sendBackResults(name, userId) {
@@ -55,7 +52,7 @@ export function joinGame(gameId, userId, userName) {
                 }
             });
         }
-        ref.on("value", snapshot => {
+        ref.once("value", snapshot => {
             const users = snapshot.val();
             const existingKey = _.findKey(users, p => p.userId === userId);
             if (existingKey) {
@@ -83,16 +80,9 @@ export function joinGame(gameId, userId, userName) {
 export function leaveGame(gameId, userId) {
     return dispatch => {
         const ref = getFbRef(`/games/${gameId}/players`);
-        function onValue(snapshot) {
-
-            console.log('onValue');
-
-            ref.off('value', onValue);  // stop future updates
+        ref.once("value", snapshot => {
             const users = snapshot.val();
             const existingKey = _.findKey(users, p => p.userId === userId);
-
-            console.log('key', existingKey);
-
             if (existingKey) {
                 const user = users[existingKey];
                 ref.child(existingKey).remove();
@@ -102,7 +92,6 @@ export function leaveGame(gameId, userId) {
                     userId: userId
                 });
             }
-        }
-        ref.on("value", onValue);
+        });
     };
 }
