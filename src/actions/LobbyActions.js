@@ -43,7 +43,7 @@ export function loginUser(name) {
 export function joinGame(gameId, authId, userName) {
     const ref = getFbRef(`/games/${gameId}/players`);
     return dispatch => {
-        function sendBackResults(name, authId) {
+        function sendBackResults(name, authId, playerId) {
             ref.off();  // Otherwise it holds a reference to the object
                         //and we can't remove it later
             dispatch({
@@ -51,7 +51,8 @@ export function joinGame(gameId, authId, userName) {
                 gameId: gameId,
                 player: {
                     name: name,
-                    authId: authId
+                    authId: authId,
+                    playerId: playerId
                 }
             });
         }
@@ -65,16 +66,10 @@ export function joinGame(gameId, authId, userName) {
             else {
                 const newPlayer = {
                     name: userName,
-                    authId: authId,
-                    oranges: {
-                        box: 0,
-                        basket: 0,
-                        dish: 0
-                    },
-                    fitness: 0
+                    authId: authId
                 };
-                ref.push(newPlayer);
-                sendBackResults(newPlayer.name, newPlayer.authId);
+                const playerId = ref.push(newPlayer);
+                sendBackResults(newPlayer.name, newPlayer.authId, playerId);
             }
         });
     };

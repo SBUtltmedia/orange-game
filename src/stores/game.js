@@ -21,6 +21,7 @@ export default function game(state=initialState, action) {
     }
     switch (action.type) {
         case GAME_LOAD:
+            console.log('action', action);
             return _.omit(action, 'type');
         case DROP_ORANGE:
             const source = action.source.toLowerCase();
