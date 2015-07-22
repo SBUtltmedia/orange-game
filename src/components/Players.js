@@ -14,6 +14,7 @@ const styles = {
 };
 
 @connect(state => ({
+    gameId: state.game.gameId,
     authId: state.user.authId
 }))
 export default class Players extends Component {
@@ -30,10 +31,12 @@ export default class Players extends Component {
         };
     }
 
-    componentWillMount() {
-        const { gameId } = this.props;
-        this.firebaseRef = getFbRef(`/games/${gameId}/players`);
-        subscribeToFirebaseList(this, this.firebaseRef, 'players', 'playerId');  // TODO: playerId?
+    componentWillReceiveProps(nextProps) {  // TODO: Is this dirty?
+        const { gameId } = nextProps;
+        if (gameId) {
+            this.firebaseRef = getFbRef(`/games/${gameId}/players`);
+            subscribeToFirebaseList(this, this.firebaseRef, 'players', 'playerId');  // TODO: playerId?
+        }
     }
 
     componentWillUnmount() {
