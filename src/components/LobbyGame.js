@@ -22,14 +22,14 @@ const styles = {
 };
 
 @connect(state => ({
-    userId: state.player.userId,
-    userName: state.player.name
+    authId: state.user.authId,
+    userName: state.user.name
 }))
 export default class LobbyGame extends Component {
     static propTypes = {
         game: PropTypes.object.isRequired,
         actions: PropTypes.object.isRequired,
-        userId: PropTypes.string.isRequired,
+        authId: PropTypes.string.isRequired,
         userName: PropTypes.string.isRequired,
         isAdmin: PropTypes.bool
     };
@@ -39,13 +39,13 @@ export default class LobbyGame extends Component {
     }
 
     joinGame() {
-        const { game, userId, userName, actions } = this.props;
-        actions.joinGame(game.id, userId, userName);
+        const { game, authId, userName, actions } = this.props;
+        actions.joinGame(game.id, authId, userName);
     }
 
     leaveGame() {
-        const { game, userId, actions } = this.props;
-        actions.leaveGame(game.id, userId);
+        const { game, authId, actions } = this.props;
+        actions.leaveGame(game.id, authId);
     }
 
     startGame() {

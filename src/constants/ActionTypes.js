@@ -6,4 +6,3 @@ export const CREATE_GAME = 'CREATE_GAME';
 export const START_GAME = 'START_GAME';
 export const DELETE_GAME = 'DELETE_GAME';
 export const GAME_LOAD = 'GAME_LOAD';
-export const LOBBY_LOAD = 'LOBBY_LOAD';

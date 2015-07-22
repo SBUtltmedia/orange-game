@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import StyleSheet from'react-style';
 import * as LobbyActions from '../actions/LobbyActions';
 import LobbyGames from '../components/LobbyGames';
@@ -19,25 +19,37 @@ const styles = StyleSheet.create({
 });
 
 @connect(state => ({
-    userName: state.player.name
+    userName: state.user.name
 }))
 export default class Lobby extends Component {
+    static propTypes = {
+        userName: PropTypes.string.isRequired
+    };
 
     componentWillMount() {
-        const { dispatch, games, userName } = this.props;
+        const { dispatch } = this.props;
         this.actions = bindActionCreators(LobbyActions, dispatch);
+        const ref = getFbRef('/');
+        const auth = ref.getAuth();
+        this.setState({
+            loggedIn: auth !== null,
+            authId: auth ? auth.uid : null
+        });
+    }
+
+    componentDidMount() {
+        const { loggedIn, authId } = this.state;
+        if (loggedIn) {
+            this.actions.getUserData(authId);
+        }
     }
 
     render() {
-        const ref = getFbRef('/');
-        const auth = ref.getAuth();
+        const { loggedIn } = this.state;
         return <div style={styles.page}>
             <LobbyUserName actions={this.actions} />
             <LobbyGames actions={this.actions} />
-            {
-                auth ? '' :
-                <EnterName open={userName === null} actions={this.actions} />
-            }
+            <EnterName open={!loggedIn} actions={this.actions} />
         </div>;
     }
 }

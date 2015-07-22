@@ -15,11 +15,11 @@ const styles = {
 };
 
 @connect(state => ({
-    userId: state.player.userId
+    authId: state.user.authId
 }))
 export default class Players extends Component {
     static propTypes = {
-        userId: PropTypes.string.isRequired,
+        authId: PropTypes.string.isRequired,
         actions: PropTypes.object.isRequired,
         gameId: PropTypes.string.isRequired
     };

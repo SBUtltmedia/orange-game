@@ -14,21 +14,21 @@ const styles = {
 };
 
 @connect(state => ({
-    userName: state.player.name,
-    userId: state.player.userId
+    userName: state.user.name,
+    authId: state.user.authId
 }))
 export default class LobbyGames extends Component {
     static propTypes = {
         actions: PropTypes.object.isRequired,
         userName: PropTypes.string.isRequired,
-        userId: PropTypes.string.isRequired
+        authId: PropTypes.string.isRequired
     };
 
     render() {
-        const { userName, userId } = this.props;
+        const { userName, authId } = this.props;
         return <div styles={styles.container}>
             <div styles={styles.section}>Player name: {userName}</div>
-            <div styles={styles.section}>userId: {userId}</div>
+            <div styles={styles.section}>authId: {authId}</div>
         </div>;
     }
 }

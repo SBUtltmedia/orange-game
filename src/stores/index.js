@@ -1,2 +1,2 @@
 export game from './game';
-export player from './player';
+export user from './user';

@@ -12,7 +12,7 @@ const styles = {
 };
 
 @connect(state => ({
-    userName: state.player.name
+    userName: state.user.name
 }))
 export default class LobbyGames extends Component {
     static propTypes = {
