@@ -1,5 +1,7 @@
 import { DROP_ORANGE, NEW_DAY, GAME_LOAD } from '../constants/ActionTypes';
 import { MAX_ORANGES, MAX_FITNESS_BOOST, DAILY_FITNESS_LOSS } from '../constants/Settings';
+import _ from 'lodash';
+
 const initialState = {
     oranges: {
         box: 0,
@@ -19,9 +21,7 @@ export default function game(state=initialState, action) {
     }
     switch (action.type) {
         case GAME_LOAD:
-            state.id = action.gameId;
-            state.playerId = action.playerId;
-            return state;
+            return _.omit(action, 'type');
         case DROP_ORANGE:
             const source = action.source.toLowerCase();
             const dest = action.dest.toLowerCase();

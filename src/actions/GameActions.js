@@ -23,11 +23,10 @@ export function gameLoad(gameId) {
             const ref = getFbRef(`/games/${gameId}/players`);
             ref.once('value', snapshot => {
                 const players = snapshot.val();
-                const playerId = _.findKey(players, p => p.authId === auth.uid);
+                const game = _.find(players, p => p.authId === auth.uid);
                 dispatch({
                     type: GAME_LOAD,
-                    gameId: gameId,
-                    playerId: playerId
+                    ...game
                 });
             });
         }
