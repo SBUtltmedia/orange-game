@@ -4,6 +4,7 @@ import { connect } from 'redux/react';
 import { forRange, getFbRef } from '../utils';
 import ItemTypes from '../constants/ItemTypes';
 import BinDisplay from './BinDisplay';
+import _ from 'lodash';
 
 @connect(state => ({
     game: state.game
@@ -19,19 +20,11 @@ export default class Bin extends Component {
     };
 
     componentWillReceiveProps(nextProps) {
-
         const { game } = nextProps;
         const { gameId, playerId } = game;
-
-        console.log("RECEIVE PROPS", gameId, playerId);
-
         if (gameId && playerId) {
             const ref = getFbRef(`/games/${gameId}/players/${playerId}`);
-
-            console.log('nextProps', nextProps);
-            console.log('game', game);
-
-            ref.update(game);
+            ref.update(_.omit(game, ['gameId', 'playerId']));
         }
     }
 
