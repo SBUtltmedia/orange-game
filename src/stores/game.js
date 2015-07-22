@@ -21,8 +21,7 @@ export default function game(state=initialState, action) {
     }
     switch (action.type) {
         case GAME_LOAD:
-            console.log('action', action);
-            return _.omit(action, 'type');
+            return _.assign(state, _.omit(action, 'type'));
         case DROP_ORANGE:
             const source = action.source.toLowerCase();
             const dest = action.dest.toLowerCase();
@@ -41,7 +40,7 @@ export default function game(state=initialState, action) {
             }
             state.oranges[source] -= 1;
             state.oranges[dest] += 1;
-            return { ...state };
+            return { ...state };  // force props to update by making new object
         case NEW_DAY:
             return {
                 oranges: {

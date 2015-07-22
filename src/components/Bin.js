@@ -20,8 +20,6 @@ export default class Bin extends Component {
 
     componentWillReceiveProps(nextProps) {
 
-
-
         const { game } = nextProps;
         const { gameId, playerId } = game;
 
