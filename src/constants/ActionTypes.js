@@ -5,3 +5,4 @@ export const LEAVE_GAME = 'LEAVE_GAME';
 export const CREATE_GAME = 'CREATE_GAME';
 export const START_GAME = 'START_GAME';
 export const DELETE_GAME = 'DELETE_GAME';
+export const SET_GAME_ID = 'SET_GAME_ID';

@@ -18,6 +18,9 @@ export default function game(state=initialState, action) {
         return state;
     }
     switch (action.type) {
+        case SET_GAME_ID:
+            state.id = action.gameId;
+            return state;
         case DROP_ORANGE:
             const source = action.source.toLowerCase();
             const dest = action.dest.toLowerCase();
