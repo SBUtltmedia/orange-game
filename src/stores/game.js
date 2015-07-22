@@ -6,9 +6,9 @@ const initialState = {
         basket: 0,
         dish: 0
     },
-    day: 0,
-    fitness: 0,
-    fitnessChange: 0,
+    day: 1,
+    fitness: 0 - DAILY_FITNESS_LOSS,
+    fitnessChange: 0 - DAILY_FITNESS_LOSS,
     id: null,
     playerId: null
 };
