@@ -65,9 +65,6 @@ export default class Bin extends Component {
         const { style, name, textual, graphical, label, game, isOver,
                     canDrop, connectDropTarget } = this.props;
         const isActive = isOver && canDrop;
-
-        console.log(game);
-
         const oranges = game.oranges[name];
         let backgroundColor = style.backgroundColor || styles.defaultBgColor;
         if (isActive) {

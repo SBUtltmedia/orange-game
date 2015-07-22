@@ -26,7 +26,8 @@ export function gameLoad(gameId) {
                 const game = _.find(players, p => p.authId === auth.uid);
                 dispatch({
                     type: GAME_LOAD,
-                    ...game
+                    ...game,
+                    gameId: gameId
                 });
             });
         }

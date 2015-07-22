@@ -40,7 +40,7 @@ export default function game(state=initialState, action) {
             }
             state.oranges[source] -= 1;
             state.oranges[dest] += 1;
-            return state;
+            return { ...state };
         case NEW_DAY:
             return {
                 oranges: {
