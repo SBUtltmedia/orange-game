@@ -14,25 +14,19 @@ export function loginUser(name) {
                 name: name
             });
         }
-        const auth = ref.getAuth();
-        if (auth) {  // if already authorized
-            sendBackResults(auth);
-        }
-        else {
-            ref.authAnonymously((error, authData) => {
-                if (authData) {
-                    const user = {
-                        userId: authData.uid,
-                        name: name
-                    };
-                    ref.child('users').push(user);  // What ID is this key()?
-                    sendBackResults(authData);
-                }
-                else {
-                    console.error("Client unauthenticated.");
-                }
-            });
-        }
+        ref.authAnonymously((error, authData) => {
+            if (authData) {
+                const user = {
+                    userId: authData.uid,
+                    name: name
+                };
+                ref.child('users').push(user);  // What ID is this key()?
+                sendBackResults(authData);
+            }
+            else {
+                console.error("Client unauthenticated.");
+            }
+        });
     };
 }
 
@@ -40,7 +34,6 @@ export function joinGame(gameId, userId, userName) {
     const ref = getFbRef(`/games/${gameId}/players`);
     return dispatch => {
         function sendBackResults(name, userId) {
-
             ref.off();  // Otherwise it holds a reference to the object
                         //and we can't remove it later
             dispatch({
@@ -93,5 +86,6 @@ export function leaveGame(gameId, userId) {
                 });
             }
         });
+        ref.off();
     };
 }

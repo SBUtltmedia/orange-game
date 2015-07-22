@@ -9,7 +9,8 @@ import Firebase from 'firebase';
 @connect((state, props) => ({
     oranges: state.game.oranges[props.name],
     fitness: state.game.fitness,
-    playerId: state.game.playerId
+    playerId: state.game.playerId,
+    gameId: state.game.id
 }))
 export default class Bin extends Component {
     static propTypes = {

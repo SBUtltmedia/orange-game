@@ -1,4 +1,4 @@
-import { DROP_ORANGE, NEW_DAY } from '../constants/ActionTypes';
+import { DROP_ORANGE, NEW_DAY, GAME_LOAD } from '../constants/ActionTypes';
 import { MAX_ORANGES, MAX_FITNESS_BOOST, DAILY_FITNESS_LOSS } from '../constants/Settings';
 const initialState = {
     oranges: {
@@ -18,6 +18,9 @@ export default function game(state=initialState, action) {
         return state;
     }
     switch (action.type) {
+        case GAME_LOAD:
+            state.id = action.gameId;
+            return state;
         case DROP_ORANGE:
             const source = action.source.toLowerCase();
             const dest = action.dest.toLowerCase();

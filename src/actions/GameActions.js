@@ -1,4 +1,4 @@
-import { DROP_ORANGE, NEW_DAY, JOIN_GAME } from '../constants/ActionTypes';
+import { DROP_ORANGE, NEW_DAY, JOIN_GAME, GAME_LOAD } from '../constants/ActionTypes';
 import { FIREBASE_APP_URL } from '../constants/Settings';
 import Firebase from 'firebase';
 import _ from 'lodash';
@@ -15,4 +15,11 @@ export function newDay(day) {
     return {
         type: NEW_DAY
     };
+}
+
+export function gameLoad(gameId) {
+    return {
+        type: GAME_LOAD,
+        gameId: gameId
+    }
 }

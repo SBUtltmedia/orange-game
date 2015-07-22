@@ -29,21 +29,21 @@ const styles = {
 export default class Game extends Component {
 
     componentWillMount() {
-        const { dispatch } = this.props;
+        const { dispatch, params } = this.props;
         this.actions = bindActionCreators(GameActions, dispatch);
+        this.actions.gameLoad(params.gameId);
     }
 
     render() {
-        const gameId = this.props.params.gameId;  // from URL params
         return <div style={styles.container}>
             <div style={styles.row}>
-                <Basket actions={this.actions} gameId={gameId} />
-                <Controls actions={this.actions} gameId={gameId} />
-                <Dish actions={this.actions} gameId={gameId} />
+                <Basket actions={this.actions} />
+                <Controls actions={this.actions} />
+                <Dish actions={this.actions} />
             </div>
             <div style={styles.row}>
-                <Stats actions={this.actions} gameId={gameId} />
-                <Players actions={this.actions} gameId={gameId} />
+                <Stats actions={this.actions} />
+                <Players actions={this.actions} />
             </div>
         </div>;
     }

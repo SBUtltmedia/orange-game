@@ -6,7 +6,7 @@ import LobbyUserName from '../components/LobbyUserName';
 import EnterName from '../components/EnterName';
 import { bindActionCreators } from 'redux';
 import { connect } from 'redux/react';
-import { trimString } from '../utils';
+import { trimString, getFbRef } from '../utils';
 
 function isNameAcceptable(name) {
     return trimString(name) !== '';  // TODO: Check for name taken
@@ -29,11 +29,15 @@ export default class Lobby extends Component {
     }
 
     render() {
-        const { userName } = this.props;
+        const ref = getFbRef('/');
+        const auth = ref.getAuth();
         return <div style={styles.page}>
             <LobbyUserName actions={this.actions} />
             <LobbyGames actions={this.actions} />
-            <EnterName open={userName === null} actions={this.actions} />
+            {
+                auth ? '' :
+                <EnterName open={userName === null} actions={this.actions} />
+            }
         </div>;
     }
 }
