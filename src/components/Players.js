@@ -33,7 +33,7 @@ export default class Players extends Component {
     componentWillMount() {
         const { gameId } = this.props;
         this.firebaseRef = getFbRef(`/games/${gameId}/players`);
-        subscribeToFirebaseList(this, this.firebaseRef, 'players', 'playerId');
+        subscribeToFirebaseList(this, this.firebaseRef, 'players', 'playerId');  // TODO: playerId?
     }
 
     componentWillUnmount() {

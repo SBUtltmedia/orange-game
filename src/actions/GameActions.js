@@ -20,16 +20,12 @@ export function gameLoad(gameId) {
     return dispatch => {
         const auth = getAuth();
         if (auth) {
-            const ref = getFbRef(`/games/${gameId}/players`);
+            const ref = getFbRef(`/games/${gameId}/players/${auth.uid}`);
             ref.once('value', snapshot => {
-                const players = snapshot.val();
-                const playerId = _.findKey(players, p => p.authId === auth.uid);
-                const game = players[playerId];
                 dispatch({
                     type: GAME_LOAD,
-                    ...game,
-                    gameId: gameId,
-                    playerId: playerId
+                    ...(snapshot.val()),
+                    gameId: gameId
                 });
             });
         }

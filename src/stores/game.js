@@ -11,8 +11,7 @@ const initialState = {
     day: 1,
     fitness: 0 - DAILY_FITNESS_LOSS,
     fitnessChange: 0 - DAILY_FITNESS_LOSS,
-    gameId: null,
-    playerId: null
+    gameId: null
 };
 
 export default function game(state=initialState, action) {
@@ -51,8 +50,7 @@ export default function game(state=initialState, action) {
                 day: state.day + 1,
                 fitness: state.fitness - DAILY_FITNESS_LOSS,
                 fitnessChange: 0 - DAILY_FITNESS_LOSS,
-                gameId: state.gameId,
-                playerId: state.authId
+                gameId: state.gameId
             }
     }
     return state;

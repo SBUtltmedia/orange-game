@@ -7,7 +7,8 @@ import BinDisplay from './BinDisplay';
 import _ from 'lodash';
 
 @connect(state => ({
-    game: state.game
+    game: state.game,
+    authId: state.user.authId
 }))
 export default class Bin extends Component {
     static propTypes = {
@@ -16,15 +17,16 @@ export default class Bin extends Component {
         graphical: PropTypes.bool,
         name: PropTypes.string.isRequired,
         actions: PropTypes.object.isRequired,
-        game: PropTypes.object.isRequired
+        game: PropTypes.object.isRequired,
+        authId: PropTypes.string.isRequired
     };
 
     componentWillReceiveProps(nextProps) {
-        const { game } = nextProps;
-        const { gameId, playerId } = game;
-        if (gameId && playerId) {
-            const ref = getFbRef(`/games/${gameId}/players/${playerId}`);
-            ref.update(_.omit(game, ['gameId', 'playerId']));
+        const { game, authId } = nextProps;
+        const { gameId } = game;
+        if (gameId && authId) {
+            const ref = getFbRef(`/games/${gameId}/players/${authId}`);
+            ref.update(_.omit(game, ['gameId', 'authId']));
         }
     }
 
