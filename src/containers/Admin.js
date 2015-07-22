@@ -12,9 +12,7 @@ const styles = StyleSheet.create({
     }
 });
 
-@connect(state => ({
-    games: state.lobby.games
-}))
+@connect(state => ({}))
 export default class Admin extends Component {
     componentWillMount() {
         const { dispatch } = this.props;
