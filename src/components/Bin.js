@@ -26,7 +26,7 @@ export default class Bin extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { name, oranges, gameId, playerId, fitness } = nextProps;
-        if (gameId) {
+        if (gameId && playerId) {
             const ref = getFbRef(`/games/${gameId}/players/${playerId}`);
             const data = {};
             data[name] = oranges;
