@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
 
 @connect(state => ({}))
 export default class Admin extends Component {
+
     componentWillMount() {
         const { dispatch } = this.props;
         this.actions = bindActionCreators(AdminActions, dispatch);

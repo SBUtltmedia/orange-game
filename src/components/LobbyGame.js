@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'redux/react';
 import { LINK_COLOR } from '../styles/Themes';
 import { Link } from 'react-router';
+import { objectToArray } from '../utils';
 import _ from 'lodash';
 
 const styles = {
@@ -35,7 +36,14 @@ export default class LobbyGame extends Component {
     };
 
     componentWillReceiveProps(newProps) {
-        //if (newProps.)
+        const { game, authId } = newProps;
+        const players = objectToArray(game.players);
+        const joinedGame = _.some(players, p => {
+            return p.authId === authId;
+        });
+        if (game.started && joinedGame) {
+            window.location.href = `/?#/game/${game.id}`;
+        }
     }
 
     joinGame() {

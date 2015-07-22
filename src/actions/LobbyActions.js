@@ -8,10 +8,6 @@ export function getUserData(authId) {
         const ref = getFbRef('/users');
         ref.once("value", snapshot => {
             const users = snapshot.val();
-
-            console.log(users);
-            console.log(authId);
-
             const user = _.find(users, u => u.authId === authId);
             dispatch({
                 type: GET_USER_DATA,
