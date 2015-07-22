@@ -53,18 +53,22 @@ export default class Bin extends Component {
         connectDropTarget: PropTypes.func.isRequired,
         isOver: PropTypes.bool.isRequired,
         canDrop: PropTypes.bool.isRequired,
-        oranges: PropTypes.number.isRequired,
         style: PropTypes.object,
         textual: PropTypes.bool,
         graphical: PropTypes.bool,
         name: PropTypes.string.isRequired,
         actions: PropTypes.object.isRequired,
+        game: PropTypes.object.isRequired
     };
 
     render() {
-        const { style, name, textual, graphical, label, oranges, isOver,
+        const { style, name, textual, graphical, label, game, isOver,
                     canDrop, connectDropTarget } = this.props;
         const isActive = isOver && canDrop;
+
+        console.log(game);
+
+        const oranges = game.oranges[name];
         let backgroundColor = style.backgroundColor || styles.defaultBgColor;
         if (isActive) {
             backgroundColor = dnd.isActive;

@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'redux/react';
 import { LINK_COLOR } from '../styles/Themes';
 import { Link } from 'react-router';
-import { objectToArray } from '../utils';
 import _ from 'lodash';
 
 const styles = {
@@ -24,12 +23,11 @@ const styles = {
 
 function gotoGameIfJoinedAndStarted(props) {
     const { game, authId } = props;
-    const players = objectToArray(game.players);
-    const joinedGame = _.some(players, p => {
+    const joinedGame = _.some(game.players, p => {
         return p.authId === authId;
     });
     if (game.started && joinedGame) {
-        window.location.href = `/?#/game/${game.id}`;
+        window.location.href = `/?#/game/${game.gameId}`;
     }
 }
 
@@ -56,22 +54,22 @@ export default class LobbyGame extends Component {
 
     joinGame() {
         const { game, authId, userName, actions } = this.props;
-        actions.joinGame(game.id, authId, userName);
+        actions.joinGame(game.gameId, authId, userName);
     }
 
     leaveGame() {
         const { game, authId, actions } = this.props;
-        actions.leaveGame(game.id, authId);
+        actions.leaveGame(game.gameId, authId);
     }
 
     startGame() {
         const { game, actions } = this.props;
-        actions.startGame(game.id);
+        actions.startGame(game.gameId);
     }
 
     deleteGame() {
         const { game, actions } = this.props;
-        actions.deleteGame(game.id);
+        actions.deleteGame(game.gameId);
     }
 
     renderUserButtons() {
@@ -98,11 +96,11 @@ export default class LobbyGame extends Component {
 
     render() {
         const { game, isAdmin } = this.props;
-        const { id, players, started } = game;
+        const { gameId, players, started } = game;
         const backgroundColor = started ? 'lightblue' : 'lightgray';
         return <div style={{ ...styles.container, backgroundColor }}>
             <div style={styles.row}>
-                <div style={styles.section}>{id}</div>
+                <div style={styles.section}>{gameId}</div>
                 <div style={styles.section}>
                     ({_.size(players)}&nbsp;players)
                 </div>
@@ -116,7 +114,7 @@ export default class LobbyGame extends Component {
                     { _.map(players, p => p.name).join(', ') }
                 </div>
                 <div style={styles.section}>
-                    <Link to={`/game/${game.id}`}>Goto</Link>
+                    <Link to={`/game/${game.gameId}`}>Goto</Link>
                 </div>
             </div>
         </div>;

@@ -48,7 +48,7 @@ export function joinGame(gameId, authId, userName) {
                         //and we can't remove it later
             dispatch({
                 type: JOIN_GAME,
-                id: gameId,
+                gameId: gameId,
                 player: {
                     name: name,
                     authId: authId
@@ -91,7 +91,7 @@ export function leaveGame(gameId, authId) {
                 ref.child(existingKey).remove();
                 dispatch({
                     type: LEAVE_GAME,
-                    id: gameId,
+                    gameId: gameId,
                     authId: authId
                 });
             }

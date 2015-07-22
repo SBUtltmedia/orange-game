@@ -12,7 +12,7 @@ export function createGame() {
     return {
         type: CREATE_GAME,
         ...game,
-        id: gameId,
+        gameId: gameId,
         started: false
     };
 }
@@ -24,7 +24,7 @@ export function startGame(gameId) {
     });
     return {
         type: START_GAME,
-        id: gameId
+        gameId: gameId
     };
 }
 
@@ -33,6 +33,6 @@ export function deleteGame(gameId) {
     ref.remove();
     return {
         type: DELETE_GAME,
-        id: gameId
+        gameId: gameId
     };
 }

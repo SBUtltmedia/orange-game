@@ -5,19 +5,23 @@ import { FIREBASE_APP_URL } from './constants/Settings';
 export function range(n) { return Array.apply(0, Array(n)); }
 export function forRange(n, f) { return range(n).map((x, i) => f(i)); }
 
-export function objectToArray(obj) {
-    return _.map(_.keys(obj), key => { return { ...obj[key], id: key }});
+export function objectToArray(object, keyName='id') {
+    return _.map(_.keys(object), key => {
+        const obj = object[key];
+        obj[keyName] = key;
+        return obj;
+    });
 }
 
 export function trimString(s) {  // Strip whitespace
       return (s || '').replace(/^\s+|\s+$/g, '');
 }
 
-export function subscribeToFirebaseList(component, ref, stateKey) {
+export function subscribeToFirebaseList(component, ref, stateKey, objectKey) {
     ref.on("value", snapshot => {
         const items = snapshot.val();
         const data = {};
-        data[stateKey] = objectToArray(items);
+        data[stateKey] = objectToArray(items, objectKey);
         component.setState(data);
     });
 

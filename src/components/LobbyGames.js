@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'redux/react';
 import LobbyGame from './LobbyGame';
-import { subscribeToFirebaseList, objectToArray, getFbRef } from '../utils';
+import { subscribeToFirebaseList, getFbRef } from '../utils';
 import _ from 'lodash';
 
 const styles = {
@@ -29,7 +29,7 @@ export default class LobbyGames extends Component {
 
     componentWillMount() {
         this.firebaseRef = getFbRef('/games');
-        subscribeToFirebaseList(this, this.firebaseRef, 'games');
+        subscribeToFirebaseList(this, this.firebaseRef, 'games', 'gameId');
     }
 
     componentWillUnmount() {
