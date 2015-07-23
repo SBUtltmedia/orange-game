@@ -11,6 +11,8 @@ import { areaTheme } from '../styles/Themes';
 import { bindActionCreators } from 'redux';
 import * as GameActions from '../actions/GameActions';
 import { connect } from 'redux/react';
+import { getUserData, getFbRef } from '../utils';
+import _ from 'lodash';
 
 const styles = {
   container: {
@@ -24,14 +26,37 @@ const styles = {
   }
 };
 
-@connect(state => ({}))
+@connect(state => ({
+    game: state.game,
+    authId: state.user.authId
+}))
 @DragDropContext(HTML5Backend)
 export default class Game extends Component {
+    static propTypes = {
+        game: PropTypes.object.isRequired,
+        authId: PropTypes.string.isRequired
+    };
 
     componentWillMount() {
         const { dispatch, params } = this.props;
         this.actions = bindActionCreators(GameActions, dispatch);
         this.actions.gameLoad(params.gameId);
+    }
+
+    componentDidMount() {
+        getUserData(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+
+        console.log("NEXT", nextProps);
+
+        const { game, authId } = nextProps;
+        const { gameId, oranges } = game;
+        if (gameId && authId && oranges) {
+            const ref = getFbRef(`/games/${gameId}/players/${authId}`);
+            ref.update(_.omit(game, ['gameId', 'authId']));
+        }
     }
 
     render() {

@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import Firebase from 'firebase';
 import { FIREBASE_APP_URL } from './constants/Settings';
+import * as AppActions from './actions/AppActions';
+import { bindActionCreators } from 'redux';
 
 export function range(n) { return Array.apply(0, Array(n)); }
 export function forRange(n, f) { return range(n).map((x, i) => f(i)); }
@@ -45,4 +47,17 @@ export function getAuth() {
     const auth = ref.getAuth();
     ref.off();
     return auth;
+}
+
+export function getUserData(component) {
+    const { dispatch } = component.props;
+    const actions = bindActionCreators(AppActions, dispatch);
+    const auth = getAuth();
+    if (auth) {
+        component.setState({
+            loggedIn: true,
+            authId: auth.uid
+        });
+        actions.getUserData(auth.uid);
+    }
 }
