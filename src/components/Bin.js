@@ -20,7 +20,6 @@ export default class Bin extends Component {
     };
 
     render() {
-        const { name, oranges } = this.props;
         return <BinDisplay {...this.props} />;
     }
 }
