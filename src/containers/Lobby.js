@@ -27,6 +27,13 @@ export default class Lobby extends Component {
 
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            loggedIn: false
+        }
+    }
+
     componentWillMount() {
         const { dispatch } = this.props;
         this.actions = bindActionCreators(LobbyActions, dispatch);
