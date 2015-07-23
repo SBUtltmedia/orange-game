@@ -21,9 +21,7 @@ export function loginUser(name) {
 
 export function joinGame(gameId, authId, userName) {
     const ref = getFbRef(`/games/${gameId}/players/${authId}`);
-    const player = {
-        name: userName
-    }
+    const player = { name: userName };
     ref.update(player);
 }
 

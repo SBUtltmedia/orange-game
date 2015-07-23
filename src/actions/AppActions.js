@@ -10,7 +10,8 @@ export function getUserData(authId) {
             if (user) {
                 dispatch({
                     type: GET_USER_DATA,
-                    name: user.name
+                    name: user.name,
+                    authId: authId
                 });
             }
         });
