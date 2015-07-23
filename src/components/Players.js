@@ -35,7 +35,7 @@ export default class Players extends Component {
         const { gameId } = nextProps;
         if (gameId) {
             this.firebaseRef = getFbRef(`/games/${gameId}/players`);
-            subscribeToFirebaseList(this, this.firebaseRef, 'players', 'playerId');
+            subscribeToFirebaseList(this, this.firebaseRef, 'players', 'authId');
         }
     }
 

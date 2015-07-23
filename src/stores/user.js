@@ -11,17 +11,16 @@ export default function player(state=initialState, action) {
     }
     switch (action.type) {
         case USER_AUTHED:
+
+            console.log("AUTHED", action);
+
             return {
                 name: action.name,
                 authId: action.authId
             };
         case GET_USER_DATA:
-
-            console.log("GET_USER_DATA", action);
-
             return {
-                name: action.name,
-                authId: action.authId
+                name: action.name
             };
     }
     return state;
