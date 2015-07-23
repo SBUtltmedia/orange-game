@@ -39,9 +39,6 @@ export function subscribeToFirebaseList(component, ref, stateKey, objectKey) {
 }
 
 export function getFbRef(url) {
-
-    console.log(url);
-
     return new Firebase(`${FIREBASE_APP_URL}/${url}`);
 }
 
