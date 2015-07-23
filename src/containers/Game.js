@@ -40,8 +40,11 @@ export default class Game extends Component {
     componentWillMount() {
         const { dispatch, params } = this.props;
         this.actions = bindActionCreators(GameActions, dispatch);
-        getUserData(this);
         this.actions.gameLoad(params.gameId);
+    }
+
+    componentDidMount() {
+        getUserData(this);
     }
 
     componentWillReceiveProps(nextProps) {

@@ -23,7 +23,9 @@ const styles = {
 
 function gotoGameIfJoinedAndStarted(props) {
     const { game, authId } = props;
-    const joinedGame = _.contains(_.keys(game.players), authId);
+    const joinedGame = _.some(game.players, p => {
+        return p.authId === authId;
+    });
     if (game.started && joinedGame) {
         window.location.href = `/?#/game/${game.gameId}`;
     }
@@ -112,7 +114,7 @@ export default class LobbyGame extends Component {
                     { _.map(players, p => p.name).join(', ') }
                 </div>
                 <div style={styles.section}>
-                    <Link to={`/game/${game.gameId}`}>Goto</Link> (for testing)
+                    <Link to={`/game/${game.gameId}`}>Goto</Link>
                 </div>
             </div>
         </div>;
