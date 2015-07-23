@@ -16,6 +16,9 @@ export default function player(state=initialState, action) {
                 authId: action.authId
             };
         case GET_USER_DATA:
+
+            console.log("GET_USER_DATA", action);
+
             return {
                 name: action.name,
                 authId: action.authId

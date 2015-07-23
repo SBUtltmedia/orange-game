@@ -6,8 +6,9 @@ import LobbyUserName from '../components/LobbyUserName';
 import EnterName from '../components/EnterName';
 import { bindActionCreators } from 'redux';
 import { connect } from 'redux/react';
-import { trimString, getFbRef } from '../utils';
 
+// TODO: Move isNameAcceptable to the right component
+import { trimString, getUserData } from '../utils';
 function isNameAcceptable(name) {
     return trimString(name) !== '';  // TODO: Check for name taken
 }
@@ -23,25 +24,16 @@ const styles = StyleSheet.create({
 }))
 export default class Lobby extends Component {
     static propTypes = {
-        userName: PropTypes.string.isRequired
+
     };
 
     componentWillMount() {
         const { dispatch } = this.props;
         this.actions = bindActionCreators(LobbyActions, dispatch);
-        const ref = getFbRef('/');
-        const auth = ref.getAuth();
-        this.setState({
-            loggedIn: auth !== null,
-            authId: auth ? auth.uid : null
-        });
     }
 
     componentDidMount() {
-        const { loggedIn, authId } = this.state;
-        if (loggedIn) {
-            this.actions.getUserData(authId);
-        }
+        getUserData(this);
     }
 
     render() {

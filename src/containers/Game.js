@@ -11,6 +11,8 @@ import { areaTheme } from '../styles/Themes';
 import { bindActionCreators } from 'redux';
 import * as GameActions from '../actions/GameActions';
 import { connect } from 'redux/react';
+import { getUserData, getFbRef } from '../utils';
+import _ from 'lodash';
 
 const styles = {
   container: {
@@ -39,6 +41,10 @@ export default class Game extends Component {
         const { dispatch, params } = this.props;
         this.actions = bindActionCreators(GameActions, dispatch);
         this.actions.gameLoad(params.gameId);
+    }
+
+    componentDidMount() {
+        getUserData(this);
     }
 
     componentWillReceiveProps(nextProps) {

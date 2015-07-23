@@ -31,16 +31,18 @@ export default class Players extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {  // TODO: Is this dirty?
+    componentWillReceiveProps(nextProps) {
         const { gameId } = nextProps;
         if (gameId) {
             this.firebaseRef = getFbRef(`/games/${gameId}/players`);
-            subscribeToFirebaseList(this, this.firebaseRef, 'players', 'playerId');  // TODO: playerId?
+            subscribeToFirebaseList(this, this.firebaseRef, 'players', 'playerId');
         }
     }
 
     componentWillUnmount() {
-        this.firebaseRef.off();
+        if (this.firebaseRef) {
+            this.firebaseRef.off();
+        }
     }
 
     render() {
