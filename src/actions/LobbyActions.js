@@ -7,16 +7,10 @@ export function loginUser(name) {
     return dispatch => {
         ref.authAnonymously((error, authData) => {
             if (authData) {
-                const user = {
-                    authId: authData.uid,
-                    name: name
-                };
-                ref.child('users').push(user);  // What ID is this key()?
-                dispatch({
-                    type: USER_AUTHED,
-                    authId: authData.uid,
-                    name: name
-                });
+                const authId = authData.uid;
+                const user = { name: name };
+                ref.child('users').child(authId).update(user);
+                dispatch(_.extend({ type: USER_AUTHED, authId: authId }, user));
             }
             else {
                 console.error("Client unauthenticated.");
@@ -27,10 +21,7 @@ export function loginUser(name) {
 
 export function joinGame(gameId, authId, userName) {
     const ref = getFbRef(`/games/${gameId}/players/${authId}`);
-    const player = {
-        name: userName,
-        authId: authId
-    }
+    const player = { name: userName };
     ref.update(player);
 }
 
