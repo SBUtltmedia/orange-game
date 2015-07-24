@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 const initialState = {
     oranges: {
-        box: 0,
+        box: getRandomNumberOfOranges(),
         basket: 0,
         dish: 0
     },
@@ -13,6 +13,10 @@ const initialState = {
     fitnessChange: 0 - DAILY_FITNESS_LOSS,
     gameId: null
 };
+
+function getRandomNumberOfOranges() {
+    return Math.floor(Math.random() * MAX_ORANGES);
+}
 
 export default function game(state=initialState, action) {
     if (!action) {
@@ -43,7 +47,7 @@ export default function game(state=initialState, action) {
         case NEW_DAY:
             return {
                 oranges: {
-                    box: Math.floor(Math.random() * MAX_ORANGES),
+                    box: getRandomNumberOfOranges(),
                     dish: 0,
                     basket: state.oranges.basket
                 },

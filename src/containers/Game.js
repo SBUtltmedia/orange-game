@@ -28,6 +28,7 @@ const styles = {
 
 @connect(state => ({
     game: state.game,
+    gameId: state.game.gameId,
     authId: state.user.authId
 }))
 @DragDropContext(HTML5Backend)
@@ -45,15 +46,16 @@ export default class Game extends Component {
 
     componentDidMount() {
         getUserData(this);
+
+        console.log("mount", this.props);
     }
 
     componentWillReceiveProps(nextProps) {
 
         console.log("NEXT", nextProps);
 
-        const { game, authId } = nextProps;
-        const { gameId, oranges } = game;
-        if (gameId && authId && oranges) {
+        const { game, authId, gameId } = nextProps;
+        if (gameId && authId) {
             const ref = getFbRef(`/games/${gameId}/players/${authId}`);
             ref.update(_.omit(game, ['gameId', 'authId']));
         }
