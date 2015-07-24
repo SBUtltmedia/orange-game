@@ -46,14 +46,9 @@ export default class Game extends Component {
 
     componentDidMount() {
         getUserData(this);
-
-        console.log("mount", this.props);
     }
 
     componentWillReceiveProps(nextProps) {
-
-        console.log("NEXT", nextProps);
-
         const { game, authId, gameId } = nextProps;
         if (gameId && authId) {
             const ref = getFbRef(`/games/${gameId}/players/${authId}`);
