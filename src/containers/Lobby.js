@@ -19,9 +19,7 @@ const styles = StyleSheet.create({
     }
 });
 
-@connect(state => ({
-    userName: state.user.name
-}))
+@connect(state => ({}))
 export default class Lobby extends Component {
     static propTypes = {
 
