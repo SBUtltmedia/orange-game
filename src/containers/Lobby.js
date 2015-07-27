@@ -5,7 +5,7 @@ import LobbyUserName from '../components/LobbyUserName';
 import EnterName from '../components/EnterName';
 
 // TODO: Move isNameAcceptable to the right component
-import { trimString, getUserData } from '../utils';
+import { trimString } from '../utils';
 function isNameAcceptable(name) {
     return trimString(name) !== '';  // TODO: Check for name taken
 }
@@ -28,9 +28,11 @@ export default class Lobby extends Component {
         }
     }
 
+    /*
     componentWillMount() {
         getUserData(this);
     }
+    */
 
     render() {
         const { loggedIn } = this.state;

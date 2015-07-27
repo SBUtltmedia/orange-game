@@ -3,23 +3,11 @@ import { getFbRef } from '../utils';
 import _ from 'lodash';
 import model from '../model';
 
-export function loginUser(name) {
-
-    console.log("Logging in " + name);
-
-    const ref = getFbRef('/');
-    ref.authAnonymously((error, authData) => {
-        if (authData) {
-            const authId = authData.uid;
-            const user = { name: name };
-            ref.child('users').child(authId).update(user);
-            model.userName = name;
-            model.authId = authId;
-        }
-        else {
-            console.error("Client unauthenticated.");
-        }
-    });
+export function setName(authId, name) {
+    const ref = getFbRef(`/users/${authId}`);
+    const user = { name: name };
+    ref.update(user);
+    model.userName = name;
 }
 
 export function joinGame(gameId, authId, userName) {

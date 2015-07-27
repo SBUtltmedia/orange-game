@@ -1,7 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import Modal from 'react-modal';
-import { loginUser } from '../actions/LobbyActions';
+import { setName } from '../actions/LobbyActions';
 import { APP_ROOT_ELEMENT } from '../constants/Settings';
+import { authId } from '../model';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
@@ -25,7 +26,7 @@ export default class EnterName extends Component {
 
     login() {
         const name = React.findDOMNode(this.refs.textBox).value;
-        loginUser(name);
+        setName(authId, name);
         this.closeModal();
     }
 

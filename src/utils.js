@@ -18,12 +18,23 @@ export function trimString(s) {  // Strip whitespace
       return (s || '').replace(/^\s+|\s+$/g, '');
 }
 
+function setComponentState(component, stateKey, value) {
+    const data = {};
+    data[stateKey] = value;
+    component.setState(data);
+}
+
+export function subscribeToFirebaseObject(component, ref, stateKey) {
+    ref.on('value', snapshot => {
+        const object = snapshot.val();
+        setComponentState(component, stateKey, object);
+    });
+}
+
 export function subscribeToFirebaseList(component, ref, stateKey, objectKey) {
-    ref.on("value", snapshot => {
+    ref.on('value', snapshot => {
         const items = snapshot.val();
-        const data = {};
-        data[stateKey] = objectToArray(items, objectKey);
-        component.setState(data);
+        setComponentState(component, stateKey, objectToArray(items, objectKey));
     });
 
     // Redudant since value does updates too
@@ -46,15 +57,4 @@ export function getAuth() {
     const auth = ref.getAuth();
     ref.off();
     return auth;
-}
-
-export function getUserData(component) {
-    const auth = getAuth();
-    if (auth) {
-        component.setState({
-            loggedIn: true,
-            authId: auth.uid
-        });
-        AppActions.getUserData(auth.uid);
-    }
 }
