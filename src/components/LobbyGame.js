@@ -2,6 +2,9 @@ import React, { PropTypes, Component } from 'react';
 import { LINK_COLOR } from '../styles/Themes';
 import { Link } from 'react-router';
 import _ from 'lodash';
+import { joinGame, leaveGame } from '../actions/LobbyActions';
+import { startGame, deleteGame } from '../actions/AdminActions';
+import { authId } from '../model';
 
 const styles = {
     container: {
@@ -43,23 +46,23 @@ export default class LobbyGame extends Component {
     }
 
     joinGame() {
-        const { game, authId, userName } = this.props;
-        actions.joinGame(game.gameId, authId, userName);
+        const { game, userName } = this.props;
+        joinGame(game.gameId, authId, userName);
     }
 
     leaveGame() {
-        const { game, authId } = this.props;
-        actions.leaveGame(game.gameId, authId);
+        const { game } = this.props;
+        leaveGame(game.gameId, authId);
     }
 
     startGame() {
         const { game } = this.props;
-        actions.startGame(game.gameId);
+        startGame(game.gameId);
     }
 
     deleteGame() {
         const { game } = this.props;
-        actions.deleteGame(game.gameId);
+        deleteGame(game.gameId);
     }
 
     renderUserButtons() {

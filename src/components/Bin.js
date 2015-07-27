@@ -5,6 +5,7 @@ import { verticalCenter, dnd } from '../styles/Themes';
 import { forRange } from '../utils';
 import ItemTypes from '../constants/ItemTypes';
 import _ from 'lodash';
+import { dropOrange } from '../actions/GameActions';
 
 const styles = {
   inner: {
@@ -15,7 +16,7 @@ const styles = {
 
 const dustbinTarget = {
     drop(props, monitor) {
-        props.actions.dropOrange(monitor.getItem().source, props.name);
+        dropOrange(monitor.getItem().source, props.name);
     }
 };
 
