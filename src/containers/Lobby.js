@@ -36,6 +36,9 @@ export default class Lobby extends Component {
 
     componentWillMount() {
         const { dispatch } = this.props;
+
+        console.log(this.props);
+
         this.actions = bindActionCreators(LobbyActions, dispatch);
         getUserData(this);
     }
