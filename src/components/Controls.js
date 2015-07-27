@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme, buttonTheme } from '../styles/Themes';
 import OrangeBox from './OrangeBox';
-import { connect } from 'redux/react';
 
 const styles = {
   container: {
@@ -16,23 +15,10 @@ const styles = {
   }
 };
 
-@connect(state => ({
-    day: state.game.day,
-    canAdvanceDay: state.game.oranges.box === 0
-}))
 export default class Controls extends Component {
-    static propTypes = {
-        day: PropTypes.number.isRequired,
-        actions: PropTypes.object.isRequired,
-        canAdvanceDay: PropTypes.bool.isRequired
-    };
-
-    componentDidMount() {
-        const { actions, day } = this.props;
-    }
 
     render() {
-        const { actions, day, canAdvanceDay } = this.props;
+        const { day, canAdvanceDay } = this.props;
         const { newDay } = actions;
         return <div style={styles.container}>
             <OrangeBox {...this.props} />

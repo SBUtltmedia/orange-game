@@ -16,8 +16,7 @@
     "react-modal": "^0.2.0",
     "react-router": "^0.13.3",
     "react-style": "^0.5.5",
-    "react-tools": "^0.13.3",
-    "redux": "^0.12.0"
+    "react-tools": "^0.13.3"
   },
   "devDependencies": {
     "chai": "^3.0.0",

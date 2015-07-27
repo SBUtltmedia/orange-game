@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
 import Player from './Player';
 import _ from 'lodash';
-import { connect } from 'redux/react';
 import { subscribeToFirebaseList, getFbRef } from '../utils';
 
 const styles = {
@@ -20,7 +19,6 @@ const styles = {
 export default class Players extends Component {
     static propTypes = {
         authId: PropTypes.string.isRequired,
-        actions: PropTypes.object.isRequired,
         gameId: PropTypes.string.isRequired
     };
 

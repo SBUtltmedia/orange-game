@@ -8,9 +8,7 @@ import Dish from '../components/Dish';
 import Stats from '../components/Stats';
 import Players from '../components/Players';
 import { areaTheme } from '../styles/Themes';
-import { bindActionCreators } from 'redux';
 import * as GameActions from '../actions/GameActions';
-import { connect } from 'redux/react';
 import { getUserData, getFbRef } from '../utils';
 import _ from 'lodash';
 
@@ -26,15 +24,11 @@ const styles = {
   }
 };
 
-@connect(state => ({
-    game: state.game,
-    gameId: state.game.gameId,
-    authId: state.user.authId
-}))
 @DragDropContext(HTML5Backend)
 export default class Game extends Component {
     static propTypes = {
         game: PropTypes.object.isRequired,
+        gameId: PropTypes.string.isRequired,
         authId: PropTypes.string.isRequired
     };
 
@@ -59,13 +53,13 @@ export default class Game extends Component {
     render() {
         return <div style={styles.container}>
             <div style={styles.row}>
-                <Basket actions={this.actions} />
-                <Controls actions={this.actions} />
-                <Dish actions={this.actions} />
+                <Basket />
+                <Controls />
+                <Dish />
             </div>
             <div style={styles.row}>
-                <Stats actions={this.actions} />
-                <Players actions={this.actions} />
+                <Stats />
+                <Players />
             </div>
         </div>;
     }

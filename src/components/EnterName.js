@@ -8,8 +8,7 @@ Modal.injectCSS();
 
 export default class EnterName extends Component {
     static propTypes = {
-        open: PropTypes.bool.isRequired,
-        actions: PropTypes.object.isRequired
+        open: PropTypes.bool.isRequired
     };
 
     constructor(props) {
@@ -24,7 +23,6 @@ export default class EnterName extends Component {
     }
 
     login() {
-        const { actions } = this.props;
         const name = React.findDOMNode(this.refs.textBox).value;
         actions.loginUser(name);
         this.closeModal();

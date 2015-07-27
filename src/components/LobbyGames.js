@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import { connect } from 'redux/react';
 import LobbyGame from './LobbyGame';
 import { subscribeToFirebaseList, getFbRef } from '../utils';
 import _ from 'lodash';
@@ -10,13 +9,8 @@ const styles = {
     },
 };
 
-@connect(state => ({
-    userName: state.user.name
-}))
 export default class LobbyGames extends Component {
     static propTypes = {
-        actions: PropTypes.object.isRequired,
-        userName: PropTypes.string.isRequired,
         isAdmin: PropTypes.bool
     };
 
@@ -38,9 +32,10 @@ export default class LobbyGames extends Component {
 
     render() {
         const { games } = this.state;
+        const { isAdmin } = this.props;
         return <div styles={[styles.container]}>
             { _.map(games, (g, i) =>
-                            <LobbyGame game={g} key={i} {...this.props} />) }
+                            <LobbyGame game={g} key={i} isAdmin={isAdmin} />) }
         </div>;
     }
 }

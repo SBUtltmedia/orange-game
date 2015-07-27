@@ -15,14 +15,10 @@ const styles = {
 };
 
 export default class OrangeBox extends Component {
-    static propTypes = {
-        actions: PropTypes.object.isRequired
-    };
 
     render() {
         const { actions } = this.props;
-        return <Bin style={styles.box} actions={actions}
-                    textual={false} graphical={true}
+        return <Bin style={styles.box} textual={false} graphical={true}
                     name="box" showName={false} />
     }
 }

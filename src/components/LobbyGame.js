@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import { connect } from 'redux/react';
 import { LINK_COLOR } from '../styles/Themes';
 import { Link } from 'react-router';
 import _ from 'lodash';
@@ -36,7 +35,6 @@ function gotoGameIfJoinedAndStarted(props) {
 export default class LobbyGame extends Component {
     static propTypes = {
         game: PropTypes.object.isRequired,
-        actions: PropTypes.object.isRequired,
         authId: PropTypes.string.isRequired,
         userName: PropTypes.string.isRequired,
         isAdmin: PropTypes.bool
@@ -51,22 +49,22 @@ export default class LobbyGame extends Component {
     }
 
     joinGame() {
-        const { game, authId, userName, actions } = this.props;
+        const { game, authId, userName } = this.props;
         actions.joinGame(game.gameId, authId, userName);
     }
 
     leaveGame() {
-        const { game, authId, actions } = this.props;
+        const { game, authId } = this.props;
         actions.leaveGame(game.gameId, authId);
     }
 
     startGame() {
-        const { game, actions } = this.props;
+        const { game } = this.props;
         actions.startGame(game.gameId);
     }
 
     deleteGame() {
-        const { game, actions } = this.props;
+        const { game } = this.props;
         actions.deleteGame(game.gameId);
     }
 
