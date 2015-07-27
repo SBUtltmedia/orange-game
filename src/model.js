@@ -16,6 +16,8 @@ class Model {
         this.fitness = 0 - DAILY_FITNESS_LOSS;
         this.fitnessChange = this.fitness;
         this.gameId = null;
+        this.authId = null;
+        this.userName = null;
     }
 
     newDay() {
