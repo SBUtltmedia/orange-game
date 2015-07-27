@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import model from '../model';
 
 const styles = {
     container: {
@@ -12,18 +13,10 @@ const styles = {
     }
 };
 
-@connect(state => ({
-    userName: state.user.name,
-    authId: state.user.authId
-}))
 export default class LobbyGames extends Component {
-    static propTypes = {
-        userName: PropTypes.string.isRequired,
-        authId: PropTypes.string.isRequired
-    };
 
     render() {
-        const { userName, authId } = this.props;
+        const { userName, authId } = model;
         return <div styles={styles.container}>
             <div styles={styles.section}>Player name: {userName}</div>
             <div styles={styles.section}>authId: {authId}</div>

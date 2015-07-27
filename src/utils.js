@@ -55,6 +55,6 @@ export function getUserData(component) {
             loggedIn: true,
             authId: auth.uid
         });
-        actions.getUserData(auth.uid);
+        AppActions.getUserData(auth.uid);
     }
 }

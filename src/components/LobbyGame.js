@@ -28,15 +28,9 @@ function gotoGameIfJoinedAndStarted(props) {
     }
 }
 
-@connect(state => ({
-    authId: state.user.authId,
-    userName: state.user.name
-}))
 export default class LobbyGame extends Component {
     static propTypes = {
         game: PropTypes.object.isRequired,
-        authId: PropTypes.string.isRequired,
-        userName: PropTypes.string.isRequired,
         isAdmin: PropTypes.bool
     };
 

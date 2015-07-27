@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
     }
 });
 
-@connect(state => ({}))
 export default class Lobby extends Component {
     static propTypes = {
 
