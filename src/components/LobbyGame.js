@@ -24,7 +24,7 @@ const styles = {
 };
 
 function gotoGameIfJoinedAndStarted(props) {
-    const { game, authId } = props;
+    const { game } = props;
     const joinedGame = _.contains(_.keys(game.players), authId);
     if (game.started && joinedGame) {
         window.location.href = `/?#/game/${game.gameId}`;
@@ -45,43 +45,25 @@ export default class LobbyGame extends Component {
         gotoGameIfJoinedAndStarted(newProps);
     }
 
-    joinGame() {
-        const { game } = this.props;
-        joinGame(game.gameId);
-    }
-
-    leaveGame() {
-        const { game } = this.props;
-        leaveGame(game.gameId);
-    }
-
-    startGame() {
-        const { game } = this.props;
-        startGame(game.gameId);
-    }
-
-    deleteGame() {
-        const { game } = this.props;
-        deleteGame(game.gameId);
-    }
-
     renderUserButtons() {
+        const { game } = this.props;
         return <div>
-            <a style={styles.link} onClick={this.joinGame.bind(this)}>
+            <a style={styles.link} onClick={joinGame(game.gameId)}>
                 Join game
             </a>
-            <a style={styles.link} onClick={this.leaveGame.bind(this)}>
+            <a style={styles.link} onClick={leaveGame(game.gameId)}>
                 Leave game
             </a>
         </div>;
     }
 
     renderAdminButtons() {
+        const { game } = this.props;
         return <div>
-            <a style={styles.link} onClick={this.startGame.bind(this)}>
+            <a style={styles.link} onClick={startGame(game.gameId)}>
                 Start game
             </a>
-            <a style={styles.link} onClick={this.deleteGame.bind(this)}>
+            <a style={styles.link} onClick={deleteGame(game.gameId)}>
                 Delete game
             </a>
         </div>;

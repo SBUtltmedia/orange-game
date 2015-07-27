@@ -8,7 +8,7 @@ import Dish from '../components/Dish';
 import Stats from '../components/Stats';
 import Players from '../components/Players';
 import { areaTheme } from '../styles/Themes';
-import * as GameActions from '../actions/GameActions';
+import { gameLoad } from '../actions/GameActions';
 import { getUserData, getFbRef } from '../utils';
 import _ from 'lodash';
 
@@ -33,9 +33,8 @@ export default class Game extends Component {
     };
 
     componentWillMount() {
-        const { dispatch, params } = this.props;
-        this.actions = bindActionCreators(GameActions, dispatch);
-        this.actions.gameLoad(params.gameId);
+        const { params } = this.props;
+        gameLoad(params.gameId);
     }
 
     componentDidMount() {
