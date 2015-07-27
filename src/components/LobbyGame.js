@@ -46,13 +46,13 @@ export default class LobbyGame extends Component {
     }
 
     joinGame() {
-        const { game, userName } = this.props;
-        joinGame(game.gameId, authId, userName);
+        const { game } = this.props;
+        joinGame(game.gameId);
     }
 
     leaveGame() {
         const { game } = this.props;
-        leaveGame(game.gameId, authId);
+        leaveGame(game.gameId);
     }
 
     startGame() {

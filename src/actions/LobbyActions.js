@@ -10,14 +10,14 @@ export function setName(authId, name) {
     model.userName = name;
 }
 
-export function joinGame(gameId, authId, userName) {
-    const ref = getFbRef(`/games/${gameId}/players/${authId}`);
-    const player = { name: userName };
+export function joinGame(gameId) {
+    const ref = getFbRef(`/games/${gameId}/players/${model.authId}`);
+    const player = { name: model.userName };
     ref.update(player);
 }
 
-export function leaveGame(gameId, authId) {
-    const ref = getFbRef(`/games/${gameId}/players/${authId}`);
+export function leaveGame(gameId) {
+    const ref = getFbRef(`/games/${gameId}/players/${model.authId}`);
     ref.remove();
     ref.off();
 }
