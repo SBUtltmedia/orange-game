@@ -43,5 +43,5 @@ export default class EnterName extends Component {
                 <input type="submit" onClick={this.login.bind(this)} value="OK" />
               </form>
         </Modal>;
-  }
+    }
 }

@@ -3,6 +3,8 @@ import StyleSheet from'react-style';
 import LobbyGames from '../components/LobbyGames';
 import LobbyUserName from '../components/LobbyUserName';
 import EnterName from '../components/EnterName';
+import { authId, userName } from '../model';
+import { getFbObject, getFbRef } from '../utils';
 
 // TODO: Move isNameAcceptable to the right component
 import { trimString } from '../utils';
@@ -17,29 +19,12 @@ const styles = StyleSheet.create({
 });
 
 export default class Lobby extends Component {
-    static propTypes = {
-
-    };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            loggedIn: false
-        }
-    }
-
-    /*
-    componentWillMount() {
-        getUserData(this);
-    }
-    */
 
     render() {
-        const { loggedIn } = this.state;
         return <div style={styles.page}>
             <LobbyUserName />
             <LobbyGames />
-            <EnterName open={!loggedIn} />
+            <EnterName open={!!!userName} />
         </div>;
     }
 }

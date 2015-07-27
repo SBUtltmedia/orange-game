@@ -24,10 +24,16 @@ function setComponentState(component, stateKey, value) {
     component.setState(data);
 }
 
+export function getFbObject(path, callback) {
+    getFbRef(path).once('value', snapshot => callback(snapshot.val()));
+}
+
 export function subscribeToFirebaseObject(component, ref, stateKey) {
     ref.on('value', snapshot => {
         const object = snapshot.val();
-        setComponentState(component, stateKey, object);
+        if (object) {
+            setComponentState(component, stateKey, object);
+        }
     });
 }
 
