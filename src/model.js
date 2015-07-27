@@ -7,28 +7,20 @@ function getRandomNumberOfOranges() {
 
 class Model {
     constructor() {
-        this._oranges = {
+        this.oranges = {
             box: getRandomNumberOfOranges(),
             basket: 0,
             dish: 0
         };
-        this._day = 1;
-        this._fitness = 0 - DAILY_FITNESS_LOSS;
-        this._fitnessChange = this.fitness;
-        this._gameId = null;
+        this.day = 1;
+        this.fitness = 0 - DAILY_FITNESS_LOSS;
+        this.fitnessChange = this.fitness;
+        this.gameId = null;
     }
 
     newDay() {
-        this._day += 1;
-        return this._day;
-    }
-
-    set day(day) {
-        this._day = day;
-    }
-
-    get day() {
-        return this._day;
+        this.day += 1;
+        return this.day;
     }
 }
 
