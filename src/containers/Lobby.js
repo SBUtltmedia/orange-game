@@ -4,8 +4,7 @@ import * as LobbyActions from '../actions/LobbyActions';
 import LobbyGames from '../components/LobbyGames';
 import LobbyUserName from '../components/LobbyUserName';
 import EnterName from '../components/EnterName';
-import { bindActionCreators } from 'redux';
-import { connect } from 'redux/react';
+import { bindActionCreators, connect } from 'redux';
 
 // TODO: Move isNameAcceptable to the right component
 import { trimString, getUserData } from '../utils';

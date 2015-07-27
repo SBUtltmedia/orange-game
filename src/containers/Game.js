@@ -8,9 +8,8 @@ import Dish from '../components/Dish';
 import Stats from '../components/Stats';
 import Players from '../components/Players';
 import { areaTheme } from '../styles/Themes';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, connect } from 'redux';
 import * as GameActions from '../actions/GameActions';
-import { connect } from 'redux/react';
 import { getUserData, getFbRef } from '../utils';
 import _ from 'lodash';
 

@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { verticalCenter, dnd } from '../styles/Themes';
-import { connect } from 'redux/react';
+import { connect } from 'redux';
 import { forRange, getFbRef } from '../utils';
 import ItemTypes from '../constants/ItemTypes';
 import BinDisplay from './BinDisplay';

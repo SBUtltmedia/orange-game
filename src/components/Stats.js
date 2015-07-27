@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme, buttonTheme, verticalCenter } from '../styles/Themes';
-import { connect } from 'redux/react';
+import { connect } from 'redux';
 
 const styles = {
   container: {

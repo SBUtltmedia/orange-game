@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { connect } from 'redux/react';
+import { connect } from 'redux';
 import { LINK_COLOR } from '../styles/Themes';
 import { Link } from 'react-router';
 import _ from 'lodash';

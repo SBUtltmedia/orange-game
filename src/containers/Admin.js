@@ -2,8 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import StyleSheet from'react-style';
 import * as AdminActions from '../actions/AdminActions';
 import LobbyGames from '../components/LobbyGames';
-import { bindActionCreators } from 'redux';
-import { connect } from 'redux/react';
+import { bindActionCreators, connect } from 'redux';
 
 const styles = StyleSheet.create({
     page: {

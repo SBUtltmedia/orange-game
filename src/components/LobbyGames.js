@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { connect } from 'redux/react';
+import { connect } from 'redux';
 import LobbyGame from './LobbyGame';
 import { subscribeToFirebaseList, getFbRef } from '../utils';
 import _ from 'lodash';

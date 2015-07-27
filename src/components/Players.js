@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
 import Player from './Player';
 import _ from 'lodash';
-import { connect } from 'redux/react';
+import { connect } from 'redux';
 import { subscribeToFirebaseList, getFbRef } from '../utils';
 
 const styles = {
