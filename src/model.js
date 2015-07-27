@@ -1,27 +1,35 @@
 import { MAX_ORANGES, MAX_FITNESS_BOOST, DAILY_FITNESS_LOSS } from './constants/Settings';
 import _ from 'lodash';
 
-const data = {
-    oranges: {
-        box: getRandomNumberOfOranges(),
-        basket: 0,
-        dish: 0
-    },
-    day: 1,
-    fitness: 0 - DAILY_FITNESS_LOSS,
-    fitnessChange: 0 - DAILY_FITNESS_LOSS,
-    gameId: null
-}
-
 function getRandomNumberOfOranges() {
     return Math.floor(Math.random() * MAX_ORANGES);
 }
 
-export function newDay() {
-    data.day += 1;
-    return getDay();
+class Model {
+    constructor() {
+        this._oranges = {
+            box: getRandomNumberOfOranges(),
+            basket: 0,
+            dish: 0
+        };
+        this._day = 1;
+        this._fitness = 0 - DAILY_FITNESS_LOSS;
+        this._fitnessChange = this.fitness;
+        this._gameId = null;
+    }
+
+    newDay() {
+        this._day += 1;
+        return this._day;
+    }
+
+    set day(day) {
+        this._day = day;
+    }
+
+    get day() {
+        return this._day;
+    }
 }
 
-export function getDay() {
-    return data.day;
-}
+export default new Model();  // singleton

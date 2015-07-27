@@ -13,7 +13,7 @@ describe('model', () => {
             const model1 = require('../src/model');
             const model2 = require('../src/model');
             model1.newDay();
-            expect(model2.getDay()).to.equal(2);
+            expect(model2.day).to.equal(2);
         });
     });
 });
