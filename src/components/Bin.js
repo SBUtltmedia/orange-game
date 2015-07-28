@@ -6,6 +6,7 @@ import { forRange } from '../utils';
 import ItemTypes from '../constants/ItemTypes';
 import _ from 'lodash';
 import { dropOrange } from '../actions/GameActions';
+import model from '../model';
 
 const styles = {
   inner: {
@@ -57,15 +58,14 @@ export default class Bin extends Component {
         style: PropTypes.object,
         textual: PropTypes.bool,
         graphical: PropTypes.bool,
-        name: PropTypes.string.isRequired,
-        game: PropTypes.object.isRequired
+        name: PropTypes.string.isRequired
     };
 
     render() {
-        const { style, name, textual, graphical, label, game, isOver,
+        const { style, name, textual, graphical, label, isOver,
                     canDrop, connectDropTarget } = this.props;
         const isActive = isOver && canDrop;
-        const oranges = game.oranges[name];
+        const oranges = model.oranges[name];
         let backgroundColor = style.backgroundColor || styles.defaultBgColor;
         if (isActive) {
             backgroundColor = dnd.isActive;

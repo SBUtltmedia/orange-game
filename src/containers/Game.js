@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { DragDropContext } from 'react-dnd';
-import HTML5Backend, { NativeTypes } from 'react-dnd/modules/backends/HTML5';
+import HTML5Backend from 'react-dnd/modules/backends/HTML5';
 import Controls from '../components/Controls';
 import OrangeBox from '../components/OrangeBox';
 import Basket from '../components/Basket';
@@ -10,6 +10,7 @@ import Players from '../components/Players';
 import { areaTheme } from '../styles/Themes';
 import { gameLoad } from '../actions/GameActions';
 import { getUserData, getFbRef } from '../utils';
+import model from '../model';
 import _ from 'lodash';
 
 const styles = {
@@ -34,6 +35,7 @@ export default class Game extends Component {
 
     componentWillMount() {
         const { params } = this.props;
+        model.gameId = params.gameId;
         gameLoad(params.gameId);
     }
 

@@ -24,6 +24,13 @@ class Model {
         this.day += 1;
         return this.day;
     }
+
+    setGameData(data) {
+        this.oranges = data.oranges;
+        this.day = data.day;
+        this.fitness = data.fitness;
+        this.fitnessChange = data.fitnessChange;
+    }
 }
 
 export default new Model();  // singleton

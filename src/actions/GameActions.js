@@ -1,6 +1,7 @@
 import { DROP_ORANGE, NEW_DAY, JOIN_GAME, GAME_LOAD } from '../constants/ActionTypes';
-import { getFbRef, getAuth } from '../utils';
+import { getFbRef, getAuth, getFbObject } from '../utils';
 import _ from 'lodash';
+import model from '../model';
 
 export function dropOrange(source, dest) {
     return {
@@ -17,17 +18,9 @@ export function newDay(day) {
 }
 
 export function gameLoad(gameId) {
-    return dispatch => {
-        const auth = getAuth();
-        if (auth) {
-            const ref = getFbRef(`/games/${gameId}/players/${auth.uid}`);
-            ref.once('value', snapshot => {
-                dispatch({
-                    type: GAME_LOAD,
-                    ...(snapshot.val()),
-                    gameId: gameId
-                });
-            });
+    getFbObject(`/games/${gameId}/players/${model.authId}`, gameData => {
+        if (gameData) {
+            model.setGameData(gameData);    
         }
-    }
+    });
 }
