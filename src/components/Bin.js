@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import DraggableOrange from './DraggableOrange';
 import { DropTarget } from 'react-dnd';
 import { verticalCenter, dnd } from '../styles/Themes';
-import { forRange } from '../utils';
+import { subscribeToFirebaseObject, getFbRef, forRange } from '../utils';
 import ItemTypes from '../constants/ItemTypes';
 import _ from 'lodash';
 import { dropOrange } from '../actions/GameActions';
@@ -61,11 +61,32 @@ export default class Bin extends Component {
         name: PropTypes.string.isRequired
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            oranges: 0
+        };
+    }
+
+    componentWillMount() {
+        const { name } = this.props;
+        const { gameId, authId } = model;
+        const url = `/games/${gameId}/players/${authId}/oranges/${name}`;
+        this.firebaseRef = getFbRef(url);
+        subscribeToFirebaseObject(this, this.firebaseRef, 'oranges');
+    }
+
+    componentWillUnmount() {
+        if (this.firebaseRef) {
+            this.firebaseRef.off();
+        }
+    }
+
     render() {
         const { style, name, textual, graphical, label, isOver,
                     canDrop, connectDropTarget } = this.props;
+        const { oranges } = this.state;
         const isActive = isOver && canDrop;
-        const oranges = model.oranges[name];
         let backgroundColor = style.backgroundColor || styles.defaultBgColor;
         if (isActive) {
             backgroundColor = dnd.isActive;

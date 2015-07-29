@@ -3,6 +3,7 @@ import { areaTheme } from '../styles/Themes';
 import Player from './Player';
 import _ from 'lodash';
 import { subscribeToFirebaseList, getFbRef } from '../utils';
+import model from '../model';
 
 const styles = {
     container: {
@@ -21,12 +22,9 @@ export default class Players extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { gameId } = nextProps;
-        if (gameId) {
-            this.firebaseRef = getFbRef(`/games/${gameId}/players`);
-            subscribeToFirebaseList(this, this.firebaseRef, 'players', 'authId');
-        }
+    componentWillMount() {
+        this.firebaseRef = getFbRef(`/games/${model.gameId}/players`);
+        subscribeToFirebaseList(this, this.firebaseRef, 'players', 'authId');
     }
 
     componentWillUnmount() {
