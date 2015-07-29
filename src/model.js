@@ -20,6 +20,11 @@ class Model {
         this.userName = null;
     }
 
+    dropOrange(source, dest) {
+        this.oranges[source] -= 1;
+        this.oranges[dest] += 1;
+    }
+
     newDay() {
         this.day += 1;
         return this.day;
@@ -33,9 +38,6 @@ class Model {
     }
 
     getGameData() {
-
-        console.log('this', this);
-
         return {
             oranges: this.oranges,
             day: this.day,

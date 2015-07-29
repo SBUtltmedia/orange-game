@@ -15,7 +15,7 @@ const styles = {
   defaultBgColor: 'darkkhaki'
 };
 
-const dustbinTarget = {
+const binTarget = {
     drop(props, monitor) {
         dropOrange(monitor.getItem().source, props.name);
     }
@@ -45,7 +45,7 @@ function renderGraphical(oranges, name) {
     }
 }
 
-@DropTarget(ItemTypes.ORANGE, dustbinTarget, (connect, monitor) => ({
+@DropTarget(ItemTypes.ORANGE, binTarget, (connect, monitor) => ({
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
     canDrop: monitor.canDrop()

@@ -4,17 +4,14 @@ import _ from 'lodash';
 import model from '../model';
 
 export function dropOrange(source, dest) {
-    return {
-        type: DROP_ORANGE,
-        source: source,
-        dest: dest
-    };
+    model.dropOrange(source, dest);
+    const url = `/games/${model.gameId}/players/${model.authId}`;
+    updateFbObject(url, model.getGameData());
 }
 
 export function newDay(day) {
-    return {
-        type: NEW_DAY
-    };
+    const url = `/games/${model.gameId}/players/${model.authId}`;
+    updateFbObject(url, { day: model.newDay() });
 }
 
 export function gameLoad(gameId) {
