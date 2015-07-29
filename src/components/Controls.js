@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme, buttonTheme } from '../styles/Themes';
 import OrangeBox from './OrangeBox';
+import model from '../model';
 
 const styles = {
   container: {
@@ -18,12 +19,10 @@ const styles = {
 export default class Controls extends Component {
 
     render() {
-        const { day, canAdvanceDay } = this.props;
-        const { newDay } = actions;
         return <div style={styles.container}>
-            <OrangeBox {...this.props} />
-            <button style={styles.button} disabled={!canAdvanceDay}
-                                        onClick={newDay.bind(this, day + 1)}>
+            <OrangeBox />
+            <button style={styles.button} disabled={!model.canAdvanceDay}
+                                            onClick={model.newDay}>
                 Let a new day begin
             </button>
             <button style={styles.button} onClick={() => alert('Not implemented')}>

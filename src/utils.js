@@ -28,6 +28,10 @@ export function getFbObject(path, callback) {
     getFbRef(path).once('value', snapshot => callback(snapshot.val()));
 }
 
+export function updateFbObject(path, data) {
+    getFbRef(path).update(data);
+}
+
 export function subscribeToFirebaseObject(component, ref, stateKey) {
     ref.on('value', snapshot => {
         const object = snapshot.val();

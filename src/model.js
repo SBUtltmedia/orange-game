@@ -31,6 +31,22 @@ class Model {
         this.fitness = data.fitness;
         this.fitnessChange = data.fitnessChange;
     }
+
+    getGameData() {
+
+        console.log('this', this);
+
+        return {
+            oranges: this.oranges,
+            day: this.day,
+            fitness: this.fitness,
+            fitnessChange: this.fitnessChange
+        };
+    }
+
+    get canAdvanceDay() {
+        return this.oranges.box === 0;
+    }
 }
 
 export default new Model();  // singleton

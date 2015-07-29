@@ -8,6 +8,10 @@ describe('model', () => {
         model = requireUncached('../src/model');
     });
 
+    it('reduces fitness on a new day', () => {
+        
+    });
+
     describe('mechanics', () => {
         it('is a singleton', () => {
             const model1 = require('../src/model');

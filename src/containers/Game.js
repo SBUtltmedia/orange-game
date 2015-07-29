@@ -27,28 +27,11 @@ const styles = {
 
 @DragDropContext(HTML5Backend)
 export default class Game extends Component {
-    static propTypes = {
-        game: PropTypes.object.isRequired,
-        gameId: PropTypes.string.isRequired,
-        authId: PropTypes.string.isRequired
-    };
 
     componentWillMount() {
         const { params } = this.props;
         model.gameId = params.gameId;
         gameLoad(params.gameId);
-    }
-
-    componentDidMount() {
-        getUserData(this);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const { game, authId, gameId } = nextProps;
-        if (gameId && authId) {
-            const ref = getFbRef(`/games/${gameId}/players/${authId}`);
-            ref.update(_.omit(game, ['gameId', 'authId']));
-        }
     }
 
     render() {

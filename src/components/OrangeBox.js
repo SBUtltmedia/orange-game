@@ -17,7 +17,6 @@ const styles = {
 export default class OrangeBox extends Component {
 
     render() {
-        const { actions } = this.props;
         return <Bin style={styles.box} textual={false} graphical={true}
                     name="box" showName={false} />
     }
