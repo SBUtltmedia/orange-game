@@ -14,7 +14,7 @@ class Model {
         };
         this.day = 1;
         this.fitness = 0 - DAILY_FITNESS_LOSS;
-        this.fitnessChange = this.fitness;
+        this.fitnessChange = 0 - DAILY_FITNESS_LOSS;
         this.gameId = null;
         this.authId = null;
         this.userName = null;
@@ -27,7 +27,10 @@ class Model {
 
     newDay() {
         this.day += 1;
-        return this.day;
+        this.oranges.dish = 0;
+        this.oranges.box = getRandomNumberOfOranges();
+        this.fitness -= DAILY_FITNESS_LOSS;
+        this.fitnessChange = 0 - DAILY_FITNESS_LOSS;
     }
 
     setGameData(data) {

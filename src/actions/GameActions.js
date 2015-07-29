@@ -10,8 +10,9 @@ export function dropOrange(source, dest) {
 }
 
 export function newDay(day) {
+    model.newDay();
     const url = `/games/${model.gameId}/players/${model.authId}`;
-    updateFbObject(url, { day: model.newDay() });
+    updateFbObject(url, model.getGameData());
 }
 
 export function gameLoad(gameId) {
