@@ -21,8 +21,20 @@ class Model {
     }
 
     dropOrange(source, dest) {
-        this.oranges[source] -= 1;
-        this.oranges[dest] += 1;
+        if (source !== dest) {
+            if (dest === 'dish') {
+                const fitnessBoost = MAX_FITNESS_BOOST - this.oranges.dish;
+                this.fitness += fitnessBoost;
+                this.fitnessChange += fitnessBoost;
+            }
+            else if (source === 'dish') {
+                const fitnessBoost = this.oranges.dish - MAX_FITNESS_BOOST - 1;
+                this.fitness += fitnessBoost;
+                this.fitnessChange += fitnessBoost;
+            }
+            this.oranges[source] -= 1;
+            this.oranges[dest] += 1;
+        }
     }
 
     newDay() {
