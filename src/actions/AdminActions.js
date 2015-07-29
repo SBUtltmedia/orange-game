@@ -8,13 +8,6 @@ export function createGame() {
         maxPlayers: MAX_PLAYERS
     };
     const gameId = ref.push(game).key();
-    //ref.off();
-    return {
-        type: CREATE_GAME,
-        ...game,
-        gameId: gameId,
-        started: false
-    };
 }
 
 export function startGame(gameId) {
@@ -22,17 +15,9 @@ export function startGame(gameId) {
     ref.update({
         started: true
     });
-    return {
-        type: START_GAME,
-        gameId: gameId
-    };
 }
 
 export function deleteGame(gameId) {
     const ref = getFbRef(`/games/${gameId}`);
     ref.remove();
-    return {
-        type: DELETE_GAME,
-        gameId: gameId
-    };
 }
