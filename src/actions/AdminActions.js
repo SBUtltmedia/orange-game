@@ -1,4 +1,3 @@
-import { CREATE_GAME, START_GAME, DELETE_GAME } from '../constants/ActionTypes';
 import { MAX_PLAYERS } from '../constants/Settings';
 import { getFbRef } from '../utils';
 

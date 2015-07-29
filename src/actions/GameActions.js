@@ -1,4 +1,3 @@
-import { DROP_ORANGE, NEW_DAY, JOIN_GAME, GAME_LOAD } from '../constants/ActionTypes';
 import { getFbObject, updateFbObject } from '../utils';
 import _ from 'lodash';
 import model from '../model';

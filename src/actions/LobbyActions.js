@@ -1,4 +1,3 @@
-import { USER_AUTHED, JOIN_GAME, LEAVE_GAME } from '../constants/ActionTypes';
 import { getFbRef } from '../utils';
 import _ from 'lodash';
 import model from '../model';

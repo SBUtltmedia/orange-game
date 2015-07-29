@@ -9,7 +9,7 @@ import Stats from '../components/Stats';
 import Players from '../components/Players';
 import { areaTheme } from '../styles/Themes';
 import { gameLoad } from '../actions/GameActions';
-import { getUserData, getFbRef } from '../utils';
+import { getFbRef } from '../utils';
 import model from '../model';
 import _ from 'lodash';
 
