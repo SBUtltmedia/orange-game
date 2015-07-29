@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { areaTheme, buttonTheme } from '../styles/Themes';
 import OrangeBox from './OrangeBox';
 import model from '../model';
+import { subscribeToFirebaseObject, getFbRef } from '../utils';
 
 const styles = {
   container: {
@@ -18,10 +19,39 @@ const styles = {
 
 export default class Controls extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            boxOranges: null
+        };
+    }
+
+    componentWillMount() {
+        const { name } = this.props;
+        const { gameId, authId } = model;
+        const url = `/games/${gameId}/players/${authId}/oranges/box`;
+        this.firebaseRef = getFbRef(url);
+        subscribeToFirebaseObject(this, this.firebaseRef, 'boxOranges');
+    }
+
+    componentWillUnmount() {
+        if (this.firebaseRef) {
+            this.firebaseRef.off();
+        }
+    }
+
+    canAdvanceDay() {
+        const { boxOranges } = this.state;
+
+        console.log('boxOranges', boxOranges);
+
+        return boxOranges === 0;
+    }
+
     render() {
         return <div style={styles.container}>
             <OrangeBox />
-            <button style={styles.button} disabled={!model.canAdvanceDay}
+            <button style={styles.button} disabled={!this.canAdvanceDay()}
                                             onClick={model.newDay}>
                 Let a new day begin
             </button>
