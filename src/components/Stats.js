@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme, buttonTheme, verticalCenter } from '../styles/Themes';
 import model from '../model';
+import { subscribeToFirebaseObject, getFbRef } from '../utils';
 
 const styles = {
   container: {
@@ -38,8 +39,32 @@ function formatChange(change) {
 
 export default class Stats extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            stats: {
+                day: null,
+                fitness: null,
+                fitnessChange: null
+            }
+        };
+    }
+
+    componentWillMount() {
+        const { gameId, authId } = model;
+        const url = `/games/${gameId}/players/${authId}`;
+        this.firebaseRef = getFbRef(url);
+        subscribeToFirebaseObject(this, this.firebaseRef, 'stats');
+    }
+
+    componentWillUnmount() {
+        if (this.firebaseRef) {
+            this.firebaseRef.off();
+        }
+    }
+
     render() {
-        const { day, fitness, fitnessChange } = model;
+        const { day, fitness, fitnessChange } = this.state.stats;
         var fitnessChangeColor = getFitnessChangeColor(fitnessChange);
 
         return <div style={styles.container}>
