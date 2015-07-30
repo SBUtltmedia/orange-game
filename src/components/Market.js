@@ -4,6 +4,7 @@ import { APP_ROOT_ELEMENT } from '../constants/Settings';
 import { subscribeToFirebaseList, getFbRef } from '../utils';
 import _ from 'lodash';
 import model from '../model';
+import Griddle from 'griddle-react';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
@@ -41,28 +42,14 @@ export default class Market extends Component {
 
     render() {
         const { modalIsOpen, players } = this.state;
+        const tableData = _.map(players, player => { return {
+            Name: player.name,
+            Fitness: player.fitness,
+            'Available oranges': player.oranges.box + player.oranges.basket
+        }});
         return <Modal isOpen={modalIsOpen} onRequestClose={() => this.closeModal()}>
           <h2>Market</h2>
-              <table id="market-table">
-                <thead>
-                    <tr>
-                        <td>Name</td>
-                        <td>Fitness</td>
-                        <td>Available Oranges</td>
-                        <td>Debt</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        _.map(players, p => <tr>
-                            <td>{p.name}</td>
-                            <td>{p.fitness}</td>
-                            <td>{p.oranges.box + p.oranges.basket}</td>
-                            <td>?</td>
-                        </tr>)
-                    }
-                </tbody>
-            </table>
+            <Griddle id="market-table" results={tableData} />
             <button onClick={() => this.closeModal()}>Close</button>
         </Modal>;
     }
