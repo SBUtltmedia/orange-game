@@ -52,10 +52,10 @@ export default class Market extends Component {
             'Loan offer': '3 oranges now for 4 oranges in 2 days',
             'Interest/day': Math.round(100 * 1 / 6) + '%'
         }});
-        return <Modal className="Modal__Bootstrap modal-dialog"
+        return <Modal className="Modal__Bootstrap modal-dialog wide"
                 isOpen={modalIsOpen} onRequestClose={() => this.closeModal()}>
             <div className="modal-header">
-              <button type="button" className="close" onClick={this.handleModalCloseRequest}>
+              <button type="button" className="close" onClick={() => this.closeModal()}>
                 <span aria-hidden="true">&times;</span>
                 <span className="sr-only">Close</span>
               </button>
@@ -74,8 +74,6 @@ export default class Market extends Component {
                     (17% interest per day)
                 </p>
             </form>
-            <br /><br />
-            <p><button onClick={() => this.closeModal()}>Close</button></p>
         </Modal>;
     }
 }
