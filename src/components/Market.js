@@ -5,6 +5,7 @@ import { subscribeToFirebaseList, getFbRef } from '../utils';
 import _ from 'lodash';
 import model from '../model';
 import Griddle from 'griddle-react';
+import NumberSelect from './NumberSelect';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
@@ -52,9 +53,16 @@ export default class Market extends Component {
             'Interest/day': Math.round(100*1/6) + '%'
         }});
         return <Modal isOpen={modalIsOpen} onRequestClose={() => this.closeModal()}>
-          <h2>Market</h2>
+            <h2>Market</h2>
             <Griddle id="market-table" results={tableData} />
-            <button onClick={() => this.closeModal()}>Close</button>
+            <form>
+                <h2>Offer loan</h2>
+                <NumberSelect n={10} /> oranges now for &nbsp;
+                <NumberSelect n={10} /> oranges in &nbsp;
+                <NumberSelect n={10} /> days &nbsp;
+                <input type="submit" value="Send offer" />
+            </form>
+            <p><button onClick={() => this.closeModal()}>Close</button></p>
         </Modal>;
     }
 }
