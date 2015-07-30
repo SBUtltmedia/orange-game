@@ -17,7 +17,7 @@ export function newDay(day) {
 export function gameLoad(gameId) {
     const url = `/games/${gameId}/players/${model.authId}`;
     getFbObject(url, gameData => {
-        if (gameData) {
+        if (gameData.oranges) {
             model.setGameData(gameData);
         }
         else {

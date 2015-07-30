@@ -32,9 +32,6 @@ export default class LobbyGames extends Component {
 
     render() {
         const { games } = this.state;
-
-        console.log(games);
-
         const { isAdmin } = this.props;
         return <div styles={[styles.container]}>
             { _.map(games, (g, i) =>
