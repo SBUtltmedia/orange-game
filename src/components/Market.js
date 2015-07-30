@@ -22,11 +22,15 @@ export default class Market extends Component {
         this.setState({ modalIsOpen: false });
     }
 
+    componentWillReceiveProps(props) {
+        this.setState({ modalIsOpen: props.open });
+    }
+
     render() {
         return <Modal isOpen={this.state.modalIsOpen}
                       onRequestClose={() => this.closeModal()}>
 
-          { /* Close button or 'X' */}
+          { /* Close button or 'X' */ }
 
           <h2>Market</h2>
               <table>
@@ -36,6 +40,7 @@ export default class Market extends Component {
                     </td>
                 </tr>
             </table>
+            <button onClick={() => this.closeModal()}>Close</button>
         </Modal>;
     }
 }

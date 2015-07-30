@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme, buttonTheme } from '../styles/Themes';
 import OrangeBox from './OrangeBox';
+import Market from './Market';
 import model from '../model';
 import * as GameActions from '../actions/GameActions';
 import { subscribeToFirebaseObject, getFbRef } from '../utils';
@@ -23,7 +24,8 @@ export default class Controls extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            boxOranges: null
+            boxOranges: null,
+            marketModalOpen: false
         };
     }
 
@@ -43,6 +45,12 @@ export default class Controls extends Component {
         return this.state.boxOranges === 0;
     }
 
+    openMarketModal() {
+        this.setState({
+            marketModalOpen: true
+        });
+    }
+
     render() {
         return <div style={styles.container}>
             <OrangeBox />
@@ -50,9 +58,10 @@ export default class Controls extends Component {
                                             onClick={GameActions.newDay}>
                 Let a new day begin
             </button>
-            <button style={styles.button} onClick={() => alert('Not implemented')}>
+            <button style={styles.button} onClick={() => this.openMarketModal()}>
                 Offer/request a loan
             </button>
+            <Market open={this.state.marketModalOpen} />
         </div>;
     }
 }

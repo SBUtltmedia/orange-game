@@ -13,7 +13,7 @@
     "path": "*",
     "react": "^0.13.3",
     "react-dnd": "^1.1.4",
-    "react-modal": "^0.2.0",
+    "react-modal": "^0.3.0",
     "react-router": "^0.13.3",
     "react-style": "^0.5.5",
     "react-tools": "^0.13.3",
