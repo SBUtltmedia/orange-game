@@ -45,7 +45,11 @@ export default class Market extends Component {
         const tableData = _.map(players, player => { return {
             Name: player.name,
             Fitness: player.fitness,
-            'Available oranges': player.oranges.box + player.oranges.basket
+            'Available oranges': player.oranges.box + player.oranges.basket,
+            'Debts to pay': '6 oranges',
+            'Loan payments to receive': '8 oranges',
+            'Loan offer': '3 oranges now for 4 oranges in 2 days',
+            'Interest/day': Math.round(100*1/6) + '%'
         }});
         return <Modal isOpen={modalIsOpen} onRequestClose={() => this.closeModal()}>
           <h2>Market</h2>
