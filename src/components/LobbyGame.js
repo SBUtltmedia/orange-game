@@ -48,10 +48,10 @@ export default class LobbyGame extends Component {
     renderUserButtons() {
         const { game } = this.props;
         return <div>
-            <a style={styles.link} onClick={joinGame(game.gameId)}>
+            <a style={styles.link} onClick={() => joinGame(game.gameId)}>
                 Join game
             </a>
-            <a style={styles.link} onClick={leaveGame(game.gameId)}>
+            <a style={styles.link} onClick={() => leaveGame(game.gameId)}>
                 Leave game
             </a>
         </div>;
@@ -60,10 +60,10 @@ export default class LobbyGame extends Component {
     renderAdminButtons() {
         const { game } = this.props;
         return <div>
-            <a style={styles.link} onClick={startGame(game.gameId)}>
+            <a style={styles.link} onClick={() => startGame(game.gameId)}>
                 Start game
             </a>
-            <a style={styles.link} onClick={deleteGame(game.gameId)}>
+            <a style={styles.link} onClick={() => deleteGame(game.gameId)}>
                 Delete game
             </a>
         </div>;

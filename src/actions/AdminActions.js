@@ -4,9 +4,9 @@ import { getFbRef } from '../utils';
 export function createGame() {
     const ref = getFbRef('/games');
     const game = {
-        maxPlayers: MAX_PLAYERS
+        started: false
     };
-    const gameId = ref.push(game).key();
+    ref.push(game);
 }
 
 export function startGame(gameId) {

@@ -36,11 +36,11 @@ export default class EnterName extends Component {
 
     render() {
         return <Modal isOpen={this.state.modalIsOpen}
-                      onRequestClose={this.closeModal.bind(this)}>
+                      onRequestClose={() => this.closeModal()}>
               <h2>Enter name</h2>
               <form>
                 <input ref="textBox" />
-                <input type="submit" onClick={this.login.bind(this)} value="OK" />
+                <input type="submit" onClick={() => this.login()} value="OK" />
               </form>
         </Modal>;
     }
