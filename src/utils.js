@@ -33,9 +33,8 @@ export function updateFbObject(path, data) {
 
 export function subscribeToFirebaseObject(component, ref, stateKey) {
     ref.on('value', snapshot => {
-        const object = snapshot.val();
-        if (typeof object !== 'undefined') {
-            setComponentState(component, stateKey, object);
+        if (snapshot.exists()) {
+            setComponentState(component, stateKey, snapshot.val());
         }
     });
 }

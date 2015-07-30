@@ -1,6 +1,15 @@
-import { getFbRef } from '../utils';
+import { getFbRef, getFbObject } from '../utils';
 import _ from 'lodash';
 import model from '../model';
+
+function hasAlreadyJoinedSomeGame(callback) {
+    getFbObject('/games', games => {
+        const b = _.some(games, game => {
+            return _.some(_.keys(game.players), key => key === model.authId);
+        });
+        callback(b);
+    });
+}
 
 export function setName(authId, name) {
     const ref = getFbRef(`/users/${authId}`);
@@ -10,9 +19,16 @@ export function setName(authId, name) {
 }
 
 export function joinGame(gameId) {
-    const ref = getFbRef(`/games/${gameId}/players/${model.authId}`);
-    const player = { name: model.userName };
-    ref.update(player);
+    if (hasAlreadyJoinedSomeGame(yes => {
+        if (yes) {
+            alert("You're already in a game.");
+        }
+        else {
+            const ref = getFbRef(`/games/${gameId}/players/${model.authId}`);
+            const player = { name: model.userName };
+            ref.update(player);
+        }
+    }));
 }
 
 export function leaveGame(gameId) {
