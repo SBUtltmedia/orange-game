@@ -62,16 +62,25 @@ export default class Market extends Component {
               <h2 className="modal-title">Market</h2>
             </div>
             <Griddle id="market-table" results={tableData} />
+            <br /><br />
             <form onSubmit={() => alert('Not implemented')}>
-                <h2>Offer loan</h2>
+                <h3>Offer loan</h3>
                 <p>
-                    <NumberSelect n={model.availableOranges} /> oranges now for &nbsp;
-                    <NumberSelect n={model.availableOranges * 4} /> oranges in &nbsp;
+                    <NumberSelect n={model.availableOranges || 10} /> oranges now for &nbsp;
+                    <NumberSelect n={model.availableOranges * 4 || 40} /> oranges in &nbsp;
                     <NumberSelect n={model.daysLeft} /> days &nbsp;
                     <input type="submit" value="Send offer" /> &nbsp;
                 </p>
                 <p>
-                    (17% interest per day)
+                    (<b>17%</b> interest per day)
+                </p>
+            </form>
+            <br />
+            <form onSubmit={() => alert('Not implemented')}>
+                <h3>Request loan</h3>
+                <p>
+                    <NumberSelect n={12} /> oranges &nbsp;
+                    <input type="submit" value="Send request" /> &nbsp;
                 </p>
             </form>
         </Modal>;
