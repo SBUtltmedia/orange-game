@@ -40,11 +40,7 @@ export default class Controls extends Component {
     }
 
     canAdvanceDay() {
-        const { boxOranges } = this.state;
-
-        console.log('boxOranges', boxOranges);
-
-        return boxOranges === 0;
+        return this.state.boxOranges === 0;
     }
 
     render() {
