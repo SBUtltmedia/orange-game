@@ -36,9 +36,7 @@ export default class Controls extends Component {
     }
 
     componentWillUnmount() {
-        if (this.firebaseRef) {
-            this.firebaseRef.off();
-        }
+        this.firebaseRef.off();
     }
 
     canAdvanceDay() {

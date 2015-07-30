@@ -58,9 +58,7 @@ export default class Stats extends Component {
     }
 
     componentWillUnmount() {
-        if (this.firebaseRef) {
-            this.firebaseRef.off();
-        }
+        this.firebaseRef.off();
     }
 
     render() {

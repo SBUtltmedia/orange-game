@@ -77,9 +77,7 @@ export default class Bin extends Component {
     }
 
     componentWillUnmount() {
-        if (this.firebaseRef) {
-            this.firebaseRef.off();
-        }
+        this.firebaseRef.off();
     }
 
     render() {

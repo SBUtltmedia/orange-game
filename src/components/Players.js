@@ -28,9 +28,7 @@ export default class Players extends Component {
     }
 
     componentWillUnmount() {
-        if (this.firebaseRef) {
-            this.firebaseRef.off();
-        }
+        this.firebaseRef.off();
     }
 
     render() {
