@@ -46,8 +46,8 @@ export default class Market extends Component {
             Name: player.name,
             Fitness: player.fitness,
             'Available oranges': player.oranges.box + player.oranges.basket,
-            'Debts to pay': '6 oranges',
-            'Loan payments to receive': '8 oranges',
+            'Debts to pay': Math.ceil(Math.random() * 10) + ' oranges',
+            'Loan payments to receive': Math.ceil(Math.random() * 10) + ' oranges',
             'Loan offer': '3 oranges now for 4 oranges in 2 days',
             'Interest/day': Math.round(100*1/6) + '%'
         }});
