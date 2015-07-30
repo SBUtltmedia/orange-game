@@ -43,7 +43,7 @@ export default class Market extends Component {
         const { modalIsOpen, players } = this.state;
         return <Modal isOpen={modalIsOpen} onRequestClose={() => this.closeModal()}>
           <h2>Market</h2>
-              <table>
+              <table id="market-table">
                 <thead>
                     <tr>
                         <td>Name</td>
