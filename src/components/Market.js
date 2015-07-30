@@ -25,6 +25,9 @@ export default class Market extends Component {
     render() {
         return <Modal isOpen={this.state.modalIsOpen}
                       onRequestClose={() => this.closeModal()}>
+
+          { /* Close button or 'X' */}
+
           <h2>Market</h2>
               <table>
                 <tr>
