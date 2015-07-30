@@ -1,8 +1,10 @@
 import React, { PropTypes, Component } from 'react';
-import { connect } from 'redux/react';
 import { LINK_COLOR } from '../styles/Themes';
 import { Link } from 'react-router';
 import _ from 'lodash';
+import { joinGame, leaveGame } from '../actions/LobbyActions';
+import { startGame, deleteGame } from '../actions/AdminActions';
+import { authId } from '../model';
 
 const styles = {
     container: {
@@ -22,23 +24,16 @@ const styles = {
 };
 
 function gotoGameIfJoinedAndStarted(props) {
-    const { game, authId } = props;
+    const { game } = props;
     const joinedGame = _.contains(_.keys(game.players), authId);
     if (game.started && joinedGame) {
         window.location.href = `/?#/game/${game.gameId}`;
     }
 }
 
-@connect(state => ({
-    authId: state.user.authId,
-    userName: state.user.name
-}))
 export default class LobbyGame extends Component {
     static propTypes = {
         game: PropTypes.object.isRequired,
-        actions: PropTypes.object.isRequired,
-        authId: PropTypes.string.isRequired,
-        userName: PropTypes.string.isRequired,
         isAdmin: PropTypes.bool
     };
 
@@ -50,43 +45,25 @@ export default class LobbyGame extends Component {
         gotoGameIfJoinedAndStarted(newProps);
     }
 
-    joinGame() {
-        const { game, authId, userName, actions } = this.props;
-        actions.joinGame(game.gameId, authId, userName);
-    }
-
-    leaveGame() {
-        const { game, authId, actions } = this.props;
-        actions.leaveGame(game.gameId, authId);
-    }
-
-    startGame() {
-        const { game, actions } = this.props;
-        actions.startGame(game.gameId);
-    }
-
-    deleteGame() {
-        const { game, actions } = this.props;
-        actions.deleteGame(game.gameId);
-    }
-
     renderUserButtons() {
+        const { game } = this.props;
         return <div>
-            <a style={styles.link} onClick={this.joinGame.bind(this)}>
+            <a style={styles.link} onClick={() => joinGame(game.gameId)}>
                 Join game
             </a>
-            <a style={styles.link} onClick={this.leaveGame.bind(this)}>
+            <a style={styles.link} onClick={() => leaveGame(game.gameId)}>
                 Leave game
             </a>
         </div>;
     }
 
     renderAdminButtons() {
+        const { game } = this.props;
         return <div>
-            <a style={styles.link} onClick={this.startGame.bind(this)}>
+            <a style={styles.link} onClick={() => startGame(game.gameId)}>
                 Start game
             </a>
-            <a style={styles.link} onClick={this.deleteGame.bind(this)}>
+            <a style={styles.link} onClick={() => deleteGame(game.gameId)}>
                 Delete game
             </a>
         </div>;

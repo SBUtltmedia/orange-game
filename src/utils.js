@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import Firebase from 'firebase';
 import { FIREBASE_APP_URL } from './constants/Settings';
-import * as AppActions from './actions/AppActions';
-import { bindActionCreators } from 'redux';
 
 export function range(n) { return Array.apply(0, Array(n)); }
 export function forRange(n, f) { return range(n).map((x, i) => f(i)); }
@@ -19,12 +17,33 @@ export function trimString(s) {  // Strip whitespace
       return (s || '').replace(/^\s+|\s+$/g, '');
 }
 
+function setComponentState(component, stateKey, value) {
+    const data = {};
+    data[stateKey] = value;
+    component.setState(data);
+}
+
+export function getFbObject(path, callback) {
+    getFbRef(path).once('value', snapshot => callback(snapshot.val()));
+}
+
+export function updateFbObject(path, data) {
+    getFbRef(path).update(data);
+}
+
+export function subscribeToFirebaseObject(component, ref, stateKey) {
+    ref.on('value', snapshot => {
+        const object = snapshot.val();
+        if (typeof object !== 'undefined') {
+            setComponentState(component, stateKey, object);
+        }
+    });
+}
+
 export function subscribeToFirebaseList(component, ref, stateKey, objectKey) {
-    ref.on("value", snapshot => {
+    ref.on('value', snapshot => {
         const items = snapshot.val();
-        const data = {};
-        data[stateKey] = objectToArray(items, objectKey);
-        component.setState(data);
+        setComponentState(component, stateKey, objectToArray(items, objectKey));
     });
 
     // Redudant since value does updates too
@@ -47,17 +66,4 @@ export function getAuth() {
     const auth = ref.getAuth();
     ref.off();
     return auth;
-}
-
-export function getUserData(component) {
-    const { dispatch } = component.props;
-    const actions = bindActionCreators(AppActions, dispatch);
-    const auth = getAuth();
-    if (auth) {
-        component.setState({
-            loggedIn: true,
-            authId: auth.uid
-        });
-        actions.getUserData(auth.uid);
-    }
 }

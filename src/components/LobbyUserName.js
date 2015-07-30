@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-import { connect } from 'redux/react';
+import { subscribeToFirebaseObject, getFbRef } from '../utils';
+import model from '../model';
 
 const styles = {
     container: {
@@ -13,22 +14,32 @@ const styles = {
     }
 };
 
-@connect(state => ({
-    userName: state.user.name,
-    authId: state.user.authId
-}))
-export default class LobbyGames extends Component {
-    static propTypes = {
-        actions: PropTypes.object.isRequired,
-        userName: PropTypes.string.isRequired,
-        authId: PropTypes.string.isRequired
-    };
+export default class LobbyUserName extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            user: {
+                authId: model.authId,
+                name: null
+            }
+        }
+    }
+
+    componentWillMount() {
+        const { authId } = this.state.user;
+        this.firebaseRef = getFbRef(`/users/${authId}`);
+        subscribeToFirebaseObject(this, this.firebaseRef, 'user');
+    }
+
+    componentWillUnmount() {
+        this.firebaseRef.off();
+    }
 
     render() {
-        const { userName, authId } = this.props;
+        const { name, authId } = this.state.user;
         return <div styles={styles.container}>
-            <div styles={styles.section}>Player name: {userName}</div>
-            <div styles={styles.section}>authId: {authId}</div>
+            <div styles={styles.section}>Player name: {name}</div>
         </div>;
     }
 }

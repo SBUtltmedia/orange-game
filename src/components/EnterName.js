@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import Modal from 'react-modal';
+import { setName } from '../actions/LobbyActions';
 import { APP_ROOT_ELEMENT } from '../constants/Settings';
+import { authId } from '../model';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
@@ -8,8 +10,7 @@ Modal.injectCSS();
 
 export default class EnterName extends Component {
     static propTypes = {
-        open: PropTypes.bool.isRequired,
-        actions: PropTypes.object.isRequired
+        open: PropTypes.bool.isRequired
     };
 
     constructor(props) {
@@ -24,9 +25,8 @@ export default class EnterName extends Component {
     }
 
     login() {
-        const { actions } = this.props;
         const name = React.findDOMNode(this.refs.textBox).value;
-        actions.loginUser(name);
+        setName(authId, name);
         this.closeModal();
     }
 
@@ -36,12 +36,12 @@ export default class EnterName extends Component {
 
     render() {
         return <Modal isOpen={this.state.modalIsOpen}
-                      onRequestClose={this.closeModal.bind(this)}>
+                      onRequestClose={() => this.closeModal()}>
               <h2>Enter name</h2>
               <form>
                 <input ref="textBox" />
-                <input type="submit" onClick={this.login.bind(this)} value="OK" />
+                <input type="submit" onClick={() => this.login()} value="OK" />
               </form>
         </Modal>;
-  }
+    }
 }

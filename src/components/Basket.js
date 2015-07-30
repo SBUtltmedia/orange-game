@@ -9,14 +9,9 @@ const styles = {
 }
 
 export default class Basket extends Component {
-  static propTypes = {
-    actions: PropTypes.object.isRequired
-  };
 
-  render() {
-    const { actions } = this.props;
-    return <Bin actions={actions} style={styles.container}
-                textual={true} graphical={true}
-                name="basket" label="Oranges saved" />
-  }
+    render() {
+        return <Bin style={styles.container} textual={true} graphical={true}
+                    name="basket" label="Oranges saved" />
+    }
 }

@@ -1,7 +1,9 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme, buttonTheme } from '../styles/Themes';
 import OrangeBox from './OrangeBox';
-import { connect } from 'redux/react';
+import model from '../model';
+import * as GameActions from '../actions/GameActions';
+import { subscribeToFirebaseObject, getFbRef } from '../utils';
 
 const styles = {
   container: {
@@ -16,28 +18,42 @@ const styles = {
   }
 };
 
-@connect(state => ({
-    day: state.game.day,
-    canAdvanceDay: state.game.oranges.box === 0
-}))
 export default class Controls extends Component {
-    static propTypes = {
-        day: PropTypes.number.isRequired,
-        actions: PropTypes.object.isRequired,
-        canAdvanceDay: PropTypes.bool.isRequired
-    };
 
-    componentDidMount() {
-        const { actions, day } = this.props;
+    constructor(props) {
+        super(props);
+        this.state = {
+            boxOranges: null
+        };
+    }
+
+    componentWillMount() {
+        const { name } = this.props;
+        const { gameId, authId } = model;
+        const url = `/games/${gameId}/players/${authId}/oranges/box`;
+        this.firebaseRef = getFbRef(url);
+        subscribeToFirebaseObject(this, this.firebaseRef, 'boxOranges');
+    }
+
+    componentWillUnmount() {
+        if (this.firebaseRef) {
+            this.firebaseRef.off();
+        }
+    }
+
+    canAdvanceDay() {
+        const { boxOranges } = this.state;
+
+        console.log('boxOranges', boxOranges);
+
+        return boxOranges === 0;
     }
 
     render() {
-        const { actions, day, canAdvanceDay } = this.props;
-        const { newDay } = actions;
         return <div style={styles.container}>
-            <OrangeBox {...this.props} />
-            <button style={styles.button} disabled={!canAdvanceDay}
-                                        onClick={newDay.bind(this, day + 1)}>
+            <OrangeBox />
+            <button style={styles.button} disabled={!this.canAdvanceDay()}
+                                            onClick={GameActions.newDay}>
                 Let a new day begin
             </button>
             <button style={styles.button} onClick={() => alert('Not implemented')}>

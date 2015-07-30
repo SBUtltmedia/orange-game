@@ -1,14 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import StyleSheet from'react-style';
-import * as LobbyActions from '../actions/LobbyActions';
 import LobbyGames from '../components/LobbyGames';
 import LobbyUserName from '../components/LobbyUserName';
 import EnterName from '../components/EnterName';
-import { bindActionCreators } from 'redux';
-import { connect } from 'redux/react';
+import { authId, userName } from '../model';
+import { getFbObject, getFbRef } from '../utils';
 
 // TODO: Move isNameAcceptable to the right component
-import { trimString, getUserData } from '../utils';
+import { trimString } from '../utils';
 function isNameAcceptable(name) {
     return trimString(name) !== '';  // TODO: Check for name taken
 }
@@ -19,34 +18,13 @@ const styles = StyleSheet.create({
     }
 });
 
-@connect(state => ({}))
 export default class Lobby extends Component {
-    static propTypes = {
-
-    };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            loggedIn: false
-        }
-    }
-
-    componentWillMount() {
-        const { dispatch } = this.props;
-
-        console.log('dispatch', dispatch);
-
-        this.actions = bindActionCreators(LobbyActions, dispatch);
-        getUserData(this);
-    }
 
     render() {
-        const { loggedIn } = this.state;
         return <div style={styles.page}>
-            <LobbyUserName actions={this.actions} />
-            <LobbyGames actions={this.actions} />
-            <EnterName open={!loggedIn} actions={this.actions} />
+            <LobbyUserName />
+            <LobbyGames />
+            <EnterName open={!!!userName} />
         </div>;
     }
 }

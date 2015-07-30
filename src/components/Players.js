@@ -2,8 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
 import Player from './Player';
 import _ from 'lodash';
-import { connect } from 'redux/react';
 import { subscribeToFirebaseList, getFbRef } from '../utils';
+import model from '../model';
 
 const styles = {
     container: {
@@ -13,16 +13,7 @@ const styles = {
     }
 };
 
-@connect(state => ({
-    gameId: state.game.gameId,
-    authId: state.user.authId
-}))
 export default class Players extends Component {
-    static propTypes = {
-        authId: PropTypes.string.isRequired,
-        actions: PropTypes.object.isRequired,
-        gameId: PropTypes.string.isRequired
-    };
 
     constructor(props) {
         super(props);
@@ -31,12 +22,9 @@ export default class Players extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { gameId } = nextProps;
-        if (gameId) {
-            this.firebaseRef = getFbRef(`/games/${gameId}/players`);
-            subscribeToFirebaseList(this, this.firebaseRef, 'players', 'authId');
-        }
+    componentWillMount() {
+        this.firebaseRef = getFbRef(`/games/${model.gameId}/players`);
+        subscribeToFirebaseList(this, this.firebaseRef, 'players', 'authId');
     }
 
     componentWillUnmount() {

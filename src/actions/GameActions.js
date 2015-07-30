@@ -1,33 +1,27 @@
-import { DROP_ORANGE, NEW_DAY, JOIN_GAME, GAME_LOAD } from '../constants/ActionTypes';
-import { getFbRef, getAuth } from '../utils';
+import { getFbObject, updateFbObject } from '../utils';
 import _ from 'lodash';
+import model from '../model';
 
 export function dropOrange(source, dest) {
-    return {
-        type: DROP_ORANGE,
-        source: source,
-        dest: dest
-    };
+    model.dropOrange(source, dest);
+    const url = `/games/${model.gameId}/players/${model.authId}`;
+    updateFbObject(url, model.getGameData());
 }
 
 export function newDay(day) {
-    return {
-        type: NEW_DAY
-    };
+    model.newDay();
+    const url = `/games/${model.gameId}/players/${model.authId}`;
+    updateFbObject(url, model.getGameData());
 }
 
 export function gameLoad(gameId) {
-    return dispatch => {
-        const auth = getAuth();
-        if (auth) {
-            const ref = getFbRef(`/games/${gameId}/players/${auth.uid}`);
-            ref.once('value', snapshot => {
-                dispatch({
-                    type: GAME_LOAD,
-                    ...(snapshot.val()),
-                    gameId: gameId
-                });
-            });
+    const url = `/games/${gameId}/players/${model.authId}`;
+    getFbObject(url, gameData => {
+        if (gameData.oranges) {
+            model.setGameData(gameData);
         }
-    }
+        else {
+            updateFbObject(url, model.getGameData());
+        }
+    });
 }

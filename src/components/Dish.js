@@ -9,14 +9,9 @@ const styles = {
 }
 
 export default class Dish extends Component {
-  static propTypes = {
-    actions: PropTypes.object.isRequired
-  };
 
-  render() {
-    const { actions } = this.props;
-    return <Bin actions={actions} style={styles.container}
-                textual={true} graphical={true}
-                name="dish" label="Oranges eaten" />
-  }
+    render() {
+        return <Bin style={styles.container} textual={true} graphical={true}
+                    name="dish" label="Oranges eaten" />
+    }
 }
