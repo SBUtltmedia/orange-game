@@ -47,22 +47,32 @@ export default class LobbyGame extends Component {
 
     renderUserButtons() {
         const { game } = this.props;
-        return <div>
-            <a style={styles.link} onClick={() => joinGame(game.gameId)}>
-                Join game
-            </a>
-            <a style={styles.link} onClick={() => leaveGame(game.gameId)}>
-                Leave game
-            </a>
-        </div>;
+        if (game.started) {
+            return <div></div>;
+        }
+        else {
+            return <div>
+                <a style={styles.link} onClick={() => joinGame(game.gameId)}>
+                    Join game
+                </a>
+                <a style={styles.link} onClick={() => leaveGame(game.gameId)}>
+                    Leave game
+                </a>
+            </div>;
+        }
     }
 
     renderAdminButtons() {
         const { game } = this.props;
         return <div>
-            <a style={styles.link} onClick={() => startGame(game.gameId)}>
-                Start game
-            </a>
+            { game.started ?
+                <a style={styles.link} onClick={() => console.log('Not implemented')}>
+                    End game
+                </a> :
+                <a style={styles.link} onClick={() => startGame(game.gameId)}>
+                    Start game
+                </a>
+            }
             <a style={styles.link} onClick={() => deleteGame(game.gameId)}>
                 Delete game
             </a>
