@@ -1,4 +1,4 @@
-import { MAX_ORANGES, MAX_FITNESS_BOOST, DAILY_FITNESS_LOSS } from './constants/Settings';
+import { MAX_ORANGES, MAX_FITNESS_BOOST, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
 import _ from 'lodash';
 
 function getRandomNumberOfOranges() {
@@ -59,6 +59,14 @@ class Model {
             fitness: this.fitness,
             fitnessChange: this.fitnessChange
         };
+    }
+
+    get availableOranges() {
+        return this.oranges.box + this.oranges.basket;
+    }
+
+    get daysLeft() {
+        return DAYS_IN_GAME - this.day;
     }
 
     get canAdvanceDay() {

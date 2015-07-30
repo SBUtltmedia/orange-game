@@ -35,8 +35,9 @@ export default class EnterName extends Component {
     }
 
     render() {
-        return <Modal isOpen={this.state.modalIsOpen}
-                      onRequestClose={() => this.closeModal()}>
+        return <Modal className="Modal__Bootstrap modal-dialog"
+                        isOpen={this.state.modalIsOpen}
+                        onRequestClose={() => this.closeModal()}>
               <h2>Enter name</h2>
               <form>
                 <input ref="textBox" />
