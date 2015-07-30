@@ -50,18 +50,31 @@ export default class Market extends Component {
             'Debts to pay': Math.ceil(Math.random() * 10) + ' oranges',
             'Loan payments to receive': Math.ceil(Math.random() * 10) + ' oranges',
             'Loan offer': '3 oranges now for 4 oranges in 2 days',
-            'Interest/day': Math.round(100*1/6) + '%'
+            'Interest/day': Math.round(100 * 1 / 6) + '%'
         }});
-        return <Modal isOpen={modalIsOpen} onRequestClose={() => this.closeModal()}>
-            <h2>Market</h2>
+        return <Modal className="Modal__Bootstrap modal-dialog"
+                isOpen={modalIsOpen} onRequestClose={() => this.closeModal()}>
+            <div className="modal-header">
+              <button type="button" className="close" onClick={this.handleModalCloseRequest}>
+                <span aria-hidden="true">&times;</span>
+                <span className="sr-only">Close</span>
+              </button>
+              <h2 className="modal-title">Market</h2>
+            </div>
             <Griddle id="market-table" results={tableData} />
-            <form>
+            <form onSubmit={() => alert('Not implemented')}>
                 <h2>Offer loan</h2>
-                <NumberSelect n={10} /> oranges now for &nbsp;
-                <NumberSelect n={10} /> oranges in &nbsp;
-                <NumberSelect n={10} /> days &nbsp;
-                <input type="submit" value="Send offer" />
+                <p>
+                    <NumberSelect n={model.availableOranges} /> oranges now for &nbsp;
+                    <NumberSelect n={model.availableOranges * 4} /> oranges in &nbsp;
+                    <NumberSelect n={model.daysLeft} /> days &nbsp;
+                    <input type="submit" value="Send offer" /> &nbsp;
+                </p>
+                <p>
+                    (17% interest per day)
+                </p>
             </form>
+            <br /><br />
             <p><button onClick={() => this.closeModal()}>Close</button></p>
         </Modal>;
     }
