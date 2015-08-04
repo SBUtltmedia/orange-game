@@ -12,15 +12,12 @@ Modal.setAppElement(appElement);
 Modal.injectCSS();
 
 export default class Market extends Component {
-    static propTypes = {
-        open: PropTypes.bool.isRequired
-    };
 
     constructor(props) {
         super(props);
         this.state = {
-            modalIsOpen: props.open,
-            players: []
+            players: [],
+            modalIsOpen: false
         };
     }
 
@@ -33,15 +30,15 @@ export default class Market extends Component {
         this.firebaseRef.off();
     }
 
+    openModal() {
+        this.setState({ modalIsOpen: true });
+    }
+
     closeModal() {
         this.setState({ modalIsOpen: false });
     }
 
-    componentWillReceiveProps(props) {
-        this.setState({ modalIsOpen: props.open });
-    }
-
-    render() {
+    renderMarketModal() {
         const { modalIsOpen, players } = this.state;
         const tableData = _.map(players, player => { return {
             Name: player.name,
@@ -84,5 +81,15 @@ export default class Market extends Component {
                 </p>
             </form>
         </Modal>;
+    }
+
+    render() {
+        const { buttonStyle } = this.props;
+        return <div>
+            <button style={buttonStyle} onClick={() => this.openModal()}>
+                Offer/request a loan
+            </button>
+            { this.renderMarketModal() }
+        </div>;
     }
 }

@@ -9,14 +9,17 @@ import { DAYS_IN_GAME } from '../constants/Settings';
 
 const styles = {
   container: {
-    ...areaTheme,
-    backgroundColor: '#F7EAC8',
-  },
-  button: {
-    margin: 16,
-    position: 'relative',
-    top: 50
-  }
+        ...areaTheme,
+        backgroundColor: '#F7EAC8',
+    },
+        buttons: {
+        display: 'flex'
+    },
+    button: {
+        margin: 16,
+        position: 'relative',
+        top: 50
+    }
 };
 
 export default class Controls extends Component {
@@ -24,8 +27,7 @@ export default class Controls extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            gameData: null,
-            marketModalOpen: false
+            gameData: null
         };
     }
 
@@ -49,23 +51,16 @@ export default class Controls extends Component {
         return false;
     }
 
-    openMarketModal() {
-        this.setState({
-            marketModalOpen: true
-        });
-    }
-
     render() {
         return <div style={styles.container}>
             <OrangeBox />
-            <button style={styles.button} disabled={!this.canAdvanceDay()}
-                                            onClick={GameActions.newDay}>
-                Let a new day begin
-            </button>
-            <button style={styles.button} onClick={() => this.openMarketModal()}>
-                Offer/request a loan
-            </button>
-            <Market open={this.state.marketModalOpen} />
+            <div style={styles.buttons}>
+                <button style={styles.button} disabled={!this.canAdvanceDay()}
+                                                onClick={GameActions.newDay}>
+                    Let a new day begin
+                </button>
+                <Market buttonStyle={styles.button} />
+            </div>
         </div>;
     }
 }
