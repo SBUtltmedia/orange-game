@@ -5,10 +5,15 @@ const styles = {
         color: 'lightblue',
         backgroundColor: 'blue',
         marginTop: 16,
+        paddingLeft: 12,
         display: 'flex'
     },
     info: {
         margin: '5px 8px'
+    },
+    name: {
+        width: '25%',
+        textAlign: 'left'
     }
 };
 
@@ -22,7 +27,7 @@ export default class Player extends Component {
     render() {
         const { name, oranges, fitness } = this.props;
         return <div style={styles.container}>
-            <div style={{...styles.info, marginRight: 12}}>{name}</div>
+            <div style={{...styles.info, ...styles.name}}>{name}</div>
             <div style={styles.info}>Fitness: {fitness || 0}</div>
             <div style={styles.info}>Box: {oranges ? oranges.box : 0}</div>
             <div style={styles.info}>Basket: {oranges ? oranges.basket : 0}</div>
