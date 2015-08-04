@@ -2,9 +2,6 @@ import _ from 'lodash';
 import Firebase from 'firebase';
 import { FIREBASE_APP_URL } from './constants/Settings';
 
-export function range(n) { return Array.apply(0, Array(n)); }
-export function forRange(n, f) { return range(n).map((x, i) => f(i)); }
-
 export function objectToArray(object, keyName='id') {
     return _.map(_.keys(object), key => {
         const obj = object[key];

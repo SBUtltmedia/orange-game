@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import DraggableOrange from './DraggableOrange';
 import { DropTarget } from 'react-dnd';
 import { verticalCenter, dnd } from '../styles/Themes';
-import { subscribeToFirebaseObject, getFbRef, forRange } from '../utils';
+import { subscribeToFirebaseObject, getFbRef } from '../utils';
 import ItemTypes from '../constants/ItemTypes';
 import _ from 'lodash';
 import { dropOrange } from '../actions/GameActions';
@@ -22,7 +22,7 @@ const binTarget = {
 };
 
 function renderOranges(oranges, name) {
-    return forRange(oranges, i => <DraggableOrange key={i} source={name} />);
+    return _.map(_.range(oranges), i => <DraggableOrange key={i} source={name} />);
 }
 
 function renderNoOranges(oranges) {
