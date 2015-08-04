@@ -30,3 +30,11 @@ a:hover {
 .modal-dialog.short {
     height: 240px !important;
 }
+
+button {
+    border-radius: 16px;
+}
+
+button:disabled {
+    color: gray;
+}

@@ -1,10 +1,11 @@
 import React, { PropTypes, Component } from 'react';
-import { areaTheme, buttonTheme } from '../styles/Themes';
+import { areaTheme } from '../styles/Themes';
 import OrangeBox from './OrangeBox';
 import Market from './Market';
 import model from '../model';
 import * as GameActions from '../actions/GameActions';
 import { subscribeToFirebaseObject, getFbRef } from '../utils';
+import { DAYS_IN_GAME } from '../constants/Settings';
 
 const styles = {
   container: {
@@ -12,7 +13,6 @@ const styles = {
     backgroundColor: '#F7EAC8',
   },
   button: {
-    ...buttonTheme,
     margin: 16,
     position: 'relative',
     top: 50
@@ -24,7 +24,7 @@ export default class Controls extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            boxOranges: null,
+            gameData: null,
             marketModalOpen: false
         };
     }
@@ -32,9 +32,9 @@ export default class Controls extends Component {
     componentWillMount() {
         const { name } = this.props;
         const { gameId, authId } = model;
-        const url = `/games/${gameId}/players/${authId}/oranges/box`;
+        const url = `/games/${gameId}/players/${authId}`;
         this.firebaseRef = getFbRef(url);
-        subscribeToFirebaseObject(this, this.firebaseRef, 'boxOranges');
+        subscribeToFirebaseObject(this, this.firebaseRef, 'gameData');
     }
 
     componentWillUnmount() {
@@ -42,7 +42,11 @@ export default class Controls extends Component {
     }
 
     canAdvanceDay() {
-        return this.state.boxOranges === 0;
+        if (this.state.gameData && this.state.gameData.oranges) {
+            const { oranges, day } = this.state.gameData;
+            return oranges.box === 0 && day < DAYS_IN_GAME;
+        }
+        return false;
     }
 
     openMarketModal() {

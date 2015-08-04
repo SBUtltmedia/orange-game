@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { areaTheme, buttonTheme, verticalCenter } from '../styles/Themes';
+import { areaTheme, verticalCenter } from '../styles/Themes';
 import model from '../model';
 import { subscribeToFirebaseObject, getFbRef } from '../utils';
 

@@ -9,10 +9,12 @@ import Stats from '../components/Stats';
 import Players from '../components/Players';
 import { areaTheme } from '../styles/Themes';
 import { gameLoad } from '../actions/GameActions';
-import { getFbRef } from '../utils';
-import { DAYS_IN_GAME } from '../constants/Settings';
+import { getFbRef, subscribeToFirebaseObject } from '../utils';
+import { GAME_STATES } from '../constants/Settings';
 import model from '../model';
 import _ from 'lodash';
+
+const { NOT_STARTED, STARTED, FINISHED } = GAME_STATES;
 
 const styles = {
   container: {
@@ -29,14 +31,28 @@ const styles = {
 @DragDropContext(HTML5Backend)
 export default class Game extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            gameState: NOT_STARTED
+        };
+    }
+
     componentWillMount() {
         const { params } = this.props;
         model.gameId = params.gameId;
         gameLoad(params.gameId);
+        const url = `/games/${model.gameId}/state`;
+        this.firebaseRef = getFbRef(url);
+        subscribeToFirebaseObject(this, this.firebaseRef, 'gameState');
+    }
+
+    componentWillUnmount() {
+        this.firebaseRef.off();
     }
 
     componentWillReceiveProps(newProps) {
-        if (model.day > DAYS_IN_GAME) {
+        if (state.gameState === FINISHED) {
             window.location.href = '/?#/gameOver/';
         }
     }
