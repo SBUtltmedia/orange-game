@@ -1,13 +1,22 @@
 import React, { PropTypes, Component } from 'react';
 import Modal from 'react-modal';
-import { setName, isNameTaken } from '../actions/LobbyActions';
+import { setName, checkIfNameTaken } from '../actions/LobbyActions';
 import { APP_ROOT_ELEMENT } from '../constants/Settings';
 import { authId } from '../model';
 import { trimString } from '../utils';
+import StyleSheet from'react-style';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
 Modal.injectCSS();
+
+const styles = StyleSheet.create({
+    error: {
+        color: "#F00",
+        fontSize: 14,
+        fontWeight: "bold"
+    }
+});
 
 export default class EnterName extends Component {
     static propTypes = {
@@ -22,18 +31,23 @@ export default class EnterName extends Component {
         };
     }
 
-    login() {
+    onSubmit(e) {
         const name = trimString(React.findDOMNode(this.refs.textBox).value);
         if (name === '') {
             this.setState({ error: 'Name cannot be blank' });
         }
-        else if (isNameTaken(name)) {
-            this.setState({ error: 'Name is already taken' });
-        }
         else {
-            setName(authId, name);
-            this.closeModal();
+            checkIfNameTaken(name, taken => {
+                if (taken) {
+                    this.setState({ error: 'Name is already taken' });
+                }
+                else {
+                    setName(authId, name);
+                    this.closeModal();
+                }
+            });
         }
+        e.preventDefault();
     }
 
     closeModal() {
@@ -49,11 +63,11 @@ export default class EnterName extends Component {
                         isOpen={this.state.modalIsOpen}
                         onRequestClose={() => this.closeModal()}>
               <h2>Enter name</h2>
-              <form onSubmit={() => this.login()}>
+              <form onSubmit={(e) => this.onSubmit(e)}>
                 <input ref="textBox" />
                 <input type="submit" value="OK" />
               </form>
-              <div>{this.state.error}</div>
+              <div style={styles.error}>{this.state.error}</div>
         </Modal>;
     }
 }

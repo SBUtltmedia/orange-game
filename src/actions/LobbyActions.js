@@ -11,7 +11,7 @@ function hasAlreadyJoinedSomeGame(callback) {
     });
 }
 
-export function isNameTaken(name, callback) {
+export function checkIfNameTaken(name, callback) {
     getFbObject('/users', users => {
         callback(_.some(users, u => u.name === name));
     });
