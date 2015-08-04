@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import Modal from 'react-modal';
-import { setName } from '../actions/LobbyActions';
+import { setName, isNameTaken } from '../actions/LobbyActions';
 import { APP_ROOT_ELEMENT } from '../constants/Settings';
 import { authId } from '../model';
 import { trimString } from '../utils';
@@ -8,10 +8,6 @@ import { trimString } from '../utils';
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
 Modal.injectCSS();
-
-function isNameAcceptable(name) {
-    return trimString(name) !== '';  // TODO: Check for name taken
-}
 
 export default class EnterName extends Component {
     static propTypes = {
@@ -21,20 +17,27 @@ export default class EnterName extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            modalIsOpen: props.open
+            modalIsOpen: props.open,
+            error: null
         };
+    }
+
+    login() {
+        const name = trimString(React.findDOMNode(this.refs.textBox).value);
+        if (name === '') {
+            this.setState({ error: 'Name cannot be blank' });
+        }
+        else if (isNameTaken(name)) {
+            this.setState({ error: 'Name is already taken' });
+        }
+        else {
+            setName(authId, name);
+            this.closeModal();
+        }
     }
 
     closeModal() {
         this.setState({ modalIsOpen: false });
-    }
-
-    login() {
-        const name = React.findDOMNode(this.refs.textBox).value;
-        if (isNameAcceptable(name)) {
-            setName(authId, name);
-            this.closeModal();
-        }
     }
 
     componentDidMount() {
@@ -50,6 +53,7 @@ export default class EnterName extends Component {
                 <input ref="textBox" />
                 <input type="submit" value="OK" />
               </form>
+              <div>{this.state.error}</div>
         </Modal>;
     }
 }

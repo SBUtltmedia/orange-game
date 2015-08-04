@@ -11,6 +11,12 @@ function hasAlreadyJoinedSomeGame(callback) {
     });
 }
 
+export function isNameTaken(name, callback) {
+    getFbObject('/users', users => {
+        callback(_.some(users, u => u.name === name));
+    });
+}
+
 export function setName(authId, name) {
     const ref = getFbRef(`/users/${authId}`);
     const user = { name: name };

@@ -9,17 +9,8 @@ const mountNode = document.getElementById(APP_ROOT_ELEMENT);
 
 function authUser() {
     return new Promise((resolve, reject) => {
-        const auth = getAuth();
-        if (auth) {
-            model.authId = auth.uid;
-            getFbObject(`/users/${model.authId}`, user => {
-                if (user && user.name) {
-                    model.userName = user.name;
-                    resolve();
-                }
-            });
-        }
-        else {
+
+        function login() {
             const ref = getFbRef('/');
             ref.authAnonymously((error, authData) => {
                 if (authData) {
@@ -31,6 +22,23 @@ function authUser() {
                     reject();
                 }
             });
+        }
+
+        const auth = getAuth();
+        if (auth) {
+            model.authId = auth.uid;
+            getFbObject(`/users/${model.authId}`, user => {
+                if (user && user.name) {
+                    model.userName = user.name;
+                    resolve();
+                }
+                else {
+                    login();
+                }
+            });
+        }
+        else {
+            login();
         }
     });
 }
