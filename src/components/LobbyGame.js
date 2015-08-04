@@ -1,10 +1,19 @@
 import React, { PropTypes, Component } from 'react';
+import { MAX_PLAYERS, GAME_STATES } from '../constants/Settings';
 import { LINK_COLOR } from '../styles/Themes';
 import { Link } from 'react-router';
 import _ from 'lodash';
 import { joinGame, leaveGame } from '../actions/LobbyActions';
 import { startGame, deleteGame } from '../actions/AdminActions';
 import { authId } from '../model';
+
+const { NOT_STARTED, STARTED, FINISHED } = GAME_STATES;
+
+const BACKGROUND_COLORS = {
+    NOT_STARTED: 'lightgray',
+    STARTED: 'lightblue',
+    FINISHED: 'pink'
+}
 
 const styles = {
     container: {
@@ -26,7 +35,7 @@ const styles = {
 function gotoGameIfJoinedAndStarted(props) {
     const { game } = props;
     const joinedGame = _.contains(_.keys(game.players), authId);
-    if (game.started && joinedGame) {
+    if (game.state === STARTED && joinedGame) {
         window.location.href = `/?#/game/${game.gameId}`;
     }
 }
@@ -47,7 +56,7 @@ export default class LobbyGame extends Component {
 
     renderUserButtons() {
         const { game } = this.props;
-        if (game.started) {
+        if (game.state === STARTED) {
             return <div></div>;
         }
         else {
@@ -65,7 +74,7 @@ export default class LobbyGame extends Component {
     renderAdminButtons() {
         const { game } = this.props;
         return <div>
-            { game.started ?
+            { game.state === STARTED ?
                 <a style={styles.link} onClick={() => console.log('Not implemented')}>
                     End game
                 </a> :
@@ -81,8 +90,8 @@ export default class LobbyGame extends Component {
 
     render() {
         const { game, isAdmin } = this.props;
-        const { gameId, players, started } = game;
-        const backgroundColor = started ? 'lightblue' : 'lightgray';
+        const { gameId, players, state } = game;
+        const backgroundColor = BACKGROUND_COLORS[state];
         return <div style={{ ...styles.container, backgroundColor }}>
             <div style={styles.row}>
                 <div style={styles.section}>{gameId}</div>
