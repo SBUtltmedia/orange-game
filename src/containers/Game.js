@@ -10,6 +10,7 @@ import Players from '../components/Players';
 import { areaTheme } from '../styles/Themes';
 import { gameLoad } from '../actions/GameActions';
 import { getFbRef } from '../utils';
+import { DAYS_IN_GAME } from '../constants/Settings';
 import model from '../model';
 import _ from 'lodash';
 
@@ -32,6 +33,12 @@ export default class Game extends Component {
         const { params } = this.props;
         model.gameId = params.gameId;
         gameLoad(params.gameId);
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (model.day > DAYS_IN_GAME) {
+            window.location.href = '/?#/gameOver/';
+        }
     }
 
     render() {
