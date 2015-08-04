@@ -6,12 +6,6 @@ import EnterName from '../components/EnterName';
 import { authId, userName } from '../model';
 import { getFbObject, getFbRef } from '../utils';
 
-// TODO: Move isNameAcceptable to the right component
-import { trimString } from '../utils';
-function isNameAcceptable(name) {
-    return trimString(name) !== '';  // TODO: Check for name taken
-}
-
 const styles = StyleSheet.create({
     page: {
         height: '100%'

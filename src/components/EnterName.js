@@ -3,10 +3,15 @@ import Modal from 'react-modal';
 import { setName } from '../actions/LobbyActions';
 import { APP_ROOT_ELEMENT } from '../constants/Settings';
 import { authId } from '../model';
+import { trimString } from '../utils';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
 Modal.injectCSS();
+
+function isNameAcceptable(name) {
+    return trimString(name) !== '';  // TODO: Check for name taken
+}
 
 export default class EnterName extends Component {
     static propTypes = {
@@ -26,8 +31,10 @@ export default class EnterName extends Component {
 
     login() {
         const name = React.findDOMNode(this.refs.textBox).value;
-        setName(authId, name);
-        this.closeModal();
+        if (isNameAcceptable(name)) {
+            setName(authId, name);
+            this.closeModal();
+        }
     }
 
     componentDidMount() {
@@ -39,9 +46,9 @@ export default class EnterName extends Component {
                         isOpen={this.state.modalIsOpen}
                         onRequestClose={() => this.closeModal()}>
               <h2>Enter name</h2>
-              <form>
+              <form onSubmit={() => this.login()}>
                 <input ref="textBox" />
-                <input type="submit" onClick={() => this.login()} value="OK" />
+                <input type="submit" value="OK" />
               </form>
         </Modal>;
     }
