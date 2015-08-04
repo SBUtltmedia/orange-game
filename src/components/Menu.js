@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import StyleSheet from'react-style';
 import { Link } from 'react-router';
-import { LINK_COLOR } from '../styles/Themes';
 
 const styles = StyleSheet.create({
     menu: {
@@ -10,7 +9,6 @@ const styles = StyleSheet.create({
         marginBottom: 16
     },
     item: {
-        color: LINK_COLOR,
         fontSize: 14,
         fontWeight: 'bold',
         margin: 16

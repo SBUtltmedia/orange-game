@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
 import { MAX_PLAYERS, GAME_STATES } from '../constants/Settings';
-import { LINK_COLOR } from '../styles/Themes';
 import { Link } from 'react-router';
 import _ from 'lodash';
 import { joinGame, leaveGame } from '../actions/LobbyActions';
@@ -27,7 +26,6 @@ const styles = {
         margin: 10
     },
     link: {
-        color: LINK_COLOR,
         margin: 10
     }
 };
