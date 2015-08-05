@@ -108,7 +108,7 @@ export default class LobbyGames extends Component {
         const { isAdmin } = this.props;
         const { games } = this.state;
         const tableData = _.map(games, game => { return {
-            Joined: game.players ? _.size(game.players),
+            Joined: _.size(game.players),
             Players: _.map(game.players, p => p.name).join(', '),
             Actions: game
         }})
