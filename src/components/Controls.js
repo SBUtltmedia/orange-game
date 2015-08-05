@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
 import OrangeBox from './OrangeBox';
-import Market from './Market';
 import model from '../model';
 import * as GameActions from '../actions/GameActions';
 import { subscribeToFirebaseObject, getFbRef } from '../utils';
@@ -11,9 +10,6 @@ const styles = {
   container: {
         ...areaTheme,
         backgroundColor: '#F7EAC8',
-    },
-        buttons: {
-        display: 'flex'
     },
     button: {
         margin: 16,
@@ -54,13 +50,10 @@ export default class Controls extends Component {
     render() {
         return <div style={styles.container}>
             <OrangeBox />
-            <div style={styles.buttons}>
-                <button style={styles.button} disabled={!this.canAdvanceDay()}
-                                                onClick={GameActions.newDay}>
-                    Let a new day begin
-                </button>
-                <Market buttonStyle={styles.button} />
-            </div>
+            <button style={styles.button} disabled={!this.canAdvanceDay()}
+                                            onClick={GameActions.newDay}>
+                I'm done for today
+            </button>
         </div>;
     }
 }

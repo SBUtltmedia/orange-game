@@ -9,9 +9,28 @@ const styles = {
     container: {
         ...areaTheme,
         backgroundColor: 'lightblue',
-        overflow: 'scroll'
+        overflow: 'scroll',
+        width: 800
     }
 };
+
+class CreditComponent extends Component {
+    render() {
+        const value = this.props.data;
+        const color = () => {
+            if (value > 0) {
+                return 'darkgreen';
+            }
+            else if (value < 0) {
+                return 'red';
+            }
+            else {
+                return 'black';
+            }
+        }();
+        return <div style={{color: color}}>{value}</div>;
+    }
+}
 
 class ReputationComponent extends Component {
     render() {
@@ -19,10 +38,26 @@ class ReputationComponent extends Component {
     }
 }
 
-const COL_META = [{
-    "columnName": "Reputation",
-    "customComponent": ReputationComponent
-}];
+class LoanComponent extends Component {
+    render() {
+        return <button>Offer</button>;
+    }
+}
+
+const COL_META = [
+    {
+        "columnName": "Credit",
+        "customComponent": CreditComponent
+    },
+    {
+        "columnName": "Reputation",
+        "customComponent": ReputationComponent
+    },
+    {
+        "columnName": "Loan",
+        "customComponent": LoanComponent
+    }
+];
 
 export default class Players extends Component {
 
@@ -50,12 +85,15 @@ export default class Players extends Component {
             Box: player.oranges.box,
             Basket: player.oranges.basket,
             Dish: player.oranges.dish,
-            Reputation: player.oranges.reputation
+            Credit: -5,
+            Reputation: player.oranges.reputation,
+            Loan: player
         }})
         return <div styles={[styles.container]}>
             <Griddle results={tableData}
-                columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish', 'Reputation' ]}
-                showPager={false} resultsPerPage={99}
+                columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish', 'Credit', 'Reputation', 'Loan' ]}
+                showPager={false} resultsPerPage={99} useFixedLayout={false}
+                tableClassName='griddle'
                 columnMetadata={ COL_META } />
         </div>;
     }

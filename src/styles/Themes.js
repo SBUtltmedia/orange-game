@@ -3,8 +3,7 @@ export const areaTheme = {
     width: "450px",
     height: "350px",
     margin: 10,
-    textAlign: 'center',
-    fontFamily: 'comic sans ms, fantasy'
+    textAlign: 'center'
 };
 
 export const verticalCenter = {
