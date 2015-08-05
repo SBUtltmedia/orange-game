@@ -49,6 +49,9 @@ export default class Market extends Component {
             'Loan offer': '3 oranges now for 4 oranges in 2 days',
             'Interest/day': Math.round(100 * 1 / 6) + '%'
         }});
+
+        console.log(tableData);
+
         return <Modal className="Modal__Bootstrap modal-dialog wide"
                 isOpen={modalIsOpen} onRequestClose={() => this.closeModal()}>
             <div className="modal-header">
@@ -58,7 +61,7 @@ export default class Market extends Component {
               </button>
               <h2 className="modal-title">Market</h2>
             </div>
-            <Griddle id="market-table" results={tableData} />
+            <Griddle results={tableData} />
             <br /><br />
             <form onSubmit={() => alert('Not implemented')}>
                 <h3>Offer loan</h3>

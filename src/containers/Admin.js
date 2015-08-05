@@ -14,9 +14,11 @@ export default class Admin extends Component {
 
     render() {
         return <div styles={[styles.page]}>
-            <button style={styles.button} onClick={createGame}>
-                Create new game
-            </button>
+            <p>
+                <button style={styles.button} onClick={createGame}>
+                    Create new game
+                </button>
+            </p>
             <LobbyGames isAdmin={true} />
         </div>;
     }
