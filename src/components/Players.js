@@ -1,9 +1,9 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
-import Player from './Player';
 import _ from 'lodash';
 import { subscribeToFirebaseList, getFbRef } from '../utils';
 import model from '../model';
+import Griddle from 'griddle-react';
 
 const styles = {
     container: {
@@ -12,6 +12,17 @@ const styles = {
         overflow: 'scroll'
     }
 };
+
+class ReputationComponent extends Component {
+    render() {
+        return <img src="/images/emoticons/dont_care.png" />;
+    }
+}
+
+const COL_META = [{
+    "columnName": "Reputation",
+    "customComponent": ReputationComponent
+}];
 
 export default class Players extends Component {
 
@@ -33,8 +44,19 @@ export default class Players extends Component {
 
     render() {
         const { players } = this.state;
-        return <div style={styles.container}>
-            { _.map(players, (p, i) => <Player key={i} {...p} />) }
+        const tableData = _.map(players, player => { return {
+            Name: player.name,
+            Fitness: player.fitness,
+            Box: player.oranges.box,
+            Basket: player.oranges.basket,
+            Dish: player.oranges.dish,
+            Reputation: player.oranges.reputation
+        }})
+        return <div styles={[styles.container]}>
+            <Griddle results={tableData}
+                columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish', 'Reputation' ]}
+                showPager={false} resultsPerPage={99}
+                columnMetadata={ COL_META } />
         </div>;
     }
 }
