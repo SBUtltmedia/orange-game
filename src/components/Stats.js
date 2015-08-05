@@ -7,6 +7,7 @@ const styles = {
   container: {
       ...areaTheme,
       backgroundColor: 'lightgreen',
+      width: 200
   },
   inner: {
       ...verticalCenter

@@ -9,8 +9,8 @@ const styles = {
     container: {
         ...areaTheme,
         backgroundColor: 'lightblue',
-        overflowY: 'scroll',
-        width: 800
+        //overflowY: 'scroll',
+        width: 600
     }
 };
 

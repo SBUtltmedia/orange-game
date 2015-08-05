@@ -7,6 +7,7 @@ import Basket from '../components/Basket';
 import Dish from '../components/Dish';
 import Stats from '../components/Stats';
 import Players from '../components/Players';
+import Chat from '../components/Chat';
 import { areaTheme } from '../styles/Themes';
 import { gameLoad } from '../actions/GameActions';
 import { getFbRef, subscribeToFirebaseObject } from '../utils';
@@ -67,6 +68,7 @@ export default class Game extends Component {
             <div style={styles.row}>
                 <Stats />
                 <Players />
+                <Chat />
             </div>
         </div>;
     }
