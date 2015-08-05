@@ -16,39 +16,39 @@ const styles = {
     },
 };
 
+function renderAction(text, f) {
+    return <a style={styles.link} onClick={f}>{text}</a>;
+}
+
 class AdminActionsComponent extends Component {
     render() {
-        const { game } = this.props.data;
-        return <div>
-            { game.state === STARTED ?
-                <a style={styles.link} onClick={() => console.log('Not implemented')}>
-                    End game
-                </a> :
-                <a style={styles.link} onClick={() => startGame(game.gameId)}>
-                    Start game
-                </a>
-            }
-            <a style={styles.link} onClick={() => deleteGame(game.gameId)}>
-                Delete game
-            </a>
-        </div>;
+        const game = this.props.data;
+        if (game.state === STARTED) {
+            return <div>
+                { renderAction('End game', () => console.log('Not implemented')) },&nbsp;
+                { renderAction('View stats', () => console.log('Not implemented')) },&nbsp;
+                { renderAction('Delete game', () => deleteGame(game.gameId)) }
+            </div>;
+        }
+        else {
+            return <div>
+                { renderAction('Start game', () => startGame(game.gameId)) },&nbsp;
+                { renderAction('Delete game', () => deleteGame(game.gameId)) }
+            </div>;
+        }
     }
 }
 
 class PlayerActionsComponent extends Component {
     render() {
-        const { game } = this.props.data;
+        const game = this.props.data;
         if (game.state === STARTED) {
             return <div></div>;
         }
         else {
             return <div>
-                <a style={styles.link} onClick={() => joinGame(game.gameId)}>
-                    Join game
-                </a>
-                <a style={styles.link} onClick={() => leaveGame(game.gameId)}>
-                    Leave game
-                </a>
+                { renderAction('Join game', () => joinGame(game.gameId)) },&nbsp;
+                { renderAction('Leave game', () => leaveGame(game.gameId)) }
             </div>;
         }
     }
@@ -114,6 +114,7 @@ export default class LobbyGames extends Component {
         }})
         return <div styles={[styles.container]}>
             <Griddle results={tableData}
+                columns={[ 'Joined', 'Players', 'Actions' ]}
                 columnMetadata={ isAdmin ? ADMIN_COL_META : PLAYER_COL_META } />
         </div>;
     }
