@@ -10,7 +10,8 @@ const styles = {
       width: 200
   },
   inner: {
-      ...verticalCenter
+      paddingLeft: 50,
+      textAlign: 'left'
   },
   value: {
     fontWeight: 'bold'
@@ -67,6 +68,9 @@ export default class Stats extends Component {
         var fitnessChangeColor = getFitnessChangeColor(fitnessChange);
 
         return <div style={styles.container}>
+            <br />
+            <h4>Your stats</h4>
+            <br /><br />
             <div style={styles.inner}>
                 <p>
                     <span>Day:</span>
@@ -84,6 +88,12 @@ export default class Stats extends Component {
                     <span style={{...styles.value, color: fitnessChangeColor}}>
                                     {formatChange(fitnessChange)}
                     </span>
+                </p>
+                <p>
+                    <span>Loans:</span>
+                    <ul>
+                        <li>John: <span style={styles.value}>3</span></li>
+                    </ul>
                 </p>
             </div>
         </div>;

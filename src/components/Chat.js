@@ -7,7 +7,23 @@ const styles = {
   container: {
       ...areaTheme,
       backgroundColor: 'lightgray',
-      width: 350
+      width: 350,
+      position: 'relative'
+  },
+  input: {
+      position: 'absolute',
+      bottom: 0,
+      width: '100%'
+  },
+  textBox: {
+      width: 200,
+      margin: 'auto'
+  },
+  presets: {
+      marginTop: 10
+  },
+  preset: {
+      fontSize: 10
   }
 };
 
@@ -33,7 +49,14 @@ export default class Chat extends Component {
 
     render() {
         return <div style={styles.container}>
-            Chat
+            <form style={styles.input}>
+                <input style={styles.textBox} />
+                <input type="submit" value="Send" />
+                <div style={styles.presets}>
+                    <button style={styles.preset}>Can I borrow oranges?</button>
+                    <button style={styles.preset}>I have oranges to borrow.</button>
+                </div>
+            </form>
         </div>;
     }
 }
