@@ -30,13 +30,7 @@ const styles = {
     }
 };
 
-function gotoGameIfJoinedAndStarted(props) {
-    const { game } = props;
-    const joinedGame = _.contains(_.keys(game.players), authId);
-    if (game.state === STARTED && joinedGame) {
-        window.location.href = `/?#/game/${game.gameId}`;
-    }
-}
+
 
 export default class LobbyGame extends Component {
     static propTypes = {
