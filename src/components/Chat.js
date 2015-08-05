@@ -7,7 +7,7 @@ const styles = {
   container: {
       ...areaTheme,
       backgroundColor: 'lightgray',
-      width: 350,
+      width: 300,
       position: 'relative'
   },
   input: {

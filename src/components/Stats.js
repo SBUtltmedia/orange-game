@@ -7,7 +7,7 @@ const styles = {
   container: {
       ...areaTheme,
       backgroundColor: 'lightgreen',
-      width: 200
+      width: 250
   },
   inner: {
       paddingLeft: 50,
