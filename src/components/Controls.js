@@ -11,10 +11,14 @@ const styles = {
         ...areaTheme,
         backgroundColor: '#F7EAC8',
     },
+    buttons: {
+        display: 'flex'
+    },
     button: {
-        margin: 16,
+        margin: '1%',
         position: 'relative',
-        top: 50
+        top: 50,
+        width: '48%'
     }
 };
 
@@ -50,10 +54,15 @@ export default class Controls extends Component {
     render() {
         return <div style={styles.container}>
             <OrangeBox />
-            <button style={styles.button} disabled={!this.canAdvanceDay()}
-                                            onClick={GameActions.newDay}>
-                I'm done for today
-            </button>
+            <div style={styles.buttons}>
+                <button style={styles.button} disabled={!this.canAdvanceDay()}
+                                                onClick={GameActions.newDay}>
+                    I'm done for today
+                </button>
+                <button style={styles.button} onClick={() => alert('Not implemented')}>
+                    Ask for loan
+                </button>
+            </div>
         </div>;
     }
 }
