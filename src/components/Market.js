@@ -49,9 +49,6 @@ export default class Market extends Component {
             'Loan offer': '3 oranges now for 4 oranges in 2 days',
             'Interest/day': Math.round(100 * 1 / 6) + '%'
         }});
-
-        console.log(tableData);
-
         return <Modal className="Modal__Bootstrap modal-dialog wide"
                 isOpen={modalIsOpen} onRequestClose={() => this.closeModal()}>
             <div className="modal-header">

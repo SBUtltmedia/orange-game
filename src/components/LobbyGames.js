@@ -76,28 +76,22 @@ export default class LobbyGames extends Component {
         };
     }
 
-    gotoGameIfJoinedAndStarted(props) {
-        const { isAdmin } = props;
+    gotoGameIfJoinedAndStarted() {
+        const { isAdmin } = this.props;
         const { games } = this.state;
         if (!isAdmin) {
-            const haveJoinedStartedGame = _.some(games, game => {
-                const joinedGame = _.contains(_.keys(game.players), authId);
-                return game.state === STARTED && joinedGame;
+            const joinedGame = _.find(games, g => {
+                return _.contains(_.keys(g.players), authId);
             });
-            if (haveJoinedStartedGame) {
-                window.location.href = `/?#/game/${game.gameId}`;
+            if (joinedGame && joinedGame.state === STARTED) {
+                window.location.href = `/?#/game/${joinedGame.gameId}`;
             }
         }
     }
 
     componentWillMount() {
-        this.gotoGameIfJoinedAndStarted(this.props);
         this.firebaseRef = getFbRef('/games');
         subscribeToFirebaseList(this, this.firebaseRef, 'games', 'gameId');
-    }
-
-    componentWillReceiveProps(newProps) {
-        this.gotoGameIfJoinedAndStarted(newProps);
     }
 
     componentWillUnmount() {
@@ -105,6 +99,7 @@ export default class LobbyGames extends Component {
     }
 
     render() {
+        this.gotoGameIfJoinedAndStarted();
         const { isAdmin } = this.props;
         const { games } = this.state;
         const tableData = _.map(games, game => { return {
