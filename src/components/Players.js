@@ -93,7 +93,7 @@ export default class Players extends Component {
             <Griddle results={tableData}
                 columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish', 'Credit', 'Reputation', 'Loan' ]}
                 showPager={false} resultsPerPage={99} useFixedLayout={false}
-                tableClassName='griddle'
+                tableClassName='little-griddle'
                 columnMetadata={ COL_META } />
         </div>;
     }

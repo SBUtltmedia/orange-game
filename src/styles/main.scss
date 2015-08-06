@@ -40,10 +40,13 @@ button:disabled {
     color: gray;
 }
 
-.griddle {
+.little-griddle, .big-griddle {
     text-align: center;
-    font-size: 10pt;
     th {
         text-align: center;
     }
+}
+
+.little-griddle {
+    font-size: 10pt;
 }
