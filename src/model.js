@@ -12,7 +12,8 @@ class Model {
             basket: 0,
             dish: 0
         };
-        this.day = 1;
+        this.gameDay = 1;
+        this.playerDay = 1;
         this.fitness = 0 - DAILY_FITNESS_LOSS;
         this.fitnessChange = 0 - DAILY_FITNESS_LOSS;
         this.gameId = null;
@@ -37,8 +38,12 @@ class Model {
         }
     }
 
-    newDay() {
-        this.day += 1;
+    newGameDay() {
+        this.gameDay += 1;
+    }
+
+    advancePlayerDay() {
+        this.playerDay += 1;
         this.oranges.dish = 0;
         this.oranges.box = getRandomNumberOfOranges();
         this.fitness -= DAILY_FITNESS_LOSS;
@@ -47,7 +52,7 @@ class Model {
 
     setGameData(data) {
         this.oranges = data.oranges;
-        this.day = data.day;
+        this.playerDay = data.day;
         this.fitness = data.fitness;
         this.fitnessChange = data.fitnessChange;
     }
@@ -55,10 +60,14 @@ class Model {
     getGameData() {
         return {
             oranges: this.oranges,
-            day: this.day,
+            day: this.playerDay,
             fitness: this.fitness,
             fitnessChange: this.fitnessChange
         };
+    }
+
+    get canAdvanceDay() {
+        return this.playerDay <= this.gameDay && this.oranges.box === 0;
     }
 
     get availableOranges() {
@@ -66,11 +75,7 @@ class Model {
     }
 
     get daysLeft() {
-        return DAYS_IN_GAME - this.day;
-    }
-
-    get canAdvanceDay() {
-        return this.oranges.box === 0;
+        return DAYS_IN_GAME - this.gameDay;
     }
 }
 

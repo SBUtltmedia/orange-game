@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
 import OrangeBox from './OrangeBox';
 import model from '../model';
-import { newDay }from '../actions/GameActions';
+import { playerReady }from '../actions/GameActions';
 import { subscribeToFirebaseObject, getFbRef } from '../utils';
 import { DAYS_IN_GAME } from '../constants/Settings';
 
@@ -27,15 +27,14 @@ export default class Controls extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            gameData: null
+            playerData: null
         };
     }
 
     componentWillMount() {
         const { name } = this.props;
         const { gameId, authId } = model;
-        const url = `/games/${gameId}/players/${authId}`;
-        this.firebaseRef = getFbRef(url);
+        this.firebaseRef = getFbRef(`/games/${gameId}/players/${authId}`);
         subscribeToFirebaseObject(this, this.firebaseRef, 'gameData');
     }
 
@@ -44,19 +43,20 @@ export default class Controls extends Component {
     }
 
     canAdvanceDay() {
-        if (this.state.gameData && this.state.gameData.oranges) {
-            const { oranges, day } = this.state.gameData;
+        if (this.state.playerData && this.state.playerData.oranges) {
+            const { oranges, day } = this.state.playerData;
             return oranges.box === 0 && day < DAYS_IN_GAME;
         }
         return false;
     }
 
     render() {
+        const { gameDay } = this.state;
         return <div style={styles.container}>
             <OrangeBox />
             <div style={styles.buttons}>
-                <button style={styles.button} disabled={!this.canAdvanceDay()}
-                                                onClick={newDay}>
+                <button style={styles.button} onClick={playerReady}
+                        disabled={!model.canAdvanceDay}>
                     I'm done for today
                 </button>
                 <button style={styles.button} onClick={() => alert('Not implemented')}>

@@ -42,14 +42,10 @@ export default class Game extends Component {
     onFbUpdate() {
         const { game } = this.state;
         if (game) {
+            model.gameDay = game.day;
             if (game.state === FINISHED) {
                 window.location.href = '/?#/gameOver/';
             }
-            /*
-            else if (_.every(game.players, p => p.ready)) {
-                newDay();
-            }
-            */
         }
     }
 

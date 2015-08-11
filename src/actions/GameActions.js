@@ -8,18 +8,25 @@ export function dropOrange(source, dest) {
     updateFbObject(url, model.getGameData());
 }
 
-export function newDay(day) {
-    model.newDay();
-    const url = `/games/${model.gameId}/players/${model.authId}`;
-    updateFbObject(url, model.getGameData());
+export function newDay() {
+    model.newGameDay();
+    updateFbObject(`/games/${model.gameId}`, { day: model.gameDay });
 }
 
-/*
 export function playerReady() {
+    model.advancePlayerDay();
     const url = `/games/${model.gameId}/players/${model.authId}`;
-    updateFbObject(url, { ready: true });
+    updateFbObject(url, model.getGameData());
+    tryToAdvanceDay();
 }
-*/
+
+export function tryToAdvanceDay() {
+    getFbObject(`/games/${model.gameId}/players`, players => {
+        if (_.every(players, p => p.day > model.gameDay)) {
+            newDay();
+        }
+    });
+}
 
 export function sendChat(text) {
     const msg = {
