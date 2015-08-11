@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
 import OrangeBox from './OrangeBox';
 import model from '../model';
-import { playerReady }from '../actions/GameActions';
+import { newDay }from '../actions/GameActions';
 import { subscribeToFirebaseObject, getFbRef } from '../utils';
 import { DAYS_IN_GAME } from '../constants/Settings';
 
@@ -56,7 +56,7 @@ export default class Controls extends Component {
             <OrangeBox />
             <div style={styles.buttons}>
                 <button style={styles.button} disabled={!this.canAdvanceDay()}
-                                            onClick={playerReady}>
+                                                onClick={newDay}>
                     I'm done for today
                 </button>
                 <button style={styles.button} onClick={() => alert('Not implemented')}>
