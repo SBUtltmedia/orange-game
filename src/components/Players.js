@@ -2,8 +2,10 @@ import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
 import _ from 'lodash';
 import { subscribeToFirebaseList, getFbRef } from '../utils';
+import { openAskNegotiation, openOfferNegotiation } from '../actions/MarketActions';
 import model from '../model';
 import Griddle from 'griddle-react';
+import Negotiation from '../components/Negotiation';
 
 const styles = {
     container: {
@@ -44,9 +46,10 @@ class ReputationComponent extends Component {
 
 class LoanComponent extends Component {
     render() {
+        const player = this.props.data;
         return <div>
-            <button>Ask</button>
-            <button>Offer</button>
+            <button onClick={() => openAskNegotiation(player)}>Ask</button>
+            <button onClick={() => openOfferNegotiation(player)}>Offer</button>
         </div>;
     }
 }
@@ -81,7 +84,8 @@ export default class Players extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            players: []
+            players: [],
+            isNegotiationOpen: false
         };
     }
 
@@ -109,10 +113,12 @@ export default class Players extends Component {
         }})
         return <div styles={[styles.container]}>
             <Griddle results={tableData}
-                columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish', 'Credit', 'Reputation', 'Loan', 'Ready' ]}
+                columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish', 'Credit',
+                            'Reputation', 'Loan', 'Ready' ]}
                 showPager={false} resultsPerPage={99} useFixedLayout={false}
                 tableClassName='little-griddle'
                 columnMetadata={ COL_META } />
+            <Negotiation open={this.state.isNegotiationOpen} />
         </div>;
     }
 }
