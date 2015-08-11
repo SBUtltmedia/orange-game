@@ -60,7 +60,7 @@ export default class Market extends Component {
             </div>
             <Griddle results={tableData} />
             <br /><br />
-            <form onSubmit={() => alert('Not implemented')}>
+            <form onSubmit={e => alert('Not implemented')}>
                 <h3>Offer loan</h3>
                 <p>
                     <NumberSelect n={model.availableOranges || 10} /> oranges now for &nbsp;
@@ -73,7 +73,7 @@ export default class Market extends Component {
                 </p>
             </form>
             <br />
-            <form onSubmit={() => alert('Not implemented')}>
+            <form onSubmit={e => alert('Not implemented')}>
                 <h3>Request loan</h3>
                 <p>
                     <NumberSelect n={12} /> oranges &nbsp;

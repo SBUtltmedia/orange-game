@@ -1,6 +1,9 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
-import { subscribeToFirebaseList, getFbRef } from '../utils';
+import { subscribeToFirebaseList, getFbRef, trimString } from '../utils';
+import { sendChat } from '../actions/GameActions';
+import ChatMessage from '../components/ChatMessage';
+import _ from 'lodash';
 import model from '../model';
 
 const styles = {
@@ -9,6 +12,9 @@ const styles = {
       backgroundColor: 'lightgray',
       width: 300,
       position: 'relative'
+  },
+  output: {
+      padding: 10
   },
   input: {
       position: 'absolute',
@@ -27,6 +33,9 @@ const styles = {
   }
 };
 
+const ASK_PRESET_TEXT = 'Can I borrow oranges?';
+const OFFER_PRESET_TEXT = 'I have oranges to borrow.';
+
 export default class Chat extends Component {
 
     constructor(props) {
@@ -40,21 +49,48 @@ export default class Chat extends Component {
         const { gameId } = model;
         const url = `/games/${gameId}/chat`;
         this.firebaseRef = getFbRef(url);
-        //subscribeToFirebaseObject(this, this.firebaseRef, 'stats');
+        subscribeToFirebaseList(this, this.firebaseRef, 'messages');
     }
 
     componentWillUnmount() {
         this.firebaseRef.off();
     }
 
+    onFormSubmit(event) {
+        const textBox = React.findDOMNode(this.refs.textBox);
+        const text = trimString(textBox.value);
+        if (text !== '') {
+            sendChat(text);
+            textBox.value = '';
+        }
+        event.preventDefault();
+    }
+
+    onPresetClick(text) {
+        const textBox = React.findDOMNode(this.refs.textBox);
+        const form = React.findDOMNode(this.refs.form);
+        textBox.value = text;
+        form.submit();
+    }
+
     render() {
+        const { messages } = this.state;
         return <div style={styles.container}>
-            <form style={styles.input}>
-                <input style={styles.textBox} />
+            <div style={styles.output}>
+                {_.map(messages, msg => <ChatMessage message={msg} />)}
+            </div>
+            <form ref="form" style={styles.input} onSubmit={e => this.onFormSubmit(e)}>
+                <input ref="textBox" style={styles.textBox} />
                 <input type="submit" value="Send" />
                 <div style={styles.presets}>
-                    <button style={styles.preset}>Can I borrow oranges?</button>
-                    <button style={styles.preset}>I have oranges to borrow.</button>
+                    <button style={styles.preset}
+                    onClick={() => this.onPresetClick(ASK_PRESET_TEXT)}>
+                        {ASK_PRESET_TEXT}
+                    </button>
+                    <button style={styles.preset}
+                    onClick={() => this.onPresetClick(OFFER_PRESET_TEXT)}>
+                        {OFFER_PRESET_TEXT}
+                    </button>
                 </div>
             </form>
         </div>;

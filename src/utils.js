@@ -28,6 +28,10 @@ export function updateFbObject(path, data) {
     getFbRef(path).update(data);
 }
 
+export function addToFbList(path, data) {
+    getFbRef(path).push(data);
+}
+
 export function subscribeToFirebaseObject(component, ref, stateKey) {
     ref.on('value', snapshot => {
         if (snapshot.exists()) {

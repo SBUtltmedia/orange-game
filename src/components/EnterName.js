@@ -31,7 +31,7 @@ export default class EnterName extends Component {
         };
     }
 
-    onSubmit(e) {
+    onSubmit(event) {
         const name = trimString(React.findDOMNode(this.refs.textBox).value);
         if (name === '') {
             this.setState({ error: 'Name cannot be blank' });
@@ -47,7 +47,7 @@ export default class EnterName extends Component {
                 }
             });
         }
-        e.preventDefault();
+        event.preventDefault();
     }
 
     closeModal() {
@@ -63,7 +63,7 @@ export default class EnterName extends Component {
                         isOpen={this.state.modalIsOpen}
                         onRequestClose={() => this.closeModal()}>
               <h2>Enter name</h2>
-              <form onSubmit={(e) => this.onSubmit(e)}>
+              <form onSubmit={e => this.onSubmit(e)}>
                 <input ref="textBox" />
                 <input type="submit" value="OK" />
               </form>
