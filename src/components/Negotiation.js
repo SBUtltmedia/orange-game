@@ -5,6 +5,7 @@ import _ from 'lodash';
 import model from '../model';
 import NumberSelect from './NumberSelect';
 import { getFbRef, subscribeToFirebaseList, updateFbObject } from '../utils';
+import { NumberPicker } from 'react-widgets';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
@@ -27,19 +28,20 @@ export default class Negotiation extends Component {
         }
     }
 
+    check(transactions) {
+        const f = _.bind(transactionIsOpenAndContainsPlayer, {}, model);
+
+        console.log('callback', _.some(transactions, f));
+
+        this.setState({
+            modalIsOpen: _.some(transactions, f),
+            thisTransaction: _.find(transactions, f)
+        });
+    }
+
     componentWillMount() {
-        const callback = (transactions) => {
-            const f = _.bind(transactionIsOpenAndContainsPlayer, {}, model);
-
-            console.log('callback', _.some(transactions, f));
-
-            this.setState({
-                modalIsOpen: _.some(transactions, f),
-                thisTransaction: _.find(transactions, f)
-            });
-        };
         this.firebaseRef = getFbRef(`/games/${model.gameId}/transactions`);
-        subscribeToFirebaseList(this, this.firebaseRef, 'transactions', 'id', callback);
+        subscribeToFirebaseList(this, this.firebaseRef, 'transactions', 'id', (ts) => this.check(ts));
     }
 
     componentWillUnmount() {
@@ -54,7 +56,7 @@ export default class Negotiation extends Component {
         const { thisTransaction } = this.state;
         const url = `/games/${model.gameId}/transactions/${thisTransaction.id}`;
         updateFbObject(url, { open: false });
-        this.closeModal();
+        this.check(this.state.transactions);
     }
 
     render() {
@@ -64,6 +66,9 @@ export default class Negotiation extends Component {
               <h2>Negotiate!</h2>
               <div>Giver: {thisTransaction ? thisTransaction.giver.name : ''}</div>
               <div>Receiver: {thisTransaction ? thisTransaction.receiver.name : ''}</div>
+              <div>
+                  <NumberPicker value={4} />
+              </div>
               <button onClick={() => this.reject()}>Reject</button>
         </Modal>;
     }

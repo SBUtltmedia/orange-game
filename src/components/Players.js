@@ -117,7 +117,7 @@ export default class Players extends Component {
                 showPager={false} resultsPerPage={99} useFixedLayout={false}
                 tableClassName='little-griddle'
                 columnMetadata={ COL_META } />
-            <Negotiation open={false} />
+            <Negotiation />
         </div>;
     }
 }
