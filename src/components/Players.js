@@ -11,6 +11,10 @@ const styles = {
         backgroundColor: 'lightblue',
         //overflowY: 'scroll',
         width: 600
+    },
+    checkmark: {
+        width: 16,
+        height: 16
     }
 };
 
@@ -47,6 +51,12 @@ class LoanComponent extends Component {
     }
 }
 
+class ReadyComponent extends Component {
+    render() {
+        return <img style={styles.checkmark} src="/images/checkmark.png" />;
+    }
+}
+
 const COL_META = [
     {
         "columnName": "Credit",
@@ -59,6 +69,10 @@ const COL_META = [
     {
         "columnName": "Loan",
         "customComponent": LoanComponent
+    },
+    {
+        "columnName": "Ready",
+        "customComponent": ReadyComponent
     }
 ];
 
@@ -90,11 +104,12 @@ export default class Players extends Component {
             Dish: player.oranges.dish,
             Credit: -5,
             Reputation: player.oranges.reputation,
-            Loan: player
+            Loan: player,
+            Ready: player
         }})
         return <div styles={[styles.container]}>
             <Griddle results={tableData}
-                columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish', 'Credit', 'Reputation', 'Loan' ]}
+                columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish', 'Credit', 'Reputation', 'Loan', 'Ready' ]}
                 showPager={false} resultsPerPage={99} useFixedLayout={false}
                 tableClassName='little-griddle'
                 columnMetadata={ COL_META } />
