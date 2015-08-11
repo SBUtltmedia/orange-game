@@ -41,7 +41,7 @@ export function subscribeToFirebaseObject(component, ref, stateKey, callback=fun
     });
 }
 
-export function subscribeToFirebaseList(component, ref, stateKey, objectKey, callback=function() {}) {
+export function subscribeToFirebaseList(component, ref, stateKey, objectKey=null, callback=function() {}) {
     ref.on('value', snapshot => {
         const items = snapshot.val();
         setComponentState(component, stateKey, objectToArray(items, objectKey));
