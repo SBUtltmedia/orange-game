@@ -9,7 +9,7 @@ import Stats from '../components/Stats';
 import Players from '../components/Players';
 import Chat from '../components/Chat';
 import { areaTheme } from '../styles/Themes';
-import { gameLoad } from '../actions/GameActions';
+import { gameLoad, newDay } from '../actions/GameActions';
 import { getFbRef, subscribeToFirebaseObject } from '../utils';
 import { GAME_STATES } from '../constants/Settings';
 import model from '../model';
@@ -35,27 +35,35 @@ export default class Game extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            gameState: NOT_STARTED
+            game: null
         };
+    }
+
+    onFbUpdate() {
+        const { game } = this.state;
+        if (game) {
+            if (game.state === FINISHED) {
+                window.location.href = '/?#/gameOver/';
+            }
+            /*
+            else if (_.every(game.players, p => p.ready)) {
+                newDay();
+            }
+            */
+        }
     }
 
     componentWillMount() {
         const { params } = this.props;
         model.gameId = params.gameId;
         gameLoad(params.gameId);
-        const url = `/games/${model.gameId}/state`;
-        this.firebaseRef = getFbRef(url);
-        subscribeToFirebaseObject(this, this.firebaseRef, 'gameState');
+        this.firebaseRef = getFbRef(`/games/${model.gameId}`);
+        const callback = () => this.onFbUpdate();
+        subscribeToFirebaseObject(this, this.firebaseRef, 'game', callback);
     }
 
     componentWillUnmount() {
         this.firebaseRef.off();
-    }
-
-    componentWillReceiveProps(newProps) {
-        if (state.gameState === FINISHED) {
-            window.location.href = '/?#/gameOver/';
-        }
     }
 
     render() {

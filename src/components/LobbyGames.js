@@ -92,7 +92,9 @@ export default class LobbyGames extends Component {
 
     componentWillMount() {
         this.firebaseRef = getFbRef('/games');
-        subscribeToFirebaseList(this, this.firebaseRef, 'games', 'gameId');
+        const callback = () => this.gotoGameIfJoinedAndStarted();
+        subscribeToFirebaseList(this, this.firebaseRef, 'games', 'gameId', callback);
+        this.gotoGameIfJoinedAndStarted();
     }
 
     componentWillUnmount() {
@@ -100,7 +102,6 @@ export default class LobbyGames extends Component {
     }
 
     render() {
-        this.gotoGameIfJoinedAndStarted();
         const { isAdmin } = this.props;
         const { games } = this.state;
         const tableData = _.map(games, game => { return {

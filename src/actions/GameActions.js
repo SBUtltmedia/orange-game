@@ -14,6 +14,13 @@ export function newDay(day) {
     updateFbObject(url, model.getGameData());
 }
 
+/*
+export function playerReady() {
+    const url = `/games/${model.gameId}/players/${model.authId}`;
+    updateFbObject(url, { ready: true });
+}
+*/
+
 export function sendChat(text) {
     const msg = {
         name: model.userName,
