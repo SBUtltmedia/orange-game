@@ -40,7 +40,10 @@ class ReputationComponent extends Component {
 
 class LoanComponent extends Component {
     render() {
-        return <button>Offer</button>;
+        return <div>
+            <button>Ask</button>
+            <button>Offer</button>
+        </div>;
     }
 }
 
