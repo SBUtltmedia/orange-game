@@ -84,8 +84,7 @@ export default class Players extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            players: [],
-            isNegotiationOpen: false
+            players: []
         };
     }
 
@@ -118,7 +117,7 @@ export default class Players extends Component {
                 showPager={false} resultsPerPage={99} useFixedLayout={false}
                 tableClassName='little-griddle'
                 columnMetadata={ COL_META } />
-            <Negotiation open={this.state.isNegotiationOpen} />
+            <Negotiation open={false} />
         </div>;
     }
 }

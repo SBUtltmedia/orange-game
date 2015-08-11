@@ -12,7 +12,8 @@ Modal.injectCSS();
 
 function transactionIsOpenAndContainsPlayer(player, trans) {
     return trans.open &&
-            trans.giver === player.authId || trans.receiver === player.authId;
+           (trans.giver.authId === player.authId ||
+           trans.receiver.authId === player.authId);
 }
 
 export default class Negotiation extends Component {
@@ -27,14 +28,15 @@ export default class Negotiation extends Component {
     }
 
     componentWillMount() {
-        const callback = () => {
-            const { transactions } = this.state;
+        const callback = (transactions) => {
             const f = _.bind(transactionIsOpenAndContainsPlayer, {}, model);
+
+            console.log('callback', _.some(transactions, f));
+
             this.setState({
                 modalIsOpen: _.some(transactions, f),
                 thisTransaction: _.find(transactions, f)
             });
-
         };
         this.firebaseRef = getFbRef(`/games/${model.gameId}/transactions`);
         subscribeToFirebaseList(this, this.firebaseRef, 'transactions', 'id', callback);
@@ -42,10 +44,6 @@ export default class Negotiation extends Component {
 
     componentWillUnmount() {
         this.firebaseRef.off();
-    }
-
-    openModal() {
-        this.setState({ modalIsOpen: true });
     }
 
     closeModal() {
@@ -60,10 +58,12 @@ export default class Negotiation extends Component {
     }
 
     render() {
+        const { modalIsOpen, thisTransaction } = this.state;
         return <Modal className="Modal__Bootstrap modal-dialog"
-                        isOpen={this.state.modalIsOpen}
-                        onRequestClose={() => {}}>
+                        isOpen={modalIsOpen} onRequestClose={() => {}}>
               <h2>Negotiate!</h2>
+              <div>Giver: {thisTransaction ? thisTransaction.giver.name : ''}</div>
+              <div>Receiver: {thisTransaction ? thisTransaction.receiver.name : ''}</div>
               <button onClick={() => this.reject()}>Reject</button>
         </Modal>;
     }
