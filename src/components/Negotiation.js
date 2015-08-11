@@ -4,14 +4,15 @@ import { APP_ROOT_ELEMENT } from '../constants/Settings';
 import _ from 'lodash';
 import model from '../model';
 import NumberSelect from './NumberSelect';
-import { getFbRef, subscribeToFirebaseList } from '../utils';
+import { getFbRef, subscribeToFirebaseList, updateFbObject } from '../utils';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
 Modal.injectCSS();
 
-function transactionContainsPlayer(player, trans) {
-    return trans.giver === player.authId || trans.receiver === player.authId;
+function transactionIsOpenAndContainsPlayer(player, trans) {
+    return trans.open &&
+            trans.giver === player.authId || trans.receiver === player.authId;
 }
 
 export default class Negotiation extends Component {
@@ -20,6 +21,7 @@ export default class Negotiation extends Component {
         super(props);
         this.state = {
             transactions: [],
+            thisTransaction: null,
             modalIsOpen: false
         }
     }
@@ -27,11 +29,15 @@ export default class Negotiation extends Component {
     componentWillMount() {
         const callback = () => {
             const { transactions } = this.state;
-            const f = _.bind(transactionContainsPlayer, {}, model);
-            this.setState({ modalIsOpen: _.some(transactions, f) });
+            const f = _.bind(transactionIsOpenAndContainsPlayer, {}, model);
+            this.setState({
+                modalIsOpen: _.some(transactions, f),
+                thisTransaction: _.find(transactions, f)
+            });
+
         };
         this.firebaseRef = getFbRef(`/games/${model.gameId}/transactions`);
-        subscribeToFirebaseList(this, this.firebaseRef, 'transactions', null, callback);
+        subscribeToFirebaseList(this, this.firebaseRef, 'transactions', 'id', callback);
     }
 
     componentWillUnmount() {
@@ -46,11 +52,19 @@ export default class Negotiation extends Component {
         this.setState({ modalIsOpen: false });
     }
 
+    reject() {
+        const { thisTransaction } = this.state;
+        const url = `/games/${model.gameId}/transactions/${thisTransaction.id}`;
+        updateFbObject(url, { open: false });
+        this.closeModal();
+    }
+
     render() {
         return <Modal className="Modal__Bootstrap modal-dialog"
                         isOpen={this.state.modalIsOpen}
                         onRequestClose={() => {}}>
-              Negotiate!
+              <h2>Negotiate!</h2>
+              <button onClick={() => this.reject()}>Reject</button>
         </Modal>;
     }
 }
