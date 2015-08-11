@@ -11,9 +11,6 @@ Modal.setAppElement(appElement);
 Modal.injectCSS();
 
 function transactionContainsPlayer(player, trans) {
-
-    console.log(player, trans);
-
     return trans.giver === player.authId || trans.receiver === player.authId;
 }
 
@@ -28,13 +25,7 @@ export default class Negotiation extends Component {
     }
 
     componentWillMount() {
-
-        console.log("mount");
-
         const callback = () => {
-
-            console.log("callback");
-
             const { transactions } = this.state;
             const f = _.bind(transactionContainsPlayer, {}, model);
             this.setState({ modalIsOpen: _.some(transactions, f) });
