@@ -37,8 +37,8 @@ describe('model', () => {
         it('is a singleton', () => {
             const model1 = require('../src/model');
             const model2 = require('../src/model');
-            model1.newDay();
-            expect(model2.playerDay).to.equal(2);
+            model1.newGameDay();
+            expect(model2.gameDay).to.equal(2);
         });
     });
 });
