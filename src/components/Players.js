@@ -40,7 +40,7 @@ class CreditComponent extends Component {
 
 class ReputationComponent extends Component {
     render() {
-        return <img src="/images/emoticons/dont_care.png" />;
+        return <img src={require("../../images/emoticons/dont_care.png")} />;
     }
 }
 
@@ -56,7 +56,8 @@ class LoanComponent extends Component {
 
 class ReadyComponent extends Component {
     render() {
-        return <img style={styles.checkmark} src="/images/checkmark.png" />;
+        return <img style={styles.checkmark}
+                src={require("../../images/checkmark.png")} />;
     }
 }
 
@@ -84,8 +85,7 @@ export default class Players extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            players: [],
-            isNegotiationOpen: false
+            players: []
         };
     }
 
@@ -118,7 +118,7 @@ export default class Players extends Component {
                 showPager={false} resultsPerPage={99} useFixedLayout={false}
                 tableClassName='little-griddle'
                 columnMetadata={ COL_META } />
-            <Negotiation open={this.state.isNegotiationOpen} />
+            <Negotiation />
         </div>;
     }
 }

@@ -24,28 +24,29 @@ export function getFbObject(path, callback) {
     getFbRef(path).once('value', snapshot => callback(snapshot.val()));
 }
 
-export function updateFbObject(path, data) {
-    getFbRef(path).update(data);
+export function updateFbObject(path, data, callback=function() {}) {
+    getFbRef(path).update(data, callback);
 }
 
-export function addToFbList(path, data) {
-    getFbRef(path).push(data);
+export function addToFbList(path, data, callback=function() {}) {
+    getFbRef(path).push(data, callback);
 }
 
 export function subscribeToFirebaseObject(component, ref, stateKey, callback=function() {}) {
     ref.on('value', snapshot => {
         if (snapshot.exists()) {
-            setComponentState(component, stateKey, snapshot.val());
-            callback();
+            const object = snapshot.val();
+            setComponentState(component, stateKey, object);
+            callback(object);
         }
     });
 }
 
-export function subscribeToFirebaseList(component, ref, stateKey, objectKey, callback=function() {}) {
+export function subscribeToFirebaseList(component, ref, stateKey, objectKey=null, callback=function() {}) {
     ref.on('value', snapshot => {
         const items = snapshot.val();
         setComponentState(component, stateKey, objectToArray(items, objectKey));
-        callback();
+        callback(items);
     });
 
     // Redudant since value does updates too

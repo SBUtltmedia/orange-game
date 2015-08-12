@@ -77,6 +77,13 @@ class Model {
     get daysLeft() {
         return DAYS_IN_GAME - this.gameDay;
     }
+
+    get playerInfo() {
+        return {
+            authId: this.authId,
+            name: this.userName
+        }
+    }
 }
 
 export default new Model();  // singleton
