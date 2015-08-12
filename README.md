@@ -9,3 +9,5 @@ Written in [React](http://facebook.github.io/react/)
 npm install
 npm start
 ```
+
+-Use `gulp tests` to run tests
