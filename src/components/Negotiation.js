@@ -27,8 +27,11 @@ const styles = {
     },
     sentenceWords: {
         marginLeft: 12,
-        marginRight: 14,
+        marginRight: 13,
         marginTop: 6
+    },
+    button: {
+        marginRight: 12
     }
 };
 
@@ -45,9 +48,6 @@ export default class Negotiation extends Component {
 
     check(transactions) {
         const f = _.bind(transactionIsOpenAndContainsPlayer, {}, model);
-
-        console.log('callback', _.some(transactions, f));
-
         this.setState({
             modalIsOpen: _.some(transactions, f),
             thisTransaction: _.find(transactions, f)
@@ -73,24 +73,41 @@ export default class Negotiation extends Component {
         updateFbObject(url, { open: false }, () => this.check(this.state.transactions));
     }
 
+    onFormSubmit(event) {
+        console.log('FORM SUBMIT');
+        event.preventDefault();
+    }
+
+    onSendCounterClick() {
+        const form = React.findDOMNode(this.refs.form);
+        form.submit();
+    }
+
     render() {
         const { modalIsOpen, thisTransaction } = this.state;
         return <Modal className="Modal__Bootstrap modal-dialog"
                         isOpen={modalIsOpen} onRequestClose={() => {}}>
-              <h2>Negotiate!</h2>
-              <div>Giver: {thisTransaction ? thisTransaction.giver.name : ''}</div>
-              <div>Receiver: {thisTransaction ? thisTransaction.receiver.name : ''}</div>
-              <br />
-              <div style={styles.fl}>
-                  <NumberPicker style={styles.numberPicker}
+            <h2>Negotiate!</h2>
+            <div>Giver: {thisTransaction ? thisTransaction.giver.name : ''}</div>
+            <div>Receiver: {thisTransaction ? thisTransaction.receiver.name : ''}</div>
+            <br />
+            <form ref="form" onSubmit={e => this.onFormSubmit(e)}>
+                <div style={styles.fl}>
+                    <NumberPicker style={styles.numberPicker}
                         defaultValue={1} min={1} max={9} />
-                  <div style={styles.sentenceWords}>oranges now for</div>
-                  <NumberPicker style={styles.numberPicker}
+                    <div style={styles.sentenceWords}>oranges now for</div>
+                    <NumberPicker style={styles.numberPicker}
                         defaultValue={1} min={1} max={9} />
-                  <div style={styles.sentenceWords}>oranges later.</div>
-              </div>
-              <br />
-              <button onClick={() => this.reject()}>Reject</button>
+                    <div style={styles.sentenceWords}>oranges later.</div>
+                </div>
+                <br />
+                <button style={styles.button} onClick={() => this.onSendCounterClick()}>
+                    Send counter-offer
+                </button>
+                <button style={styles.button} onClick={() => this.reject()}>
+                    Reject completely
+                </button>
+            </form>
         </Modal>;
     }
 }
