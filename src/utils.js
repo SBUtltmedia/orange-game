@@ -24,12 +24,12 @@ export function getFbObject(path, callback) {
     getFbRef(path).once('value', snapshot => callback(snapshot.val()));
 }
 
-export function updateFbObject(path, data) {
-    getFbRef(path).update(data);
+export function updateFbObject(path, data, callback=function() {}) {
+    getFbRef(path).update(data, callback);
 }
 
-export function addToFbList(path, data) {
-    getFbRef(path).push(data);
+export function addToFbList(path, data, callback=function() {}) {
+    getFbRef(path).push(data, callback);
 }
 
 export function subscribeToFirebaseObject(component, ref, stateKey, callback=function() {}) {

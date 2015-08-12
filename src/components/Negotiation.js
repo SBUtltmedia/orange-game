@@ -70,8 +70,7 @@ export default class Negotiation extends Component {
     reject() {
         const { thisTransaction } = this.state;
         const url = `/games/${model.gameId}/transactions/${thisTransaction.id}`;
-        updateFbObject(url, { open: false });
-        this.check(this.state.transactions);
+        updateFbObject(url, { open: false }, () => this.check(this.state.transactions));
     }
 
     render() {
