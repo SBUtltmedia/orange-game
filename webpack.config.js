@@ -29,19 +29,19 @@ module.exports = {
         },
         {
             test: /\.css?$/,
-            loaders: ['react-hot', 'css-loader']
+            loader: 'style-loader!css-loader'
         },
         {
             test: /\.png?$/,
-            loaders: ["url-loader?limit=10000"]
+            loader: "url-loader?limit=10000"
         },
         {
             test: /\.gif?$/,
-            loaders: ["url-loader?mimetype=image/png"]
+            loader: "url-loader?mimetype=image/png"
         },
         {
             test: /\.jpg?$/,
-            loaders: ["url-loader?limit=10000"]
+            loader: "url-loader?limit=10000"
         },
         {
             test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
