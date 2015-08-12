@@ -7,8 +7,8 @@ function openNegotation(givingPlayer, receivingPlayer) {
     console.log(givingPlayer, receivingPlayer);
 
     const transaction = {
-        giver: givingPlayer,
-        receiver: receivingPlayer,
+        lender: givingPlayer,
+        borrower: receivingPlayer,
         open: true,
         completed: false
     };

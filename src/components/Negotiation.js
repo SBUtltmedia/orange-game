@@ -14,8 +14,8 @@ Modal.injectCSS();
 
 function transactionIsOpenAndContainsPlayer(player, trans) {
     return trans.open &&
-           (trans.giver.authId === player.authId ||
-           trans.receiver.authId === player.authId);
+           (trans.lender.authId === player.authId ||
+           trans.borrower.authId === player.authId);
 }
 
 const styles = {
@@ -88,8 +88,8 @@ export default class Negotiation extends Component {
         return <Modal className="Modal__Bootstrap modal-dialog"
                         isOpen={modalIsOpen} onRequestClose={() => {}}>
             <h2>Negotiate a loan</h2>
-            <div>Lender: {thisTransaction ? thisTransaction.giver.name : ''}</div>
-            <div>Borrower: {thisTransaction ? thisTransaction.receiver.name : ''}</div>
+            <div>Lender: {thisTransaction ? thisTransaction.lender.name : ''}</div>
+            <div>Borrower: {thisTransaction ? thisTransaction.borrower.name : ''}</div>
             <br />
             <form ref="form" onSubmit={e => this.onFormSubmit(e)}>
                 <div style={styles.fl}>
