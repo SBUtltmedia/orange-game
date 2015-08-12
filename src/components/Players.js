@@ -40,7 +40,7 @@ class CreditComponent extends Component {
 
 class ReputationComponent extends Component {
     render() {
-        return <img src="/images/emoticons/dont_care.png" />;
+        return <img src={require("../../images/emoticons/dont_care.png")} />;
     }
 }
 
@@ -56,7 +56,8 @@ class LoanComponent extends Component {
 
 class ReadyComponent extends Component {
     render() {
-        return <img style={styles.checkmark} src="/images/checkmark.png" />;
+        return <img style={styles.checkmark}
+                src={require("../../images/checkmark.png")} />;
     }
 }
 

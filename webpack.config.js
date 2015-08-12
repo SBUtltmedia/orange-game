@@ -22,14 +22,37 @@ module.exports = {
   },
   module: {
     loaders: [{
-      test: /\.jsx?$/,
-      loaders: ['react-hot', 'babel-loader?stage=0'],
-      include: path.join(__dirname, 'src')
+        test: /\.(js|jsx)?$/,
+        loaders: ['react-hot', 'babel-loader?stage=0'],
+        include: path.join(__dirname, 'src')
     },
     {
         test: /\.css?$/,
-        loaders: ['react-hot', 'css-loader'],
-        include: path.join(__dirname, 'src')
+        loaders: ['react-hot', 'css-loader']
+    },
+    {
+        test: /\.png?$/,
+        loaders: ["url-loader?limit=10000"]
+    },
+    {
+        test: /\.gif?$/,
+        loaders: ["url-loader?mimetype=image/png"]
+    },
+    {
+        test: /\.jpg?$/,
+        loaders: ["url-loader?limit=10000"]
+    },
+    {
+        test: /\.eot?$/,
+        loaders: ["file-loader"]
+    },
+    {
+        test: /\.woff?$/,
+        loaders: ["url-loader?mimetype=application/font-woff"]
+    },
+    {
+        test: /.(ttf|eot|svg)?$/,
+        loader: "file-loader?name=[name].[ext]"
     }]
   }
 };
