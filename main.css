@@ -45,11 +45,8 @@ button:disabled {
     color: gray;
 }
 
-.little-griddle, .big-griddle {
+.little-griddle, .big-griddle, .little-griddle th, .big-griddle th  {
     text-align: center;
-    th {
-        text-align: center;
-    }
 }
 
 .little-griddle {
