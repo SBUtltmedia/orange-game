@@ -1,5 +1,4 @@
 var gulp        = require('gulp'),
-    sass        = require('gulp-sass'),
     sourcemaps  = require('gulp-sourcemaps'),
     babel       = require('gulp-babel'),
     copy        = require('gulp-copy'),
