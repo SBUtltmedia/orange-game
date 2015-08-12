@@ -78,7 +78,7 @@ export default class Negotiation extends Component {
         event.preventDefault();
     }
 
-    onSendCounterClick() {
+    counter() {
         const form = React.findDOMNode(this.refs.form);
         form.submit();
     }
@@ -101,10 +101,10 @@ export default class Negotiation extends Component {
                     <div style={styles.sentenceWords}>oranges later.</div>
                 </div>
                 <br />
-                <button style={styles.button} onClick={() => this.onSendCounterClick()}>
+                <button style={styles.button} className="btn btn-success" onClick={() => this.counter()}>
                     Send counter-offer
                 </button>
-                <button style={styles.button} onClick={() => this.reject()}>
+                <button style={styles.button} className="btn btn-danger" onClick={() => this.reject()}>
                     Reject completely
                 </button>
             </form>
