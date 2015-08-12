@@ -31,6 +31,10 @@ a:hover {
     height: 240px !important;
 }
 
+.modal-dialog.medium {
+    height: 360px !important;
+}
+
 /*
 button {
     border-radius: 16px;

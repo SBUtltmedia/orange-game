@@ -59,7 +59,8 @@ export default class Negotiation extends Component {
 
     componentWillMount() {
         this.firebaseRef = getFbRef(`/games/${model.gameId}/transactions`);
-        subscribeToFirebaseList(this, this.firebaseRef, 'transactions', 'id', (ts) => this.check(ts));
+        subscribeToFirebaseList(this, this.firebaseRef, 'transactions', 'id',
+                        transactions => this.check(transactions));
     }
 
     componentWillUnmount() {
@@ -97,7 +98,7 @@ export default class Negotiation extends Component {
 
     render() {
         const { modalIsOpen, thisTransaction, nowOranges, laterOranges } = this.state;
-        return <Modal className="Modal__Bootstrap modal-dialog"
+        return <Modal className="Modal__Bootstrap modal-dialog medium"
                         isOpen={modalIsOpen} onRequestClose={() => {}}>
             <h2>Negotiate a loan</h2>
             <div>Lender: {thisTransaction ? thisTransaction.lender.name : ''}</div>
@@ -112,13 +113,15 @@ export default class Negotiation extends Component {
                     <NumberPicker style={styles.numberPicker}
                         value={laterOranges} min={1} max={9}
                         onChange={this.onLaterChange.bind(this)} />
-                    <div style={styles.sentenceWords}>oranges later.</div>
+                    <div style={styles.sentenceWords}>oranges later</div>
                 </div>
                 <br />
-                <button style={styles.button} className="btn btn-success" onClick={() => this.counter()}>
+                <button style={styles.button} className="btn btn-success"
+                        onClick={() => this.counter()}>
                     Send counter-offer
                 </button>
-                <button style={styles.button} className="btn btn-danger" onClick={() => this.reject()}>
+                <button style={styles.button} className="btn btn-danger"
+                        onClick={() => this.reject()}>
                     Reject completely
                 </button>
             </form>
