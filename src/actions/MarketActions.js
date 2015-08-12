@@ -1,11 +1,8 @@
-import { addToFbList} from '../utils';
+import { addToFbList, updateFbObject } from '../utils';
 import _ from 'lodash';
 import model from '../model';
 
 function openNegotation(givingPlayer, receivingPlayer) {
-
-    console.log(givingPlayer, receivingPlayer);
-
     const transaction = {
         lender: givingPlayer,
         borrower: receivingPlayer,
@@ -25,4 +22,16 @@ export function openAskNegotiation(withPlayer) {
 
 export function openOfferNegotiation(withPlayer) {
     openNegotation(model.playerInfo, getPlayerInfo(withPlayer));
+}
+
+export function updateNegotiation(transactionId, nowOranges, laterOranges) {
+
+    console.log(transactionId, nowOranges, laterOranges);
+
+    const oranges = {
+        now: nowOranges,
+        later: laterOranges
+    };
+    const url = `/games/${model.gameId}/transactions/${transactionId}/oranges`
+    updateFbObject(url, oranges);
 }

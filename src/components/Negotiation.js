@@ -7,6 +7,7 @@ import model from '../model';
 import NumberSelect from './NumberSelect';
 import { getFbRef, subscribeToFirebaseList, updateFbObject } from '../utils';
 import { NumberPicker } from 'react-widgets';
+import { updateNegotiation } from '../actions/MarketActions';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
@@ -42,7 +43,9 @@ export default class Negotiation extends Component {
         this.state = {
             transactions: [],
             thisTransaction: null,
-            modalIsOpen: false
+            modalIsOpen: false,
+            nowOranges: 1,
+            laterOranges: 1
         }
     }
 
@@ -74,8 +77,17 @@ export default class Negotiation extends Component {
     }
 
     onFormSubmit(event) {
-        console.log('FORM SUBMIT');
+        const { thisTransaction, nowOranges, laterOranges } = this.state;
+        updateNegotiation(thisTransaction.id, nowOranges, laterOranges);
         event.preventDefault();
+    }
+
+    onNowChange(value) {
+        this.setState({ nowOranges: value });
+    }
+
+    onLaterChange(value) {
+        this.setState({ laterOranges: value });
     }
 
     counter() {
@@ -84,7 +96,7 @@ export default class Negotiation extends Component {
     }
 
     render() {
-        const { modalIsOpen, thisTransaction } = this.state;
+        const { modalIsOpen, thisTransaction, nowOranges, laterOranges } = this.state;
         return <Modal className="Modal__Bootstrap modal-dialog"
                         isOpen={modalIsOpen} onRequestClose={() => {}}>
             <h2>Negotiate a loan</h2>
@@ -94,10 +106,12 @@ export default class Negotiation extends Component {
             <form ref="form" onSubmit={e => this.onFormSubmit(e)}>
                 <div style={styles.fl}>
                     <NumberPicker style={styles.numberPicker}
-                        defaultValue={1} min={1} max={9} />
+                        value={nowOranges} min={1} max={9}
+                        onChange={this.onNowChange.bind(this)} />
                     <div style={styles.sentenceWords}>oranges now for</div>
                     <NumberPicker style={styles.numberPicker}
-                        defaultValue={1} min={1} max={9} />
+                        value={laterOranges} min={1} max={9}
+                        onChange={this.onLaterChange.bind(this)} />
                     <div style={styles.sentenceWords}>oranges later.</div>
                 </div>
                 <br />
