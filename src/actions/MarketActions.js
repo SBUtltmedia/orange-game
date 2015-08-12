@@ -25,9 +25,6 @@ export function openOfferNegotiation(withPlayer) {
 }
 
 export function updateNegotiation(transactionId, nowOranges, laterOranges) {
-
-    console.log(transactionId, nowOranges, laterOranges);
-
     const oranges = {
         now: nowOranges,
         later: laterOranges
