@@ -51,7 +51,7 @@ module.exports = {
         loaders: ["url-loader?mimetype=application/font-woff"]
     },
     {
-        test: /.(ttf|eot|svg)?$/,
+        test: /\.(ttf|eot|svg)?$/,
         loader: "file-loader?name=[name].[ext]"
     }]
   }
