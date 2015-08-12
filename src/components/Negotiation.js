@@ -87,9 +87,9 @@ export default class Negotiation extends Component {
         const { modalIsOpen, thisTransaction } = this.state;
         return <Modal className="Modal__Bootstrap modal-dialog"
                         isOpen={modalIsOpen} onRequestClose={() => {}}>
-            <h2>Negotiate!</h2>
-            <div>Giver: {thisTransaction ? thisTransaction.giver.name : ''}</div>
-            <div>Receiver: {thisTransaction ? thisTransaction.receiver.name : ''}</div>
+            <h2>Negotiate a loan</h2>
+            <div>Lender: {thisTransaction ? thisTransaction.giver.name : ''}</div>
+            <div>Borrower: {thisTransaction ? thisTransaction.receiver.name : ''}</div>
             <br />
             <form ref="form" onSubmit={e => this.onFormSubmit(e)}>
                 <div style={styles.fl}>
