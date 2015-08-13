@@ -47,17 +47,28 @@ class ReputationComponent extends Component {
 class LoanComponent extends Component {
     render() {
         const player = this.props.data;
-        return <div>
-            <button onClick={() => openAskNegotiation(player)}>Ask</button>
-            <button onClick={() => openOfferNegotiation(player)}>Offer</button>
-        </div>;
+        if (player && player.oranges) {
+            return <div>
+                <button onClick={() => openAskNegotiation(player)}>Ask</button>
+                <button onClick={() => openOfferNegotiation(player)}>Offer</button>
+            </div>;
+        }
+        else {
+            return <div></div>;
+        }
     }
 }
 
 class ReadyComponent extends Component {
     render() {
-        return <img style={styles.checkmark}
-                src={require("../../images/checkmark.png")} />;
+        const player = this.props.data;
+        if (player) {
+            return <img style={styles.checkmark}
+                    src={require("../../images/checkmark.png")} />;
+        }
+        else {
+            return <div></div>;
+        }
     }
 }
 
