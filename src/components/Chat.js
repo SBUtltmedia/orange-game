@@ -14,7 +14,9 @@ const styles = {
       position: 'relative'
   },
   output: {
-      padding: 10
+      padding: 10,
+      overflow: 'scroll',
+      height: 285
   },
   input: {
       position: 'absolute',
@@ -49,7 +51,13 @@ export default class Chat extends Component {
         const { gameId } = model;
         const url = `/games/${gameId}/chat`;
         this.firebaseRef = getFbRef(url);
-        subscribeToFirebaseList(this, this.firebaseRef, 'messages');
+        const callback = () => {
+            setTimeout(() => {
+                const output = React.findDOMNode(this.refs.output);
+                output.scrollTop = 999999999;
+            }, 100);
+        };
+        subscribeToFirebaseList(this, this.firebaseRef, 'messages', null, callback);
     }
 
     componentWillUnmount() {
@@ -76,7 +84,7 @@ export default class Chat extends Component {
     render() {
         const { messages } = this.state;
         return <div style={styles.container}>
-            <div style={styles.output}>
+            <div ref="output" style={styles.output}>
                 {_.map(messages, msg => <ChatMessage message={msg} />)}
             </div>
             <form ref="form" style={styles.input} onSubmit={e => this.onFormSubmit(e)}>

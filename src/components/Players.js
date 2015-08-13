@@ -100,17 +100,26 @@ export default class Players extends Component {
 
     render() {
         const { players } = this.state;
-        const tableData = _.map(players, player => { return {
-            Name: player.name,
-            Fitness: player.fitness,
-            Box: player.oranges.box,
-            Basket: player.oranges.basket,
-            Dish: player.oranges.dish,
-            Credit: -5,
-            Reputation: player.oranges.reputation,
-            Loan: player,
-            Ready: player
-        }})
+        const tableData = _.map(players, player => {
+            if (player.oranges) {
+                return {
+                    Name: player.name,
+                    Fitness: player.fitness,
+                    Box: player.oranges.box,
+                    Basket: player.oranges.basket,
+                    Dish: player.oranges.dish,
+                    Credit: -5,
+                    Reputation: player.reputation,
+                    Loan: player,
+                    Ready: player
+                };
+            }
+            else {
+                return {
+                    Name: player.name
+                };
+            }
+        })
         return <div styles={[styles.container]}>
             <Griddle results={tableData}
                 columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish', 'Credit',
