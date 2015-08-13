@@ -36,16 +36,12 @@ function transferOranges(transaction) {
     const borrowerId = transaction.borrower.authId;
     const lenderUrl = `/games/${model.gameId}/players/${lenderId}/oranges`;
     const borrowerUrl = `/games/${model.gameId}/players/${borrowerId}/oranges`;
-
-    console.log(transaction.lender.oranges.basket, orangesToTransfer, transaction.lender.oranges.basket - orangesToTransfer);
-
     const newLenderOranges = {
         basket: transaction.lender.oranges.basket - orangesToTransfer
     };
     const newBorrowerOranges = {
         box: transaction.borrower.oranges.box + orangesToTransfer
     };
-
     updateFbObject(lenderUrl, newLenderOranges);
     updateFbObject(borrowerUrl, newBorrowerOranges);
 }
