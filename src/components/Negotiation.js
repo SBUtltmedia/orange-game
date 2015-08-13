@@ -67,7 +67,7 @@ export default class Negotiation extends Component {
     componentWillMount() {
         this.firebaseRef = getFbRef(`/games/${model.gameId}/transactions`);
         subscribeToFbList(this, this.firebaseRef, 'transactions', 'id',
-                        transactions => this.check(transactions));
+                            transactions => this.check(transactions));
     }
 
     componentWillUnmount() {

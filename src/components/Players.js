@@ -47,7 +47,7 @@ class ReputationComponent extends Component {
 class LoanComponent extends Component {
     render() {
         const player = this.props.data;
-        if (player && player.oranges) {
+        if (player && player.authId !== model.authId && player.oranges) {
             return <div>
                 <button onClick={() => openAskNegotiation(player)}>Ask</button>
                 <button onClick={() => openOfferNegotiation(player)}>Offer</button>
