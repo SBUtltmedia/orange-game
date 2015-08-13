@@ -12,8 +12,11 @@ import { areaTheme } from '../styles/Themes';
 import { gameLoad, newDay } from '../actions/GameActions';
 import { getFbRef, subscribeToFbObject } from '../utils';
 import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
+import * as FluxActions from '../actions/FluxActions';
+import { bindActionCreators } from 'redux';
 import model from '../model';
 import _ from 'lodash';
+import { connect } from 'redux/react';
 
 const styles = {
   container: {
@@ -28,6 +31,9 @@ const styles = {
 };
 
 @DragDropContext(HTML5Backend)
+@connect(state => ({
+    players: state.players
+}))
 export default class Game extends Component {
 
     constructor(props) {
@@ -50,7 +56,9 @@ export default class Game extends Component {
     }
 
     componentWillMount() {
-        const { params } = this.props;
+        const { params, dispatch } = this.props;
+        const fluxActions = bindActionCreators(FluxActions, dispatch);
+        fluxActions.listenToFirebase();
         model.gameId = params.gameId;
         gameLoad(params.gameId);
         this.firebaseGameRef = getFbRef(`/games/${model.gameId}`);
@@ -64,6 +72,9 @@ export default class Game extends Component {
     }
 
     render() {
+
+        console.log(this.props, this.state);
+
         return <div style={styles.container}>
             <div style={styles.row}>
                 <Basket />
