@@ -20,11 +20,11 @@ function setComponentState(component, stateKey, value) {
     component.setState(data);
 }
 
-export function getFbObject(path, callback) {
+export function getFbObject(path, callback=() => {}) {
     getFbRef(path).once('value', snapshot => callback(snapshot.val()));
 }
 
-export function updateFbObject(path, data, callback=function() {}) {
+export function updateFbObject(path, data, callback=() => {}) {
     getFbRef(path).update(data, callback);
 }
 

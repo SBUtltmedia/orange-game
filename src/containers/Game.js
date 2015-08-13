@@ -11,11 +11,9 @@ import Chat from '../components/Chat';
 import { areaTheme } from '../styles/Themes';
 import { gameLoad, newDay } from '../actions/GameActions';
 import { getFbRef, subscribeToFbObject } from '../utils';
-import { GAME_STATES } from '../constants/Settings';
+import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
 import model from '../model';
 import _ from 'lodash';
-
-const { NOT_STARTED, STARTED, FINISHED } = GAME_STATES;
 
 const styles = {
   container: {

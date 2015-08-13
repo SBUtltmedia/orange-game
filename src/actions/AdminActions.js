@@ -1,7 +1,6 @@
-import { MAX_PLAYERS, GAME_STATES } from '../constants/Settings';
+import { MAX_PLAYERS } from '../constants/Settings';
+import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
 import { getFbRef } from '../utils';
-
-const { NOT_STARTED, STARTED, FINISHED } = GAME_STATES;
 
 export function createGame() {
     const ref = getFbRef('/games');

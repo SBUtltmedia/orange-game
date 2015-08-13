@@ -1,14 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 import { subscribeToFbList, getFbRef } from '../utils';
 import _ from 'lodash';
-import { MAX_PLAYERS, GAME_STATES } from '../constants/Settings';
+import { MAX_PLAYERS } from '../constants/Settings';
+import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
 import { Link } from 'react-router';
 import { joinGame, leaveGame } from '../actions/LobbyActions';
 import { startGame, deleteGame } from '../actions/AdminActions';
 import { authId } from '../model';
 import Griddle from 'griddle-react';
-
-const { NOT_STARTED, STARTED, FINISHED } = GAME_STATES;
 
 const styles = {
     container: {
