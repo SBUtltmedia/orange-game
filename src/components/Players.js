@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
 import _ from 'lodash';
-import { subscribeToFirebaseList, getFbRef } from '../utils';
+import { subscribeToFbList, getFbRef } from '../utils';
 import { openAskNegotiation, openOfferNegotiation } from '../actions/MarketActions';
 import model from '../model';
 import Griddle from 'griddle-react';
@@ -91,7 +91,7 @@ export default class Players extends Component {
 
     componentWillMount() {
         this.firebaseRef = getFbRef(`/games/${model.gameId}/players`);
-        subscribeToFirebaseList(this, this.firebaseRef, 'players', 'authId');
+        subscribeToFbList(this, this.firebaseRef, 'players', 'authId');
     }
 
     componentWillUnmount() {

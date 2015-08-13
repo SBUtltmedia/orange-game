@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { subscribeToFirebaseObject, getFbRef } from '../utils';
+import { subscribeToFbObject, getFbRef } from '../utils';
 import model from '../model';
 
 const styles = {
@@ -29,7 +29,7 @@ export default class LobbyUserName extends Component {
     componentWillMount() {
         const { authId } = this.state.user;
         this.firebaseRef = getFbRef(`/users/${authId}`);
-        subscribeToFirebaseObject(this, this.firebaseRef, 'user');
+        subscribeToFbObject(this, this.firebaseRef, 'user');
     }
 
     componentWillUnmount() {

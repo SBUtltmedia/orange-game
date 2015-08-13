@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
-import { subscribeToFirebaseList, getFbRef, trimString } from '../utils';
+import { subscribeToFbList, getFbRef, trimString } from '../utils';
 import { sendChat } from '../actions/GameActions';
 import ChatMessage from '../components/ChatMessage';
 import _ from 'lodash';
@@ -57,7 +57,7 @@ export default class Chat extends Component {
                 output.scrollTop = 999999999;
             }, 100);
         };
-        subscribeToFirebaseList(this, this.firebaseRef, 'messages', null, callback);
+        subscribeToFbList(this, this.firebaseRef, 'messages', null, callback);
     }
 
     componentWillUnmount() {

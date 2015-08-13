@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import DraggableOrange from './DraggableOrange';
 import { DropTarget } from 'react-dnd';
 import { verticalCenter, dnd } from '../styles/Themes';
-import { subscribeToFirebaseObject, getFbRef } from '../utils';
+import { subscribeToFbObject, getFbRef } from '../utils';
 import ItemTypes from '../constants/ItemTypes';
 import _ from 'lodash';
 import { dropOrange } from '../actions/GameActions';
@@ -73,7 +73,7 @@ export default class Bin extends Component {
         const { gameId, authId } = model;
         const url = `/games/${gameId}/players/${authId}/oranges/${name}`;
         this.firebaseRef = getFbRef(url);
-        subscribeToFirebaseObject(this, this.firebaseRef, 'oranges');
+        subscribeToFbObject(this, this.firebaseRef, 'oranges');
     }
 
     componentWillUnmount() {

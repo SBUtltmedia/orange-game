@@ -32,7 +32,7 @@ export function addToFbList(path, data, callback=function() {}) {
     getFbRef(path).push(data, callback);
 }
 
-export function subscribeToFirebaseObject(component, ref, stateKey, callback=function() {}) {
+export function subscribeToFbObject(component, ref, stateKey, callback=() => {}) {
     ref.on('value', snapshot => {
         if (snapshot.exists()) {
             const object = snapshot.val();
@@ -42,7 +42,7 @@ export function subscribeToFirebaseObject(component, ref, stateKey, callback=fun
     });
 }
 
-export function subscribeToFirebaseList(component, ref, stateKey, objectKey=null, callback=function() {}) {
+export function subscribeToFbList(component, ref, stateKey, objectKey=null, callback=() => {}) {
     ref.on('value', snapshot => {
         const items = snapshot.val();
         setComponentState(component, stateKey, objectToArray(items, objectKey));

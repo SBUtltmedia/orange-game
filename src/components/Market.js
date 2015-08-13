@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import Modal from 'react-modal';
 import { APP_ROOT_ELEMENT } from '../constants/Settings';
-import { subscribeToFirebaseList, getFbRef } from '../utils';
+import { subscribeToFbList, getFbRef } from '../utils';
 import _ from 'lodash';
 import model from '../model';
 import Griddle from 'griddle-react';
@@ -23,7 +23,7 @@ export default class Market extends Component {
 
     componentWillMount() {
         this.firebaseRef = getFbRef(`/games/${model.gameId}/players`);
-        subscribeToFirebaseList(this, this.firebaseRef, 'players', 'authId');
+        subscribeToFbList(this, this.firebaseRef, 'players', 'authId');
     }
 
     componentWillUnmount() {

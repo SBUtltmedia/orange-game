@@ -3,7 +3,7 @@ import { areaTheme } from '../styles/Themes';
 import OrangeBox from './OrangeBox';
 import model from '../model';
 import { playerReady }from '../actions/GameActions';
-import { subscribeToFirebaseObject, getFbRef } from '../utils';
+import { subscribeToFbObject, getFbRef } from '../utils';
 import { DAYS_IN_GAME } from '../constants/Settings';
 
 const styles = {
@@ -35,7 +35,7 @@ export default class Controls extends Component {
         const { name } = this.props;
         const { gameId, authId } = model;
         this.firebaseRef = getFbRef(`/games/${gameId}/players/${authId}`);
-        subscribeToFirebaseObject(this, this.firebaseRef, 'gameData');
+        subscribeToFbObject(this, this.firebaseRef, 'gameData');
     }
 
     componentWillUnmount() {

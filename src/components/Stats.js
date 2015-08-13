@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme, verticalCenter } from '../styles/Themes';
 import model from '../model';
-import { subscribeToFirebaseObject, getFbRef } from '../utils';
+import { subscribeToFbObject, getFbRef } from '../utils';
 
 const styles = {
   container: {
@@ -56,7 +56,7 @@ export default class Stats extends Component {
         const { gameId, authId } = model;
         const url = `/games/${gameId}/players/${authId}`;
         this.firebaseRef = getFbRef(url);
-        subscribeToFirebaseObject(this, this.firebaseRef, 'stats');
+        subscribeToFbObject(this, this.firebaseRef, 'stats');
     }
 
     componentWillUnmount() {

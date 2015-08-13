@@ -10,7 +10,7 @@ import Players from '../components/Players';
 import Chat from '../components/Chat';
 import { areaTheme } from '../styles/Themes';
 import { gameLoad, newDay } from '../actions/GameActions';
-import { getFbRef, subscribeToFirebaseObject } from '../utils';
+import { getFbRef, subscribeToFbObject } from '../utils';
 import { GAME_STATES } from '../constants/Settings';
 import model from '../model';
 import _ from 'lodash';
@@ -55,7 +55,7 @@ export default class Game extends Component {
         gameLoad(params.gameId);
         this.firebaseRef = getFbRef(`/games/${model.gameId}`);
         const callback = () => this.onFbUpdate();
-        subscribeToFirebaseObject(this, this.firebaseRef, 'game', callback);
+        subscribeToFbObject(this, this.firebaseRef, 'game', callback);
     }
 
     componentWillUnmount() {

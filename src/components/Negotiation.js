@@ -5,7 +5,7 @@ import { verticalCenter } from '../styles/Themes';
 import _ from 'lodash';
 import model from '../model';
 import NumberSelect from './NumberSelect';
-import { getFbRef, subscribeToFirebaseList, updateFbObject } from '../utils';
+import { getFbRef, subscribeToFbList, updateFbObject } from '../utils';
 import { NumberPicker } from 'react-widgets';
 import { updateNegotiation } from '../actions/MarketActions';
 
@@ -59,7 +59,7 @@ export default class Negotiation extends Component {
 
     componentWillMount() {
         this.firebaseRef = getFbRef(`/games/${model.gameId}/transactions`);
-        subscribeToFirebaseList(this, this.firebaseRef, 'transactions', 'id',
+        subscribeToFbList(this, this.firebaseRef, 'transactions', 'id',
                         transactions => this.check(transactions));
     }
 

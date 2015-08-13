@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { subscribeToFirebaseList, getFbRef } from '../utils';
+import { subscribeToFbList, getFbRef } from '../utils';
 import _ from 'lodash';
 import { MAX_PLAYERS, GAME_STATES } from '../constants/Settings';
 import { Link } from 'react-router';
@@ -93,7 +93,7 @@ export default class LobbyGames extends Component {
     componentWillMount() {
         this.firebaseRef = getFbRef('/games');
         const callback = () => this.gotoGameIfJoinedAndStarted();
-        subscribeToFirebaseList(this, this.firebaseRef, 'games', 'gameId', callback);
+        subscribeToFbList(this, this.firebaseRef, 'games', 'gameId', callback);
         this.gotoGameIfJoinedAndStarted();
     }
 
