@@ -51,10 +51,17 @@ export default class Negotiation extends Component {
 
     check(transactions) {
         const f = _.bind(transactionIsOpenAndContainsPlayer, {}, model);
+        const thisTransaction = _.find(transactions, f);
         this.setState({
-            modalIsOpen: _.some(transactions, f),
-            thisTransaction: _.find(transactions, f)
+            modalIsOpen: !!thisTransaction
         });
+        if (thisTransaction) {
+            this.setState({
+                thisTransaction: thisTransaction,
+                nowOranges: thisTransaction.oranges.now,
+                laterOranges: thisTransaction.oranges.later
+            })
+        }
     }
 
     componentWillMount() {

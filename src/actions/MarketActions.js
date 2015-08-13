@@ -7,7 +7,11 @@ function openNegotation(givingPlayer, receivingPlayer) {
         lender: givingPlayer,
         borrower: receivingPlayer,
         open: true,
-        completed: false
+        completed: false,
+        oranges: {
+            now: 1,
+            later: 1
+        }
     };
     addToFbList(`/games/${model.gameId}/transactions`, transaction);
 }
