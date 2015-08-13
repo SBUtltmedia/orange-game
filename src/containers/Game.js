@@ -32,7 +32,7 @@ const styles = {
 
 @DragDropContext(HTML5Backend)
 @connect(state => ({
-    players: state.players
+    players: state.firebase.players
 }))
 export default class Game extends Component {
 
