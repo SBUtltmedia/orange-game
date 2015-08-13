@@ -16,7 +16,7 @@ const styles = {
   output: {
       padding: 10,
       overflow: 'scroll',
-      height: 285
+      height: 288
   },
   input: {
       position: 'absolute',
@@ -28,7 +28,7 @@ const styles = {
       margin: 'auto'
   },
   presets: {
-      marginTop: 10
+      marginTop: 8
   },
   preset: {
       fontSize: 10

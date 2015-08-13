@@ -11,9 +11,6 @@ const styles = {
         ...areaTheme,
         backgroundColor: '#F7EAC8',
     },
-    buttons: {
-        display: 'flex'
-    },
     button: {
         margin: '1%',
         position: 'relative',
@@ -54,15 +51,10 @@ export default class Controls extends Component {
         const { gameDay } = this.state;
         return <div style={styles.container}>
             <OrangeBox />
-            <div style={styles.buttons}>
-                <button style={styles.button} onClick={playerReady}
-                        disabled={!model.canAdvanceDay}>
-                    I'm done for today
-                </button>
-                <button style={styles.button} onClick={() => alert('Not implemented')}>
-                    Ask for loan
-                </button>
-            </div>
+            <button style={styles.button} onClick={playerReady}
+                    disabled={!model.canAdvanceDay}>
+                I'm done for today
+            </button>
         </div>;
     }
 }

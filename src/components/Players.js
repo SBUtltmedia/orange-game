@@ -62,7 +62,7 @@ class LoanComponent extends Component {
 class ReadyComponent extends Component {
     render() {
         const player = this.props.data;
-        if (player) {
+        if (player && player.day > model.gameDay) {
             return <img style={styles.checkmark}
                     src={require("../../images/checkmark.png")} />;
         }
