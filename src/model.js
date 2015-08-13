@@ -6,6 +6,11 @@ function getRandomNumberOfOranges() {
 }
 
 class Model {
+
+    static playerData(player) {
+        return _.pick(player, ['authId', 'name', 'fitness', 'fitnessChange', 'oranges']);
+    }
+
     constructor() {
         this.oranges = {
             box: getRandomNumberOfOranges(),
@@ -19,6 +24,10 @@ class Model {
         this.gameId = null;
         this.authId = null;
         this.userName = null;
+    }
+
+    getPlayerData(player) {
+        return Model.playerData(player || this);
     }
 
     dropOrange(source, dest) {
@@ -50,20 +59,11 @@ class Model {
         this.fitnessChange = 0 - DAILY_FITNESS_LOSS;
     }
 
-    setGameData(data) {
+    setPlayerData(data) {
         this.oranges = data.oranges;
         this.playerDay = data.day;
         this.fitness = data.fitness;
         this.fitnessChange = data.fitnessChange;
-    }
-
-    getGameData() {
-        return {
-            oranges: this.oranges,
-            day: this.playerDay,
-            fitness: this.fitness,
-            fitnessChange: this.fitnessChange
-        };
     }
 
     get canAdvanceDay() {
@@ -76,13 +76,6 @@ class Model {
 
     get daysLeft() {
         return DAYS_IN_GAME - this.gameDay;
-    }
-
-    get playerInfo() {
-        return {
-            authId: this.authId,
-            name: this.userName
-        }
     }
 }
 

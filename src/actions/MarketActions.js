@@ -18,8 +18,8 @@ function createNegotation(givingPlayer, receivingPlayer) {
     addToFbList(`/games/${model.gameId}/transactions`, transaction);
 }
 
-function update(transactionId, nowOranges, laterOranges, extraData) {
-    const url = `/games/${model.gameId}/transactions/${transactionId}`;
+function update(transaction, nowOranges, laterOranges, extraData) {
+    const url = `/games/${model.gameId}/transactions/${transaction.id}`;
     const data = _.extend({
         oranges: {
             now: nowOranges,
@@ -30,34 +30,50 @@ function update(transactionId, nowOranges, laterOranges, extraData) {
     updateFbObject(url, data);
 }
 
-export function openOffer(transactionId, nowOranges, laterOranges) {
-    update(transactionId, nowOranges, laterOranges, { state: OPEN });
+function transferOranges(transaction) {
+    const orangesToTransfer = transaction.oranges.now;
+    const lenderId = transaction.lender.authId;
+    const borrowerId = transaction.borrower.authId;
+    const lenderUrl = `/games/${model.gameId}/players/${lenderId}/oranges`;
+    const borrowerUrl = `/games/${model.gameId}/players/${borrowerId}/oranges`;
+
+    console.log(transaction.lender.oranges.basket, orangesToTransfer, transaction.lender.oranges.basket - orangesToTransfer);
+
+    const newLenderOranges = {
+        basket: transaction.lender.oranges.basket - orangesToTransfer
+    };
+    const newBorrowerOranges = {
+        box: transaction.borrower.oranges.box + orangesToTransfer
+    };
+
+    updateFbObject(lenderUrl, newLenderOranges);
+    updateFbObject(borrowerUrl, newBorrowerOranges);
 }
 
-export function updateOffer(transactionId, nowOranges, laterOranges) {
-    update(transactionId, nowOranges, laterOranges);
+export function openOffer(transaction, nowOranges, laterOranges) {
+    update(transaction, nowOranges, laterOranges, { state: OPEN });
 }
 
-export function rejectOffer(transactionId, callback) {
-    const url = `/games/${model.gameId}/transactions/${transactionId}`;
+export function updateOffer(transaction, nowOranges, laterOranges) {
+    update(transaction, nowOranges, laterOranges);
+}
+
+export function rejectOffer(transaction, callback) {
+    const url = `/games/${model.gameId}/transactions/${transaction.id}`;
     const data = { state: REJECTED, lastToAct: model.authId };
     updateFbObject(url, data, callback);
 }
 
-export function acceptOffer(transactionId, callback) {
-    const url = `/games/${model.gameId}/transactions/${transactionId}`;
+export function acceptOffer(transaction, callback) {
+    const url = `/games/${model.gameId}/transactions/${transaction.id}`;
     const data = { state: ACCEPTED, lastToAct: model.authId };
-    updateFbObject(url, data, callback);
-}
-
-function getPlayerInfo(player) {
-    return _.pick(player, ['authId', 'name']);
+    updateFbObject(url, data, () => transferOranges(transaction));
 }
 
 export function openAskNegotiation(withPlayer) {
-    createNegotation(getPlayerInfo(withPlayer), model.playerInfo);
+    createNegotation(model.getPlayerData(withPlayer), model.getPlayerData());
 }
 
 export function openOfferNegotiation(withPlayer) {
-    createNegotation(model.playerInfo, getPlayerInfo(withPlayer));
+    createNegotation(model.getPlayerData(), model.getPlayerData(withPlayer));
 }

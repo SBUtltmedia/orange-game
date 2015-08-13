@@ -91,17 +91,17 @@ export default class Negotiation extends Component {
 
     open() {
         const { thisTransaction, nowOranges, laterOranges } = this.state;
-        openOffer(thisTransaction.id, nowOranges, laterOranges);
+        openOffer(thisTransaction, nowOranges, laterOranges);
     }
 
     reject() {
         const { thisTransaction } = this.state;
-        rejectOffer(thisTransaction.id, () => this.check(this.state.transactions));
+        rejectOffer(thisTransaction, () => this.check(this.state.transactions));
     }
 
     accept() {
         const { thisTransaction } = this.state;
-        acceptOffer(thisTransaction.id, () => this.check(this.state.transactions));
+        acceptOffer(thisTransaction, () => this.check(this.state.transactions));
     }
 
     counter() {
@@ -111,7 +111,7 @@ export default class Negotiation extends Component {
 
     onFormSubmit(event) {
         const { thisTransaction, nowOranges, laterOranges } = this.state;
-        updateOffer(thisTransaction.id, nowOranges, laterOranges);
+        updateOffer(thisTransaction, nowOranges, laterOranges);
         event.preventDefault();
     }
 
