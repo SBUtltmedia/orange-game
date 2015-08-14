@@ -61,7 +61,7 @@ export function subscribeToFbList(component, ref, stateKey, objectKey=null, call
 }
 
 export function getFbRef(url) {
-    return new Firebase(`${FIREBASE_APP_URL}/${url}`);
+    return new Firebase(`${FIREBASE_APP_URL}/${url || ''}`);
 }
 
 export function getAuth() {

@@ -15,7 +15,7 @@ function authUser() {
     return new Promise((resolve, reject) => {
 
         function login() {
-            const ref = getFbRef('/');
+            const ref = getFbRef();
             ref.authAnonymously((error, authData) => {
                 if (authData) {
                     model.authId = authData.uid;

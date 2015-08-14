@@ -1,7 +1,7 @@
+import { getFbRef } from '../utils';
+
 export function listenToFirebase() {
     return dispatch => {
-        dispatch({
-            players: [ { name: 'Ken' } ]
-        })
-    };
+        return getFbRef().on('value', snapshot => dispatch(snapshot.val()));
+    }
 }
