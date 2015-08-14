@@ -32,28 +32,9 @@ const styles = {
 
 @DragDropContext(HTML5Backend)
 @connect(state => ({
-    players: state.firebase.players
+    firebase: state.firebase
 }))
 export default class Game extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            game: null,
-            player: null
-        };
-    }
-
-    onGameUpdate(game) {
-        model.gameDay = game.day;
-        if (game.state === FINISHED) {
-            window.location.href = '/?#/gameOver/';
-        }
-    }
-
-    onPlayerUpdate(player) {
-        model.setPlayerData(player);
-    }
 
     componentWillMount() {
         const { params, dispatch } = this.props;
@@ -61,20 +42,27 @@ export default class Game extends Component {
         fluxActions.listenToFirebase();
         model.gameId = params.gameId;
         gameLoad(params.gameId);
-        this.firebaseGameRef = getFbRef(`/games/${model.gameId}`);
-        this.firebasePlayerRef = getFbRef(`/games/${model.gameId}/players/${model.authId}`);
-        subscribeToFbObject(this, this.firebaseGameRef, 'game', (g) => this.onGameUpdate(g));
-        subscribeToFbObject(this, this.firebasePlayerRef, 'player', (p) => this.onPlayerUpdate(p));
     }
 
     componentWillUnmount() {
         this.firebaseGameRef.off();
     }
 
+    componentWillReceiveProps(newProps) {
+        const { params, firebase } = newProps;
+        const { games } = firebase;
+        if (games) {
+            const game = games[params.gameId];
+            const player = game.players[model.authId];
+            model.gameDay = game.day;
+            model.setPlayerData(player);
+            if (game.state === FINISHED) {
+                window.location.href = '/?#/gameOver/';
+            }
+        }
+    }
+
     render() {
-
-        console.log(this.props, this.state);
-
         return <div style={styles.container}>
             <div style={styles.row}>
                 <Basket />
