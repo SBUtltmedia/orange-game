@@ -1,11 +1,11 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
 import _ from 'lodash';
-import { subscribeToFbList, getFbRef } from '../utils';
 import { openAskNegotiation, openOfferNegotiation } from '../actions/MarketActions';
 import model from '../model';
 import Griddle from 'griddle-react';
 import Negotiation from '../components/Negotiation';
+import { connect } from 'redux/react';
 
 const styles = {
     container: {
@@ -91,54 +91,50 @@ const COL_META = [
     }
 ];
 
+@connect(state => ({
+    firebase: state.firebase
+}))
 export default class Players extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            players: []
-        };
-    }
-
-    componentWillMount() {
-        this.firebaseRef = getFbRef(`/games/${model.gameId}/players`);
-        subscribeToFbList(this, this.firebaseRef, 'players', 'authId');
-    }
-
-    componentWillUnmount() {
-        this.firebaseRef.off();
-    }
-
     render() {
-        const { players } = this.state;
-        const tableData = _.map(players, player => {
-            if (player.oranges) {
-                return {
-                    Name: player.name,
-                    Fitness: player.fitness,
-                    Box: player.oranges.box,
-                    Basket: player.oranges.basket,
-                    Dish: player.oranges.dish,
-                    Credit: -5,
-                    Reputation: player.reputation,
-                    Loan: player,
-                    Ready: player
-                };
+        const { firebase } = this.props;
+        if (firebase) {
+            const { games } = firebase;
+            if (games) {
+                const game = games[model.gameId];
+                const players = game.players;
+                const tableData = _.map(players, player => {
+                    if (player.oranges) {
+                        return {
+                            Name: player.name,
+                            Fitness: player.fitness,
+                            Box: player.oranges.box,
+                            Basket: player.oranges.basket,
+                            Dish: player.oranges.dish,
+                            Credit: -5,
+                            Reputation: player.reputation,
+                            Loan: player,
+                            Ready: player
+                        };
+                    }
+                    else {
+                        return {
+                            Name: player.name
+                        };
+                    }
+                })
+                return <div styles={[styles.container]}>
+                    <Griddle results={tableData}
+                        columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish',
+                                    'Credit', 'Reputation', 'Loan', 'Ready' ]}
+                        showPager={false} resultsPerPage={99}
+                        useFixedLayout={false}
+                        tableClassName='little-griddle'
+                        columnMetadata={ COL_META } />
+                    <Negotiation />
+                </div>;
             }
-            else {
-                return {
-                    Name: player.name
-                };
-            }
-        })
-        return <div styles={[styles.container]}>
-            <Griddle results={tableData}
-                columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish', 'Credit',
-                            'Reputation', 'Loan', 'Ready' ]}
-                showPager={false} resultsPerPage={99} useFixedLayout={false}
-                tableClassName='little-griddle'
-                columnMetadata={ COL_META } />
-            <Negotiation />
-        </div>;
+        }
+        return <div styles={[styles.container]}></div>;  // fallback
     }
 }

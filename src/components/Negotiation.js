@@ -5,10 +5,10 @@ import { verticalCenter } from '../styles/Themes';
 import _ from 'lodash';
 import model from '../model';
 import NumberSelect from './NumberSelect';
-import { getFbRef, subscribeToFbList, updateFbObject } from '../utils';
 import { NumberPicker } from 'react-widgets';
 import { openOffer, updateOffer, rejectOffer, acceptOffer } from '../actions/MarketActions';
 import { CREATING, OPEN, ACCEPTED, REJECTED } from '../constants/NegotiationStates';
+import { connect } from 'redux/react';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
@@ -41,12 +41,16 @@ const styles = {
     }
 };
 
-function renderButton(title, fn, cssClass) {
-    return <button style={styles.button} className={`btn ${cssClass}`} onClick={fn}>
+function renderButton(title, fn, cssClass, enabled=true) {
+    return <button disabled={!enabled} style={styles.button}
+            className={`btn ${cssClass}`} onClick={fn}>
         {title}
     </button>;
 }
 
+@connect(state => ({
+    firebase: state.firebase
+}))
 export default class Negotiation extends Component {
 
     constructor(props) {
@@ -56,33 +60,37 @@ export default class Negotiation extends Component {
             thisTransaction: null,
             modalIsOpen: false,
             nowOranges: 1,
-            laterOranges: 1
+            laterOranges: 1,
+            originalNowOranges: 1,
+            originalLaterOranges: 1,
         }
     }
 
     check(transactions) {
         const f = _.bind(transactionIsOpenAndContainsPlayer, {}, model);
-        const thisTransaction = _.find(transactions, f);
+        const transactionId = _.findKey(transactions, f);
+        const transaction = transactions[transactionId];
         this.setState({
-            modalIsOpen: !!thisTransaction
+            modalIsOpen: !!transaction
         });
-        if (thisTransaction) {
+        if (transaction) {
             this.setState({
-                thisTransaction: thisTransaction,
-                nowOranges: thisTransaction.oranges.now,
-                laterOranges: thisTransaction.oranges.later
+                thisTransaction: _.extend({id: transactionId}, transaction),
+                nowOranges: transaction.oranges.now,
+                laterOranges: transaction.oranges.later,
+                originalNowOranges: transaction.oranges.now,
+                originalLaterOranges: transaction.oranges.later
             })
         }
     }
 
-    componentWillMount() {
-        this.firebaseRef = getFbRef(`/games/${model.gameId}/transactions`);
-        subscribeToFbList(this, this.firebaseRef, 'transactions', 'id',
-                            transactions => this.check(transactions));
-    }
-
-    componentWillUnmount() {
-        this.firebaseRef.off();
+    componentWillReceiveProps(newProps) {
+        const { firebase } = newProps;
+        const { games } = firebase;
+        if (games) {
+            const game = games[model.gameId];
+            this.check(game.transactions || {});
+        }
     }
 
     closeModal() {
@@ -123,7 +131,7 @@ export default class Negotiation extends Component {
         this.setState({ laterOranges: value });
     }
 
-    renderAcceptButton() {
+    renderAcceptButton(enabled=true) {
         const { thisTransaction } = this.state;
         const fn = () => {
             if (thisTransaction.state === CREATING) {
@@ -133,19 +141,20 @@ export default class Negotiation extends Component {
                 return () => this.accept();
             }
         }();
-        return renderButton('Accept', fn, 'btn-success');
+        return renderButton('Accept', fn, 'btn-success', enabled);
     }
 
-    renderRejectButton() {
-        return renderButton('Reject', () => this.reject(), 'btn-danger');
+    renderRejectButton(enabled=true) {
+        return renderButton('Reject', () => this.reject(), 'btn-danger', enabled);
     }
 
-    renderCounterButton() {
-        return renderButton('Send counter-offer', () => this.counter(), '');
+    renderCounterButton(enabled=true) {
+        return renderButton('Send counter-offer', () => this.counter(), '', enabled);
     }
 
     renderButtons() {
-        const { thisTransaction } = this.state;
+        const { thisTransaction, nowOranges, laterOranges, originalNowOranges,
+                                    originalLaterOranges } = this.state;
         if (thisTransaction) {
             if (thisTransaction.state === CREATING) {
                 return <div style={styles.buttons}>
@@ -160,9 +169,11 @@ export default class Negotiation extends Component {
                     </div>;
                 }
                 else {
+                    const hasChangedValues = nowOranges !== originalNowOranges ||
+                                           laterOranges !== originalLaterOranges;
                     return <div style={styles.buttons}>
-                        { this.renderAcceptButton() }
-                        { this.renderCounterButton() }
+                        { this.renderAcceptButton(!hasChangedValues) }
+                        { this.renderCounterButton(hasChangedValues) }
                         { this.renderRejectButton() }
                     </div>;
                 }
@@ -175,6 +186,7 @@ export default class Negotiation extends Component {
 
     render() {
         const { modalIsOpen, thisTransaction, nowOranges, laterOranges } = this.state;
+        const lastToAct = thisTransaction && thisTransaction.lastToAct === model.authId;
         return <Modal className="Modal__Bootstrap modal-dialog medium"
                         isOpen={modalIsOpen} onRequestClose={() => {}}>
             <h2>Negotiate a loan</h2>
@@ -184,11 +196,11 @@ export default class Negotiation extends Component {
             <form ref="form" onSubmit={e => this.onFormSubmit(e)}>
                 <div style={styles.fl}>
                     <NumberPicker style={styles.numberPicker}
-                        value={nowOranges} min={1} max={9}
+                        value={nowOranges} min={1} max={9} disabled={lastToAct}
                         onChange={this.onNowChange.bind(this)} />
                     <div style={styles.sentenceWords}>oranges now for</div>
                     <NumberPicker style={styles.numberPicker}
-                        value={laterOranges} min={1} max={9}
+                        value={laterOranges} min={1} max={9} disabled={lastToAct}
                         onChange={this.onLaterChange.bind(this)} />
                     <div style={styles.sentenceWords}>oranges later</div>
                 </div>

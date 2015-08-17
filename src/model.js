@@ -8,7 +8,8 @@ function getRandomNumberOfOranges() {
 class Model {
 
     static playerData(player) {
-        return _.pick(player, ['authId', 'name', 'fitness', 'fitnessChange', 'oranges']);
+        return _.extend({ day: player.day || player.playerDay },
+               _.pick(player, ['authId', 'name', 'fitness', 'fitnessChange', 'oranges' ]));
     }
 
     constructor() {

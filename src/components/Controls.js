@@ -3,8 +3,8 @@ import { areaTheme } from '../styles/Themes';
 import OrangeBox from './OrangeBox';
 import model from '../model';
 import { playerReady }from '../actions/GameActions';
-import { subscribeToFbObject, getFbRef } from '../utils';
 import { DAYS_IN_GAME } from '../constants/Settings';
+import { connect } from 'redux/react';
 
 const styles = {
   container: {
@@ -19,40 +19,31 @@ const styles = {
     }
 };
 
+@connect(state => ({
+    firebase: state.firebase
+}))
 export default class Controls extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            playerData: null
-        };
-    }
-
-    componentWillMount() {
-        const { name } = this.props;
-        const { gameId, authId } = model;
-        this.firebaseRef = getFbRef(`/games/${gameId}/players/${authId}`);
-        subscribeToFbObject(this, this.firebaseRef, 'gameData');
-    }
-
-    componentWillUnmount() {
-        this.firebaseRef.off();
-    }
-
     canAdvanceDay() {
-        if (this.state.playerData && this.state.playerData.oranges) {
-            const { oranges, day } = this.state.playerData;
-            return oranges.box === 0 && day < DAYS_IN_GAME;
+        const { gameId, authId } = model;
+        const { firebase } = this.props;
+        const { games } = firebase;
+        if (games) {
+            const game = games[gameId];
+            const player = game.players[authId];
+            if (player.oranges) {
+                const { oranges, day } = player;
+                return oranges.box === 0 && day < DAYS_IN_GAME;
+            }
         }
         return false;
     }
 
     render() {
-        const { gameDay } = this.state;
         return <div style={styles.container}>
             <OrangeBox />
             <button style={styles.button} onClick={playerReady}
-                    disabled={!model.canAdvanceDay}>
+                    disabled={!this.canAdvanceDay()}>
                 I'm done for today
             </button>
         </div>;

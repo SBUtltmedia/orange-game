@@ -10,10 +10,12 @@ import Players from '../components/Players';
 import Chat from '../components/Chat';
 import { areaTheme } from '../styles/Themes';
 import { gameLoad, newDay } from '../actions/GameActions';
-import { getFbRef, subscribeToFbObject } from '../utils';
 import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
+import * as FluxActions from '../actions/FluxActions';
+import { bindActionCreators } from 'redux';
 import model from '../model';
 import _ from 'lodash';
+import { connect } from 'redux/react';
 
 const styles = {
   container: {
@@ -28,39 +30,35 @@ const styles = {
 };
 
 @DragDropContext(HTML5Backend)
+@connect(state => ({
+    firebase: state.firebase
+}))
 export default class Game extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            game: null,
-            player: null
-        };
-    }
-
-    onGameUpdate(game) {
-        model.gameDay = game.day;
-        if (game.state === FINISHED) {
-            window.location.href = '/?#/gameOver/';
-        }
-    }
-
-    onPlayerUpdate(player) {
-        model.setPlayerData(player);
-    }
-
     componentWillMount() {
-        const { params } = this.props;
+        const { params, dispatch } = this.props;
+        this.fluxActions = bindActionCreators(FluxActions, dispatch);
+        this.fluxActions.listenToFirebase();
         model.gameId = params.gameId;
         gameLoad(params.gameId);
-        this.firebaseGameRef = getFbRef(`/games/${model.gameId}`);
-        this.firebasePlayerRef = getFbRef(`/games/${model.gameId}/players/${model.authId}`);
-        subscribeToFbObject(this, this.firebaseGameRef, 'game', (g) => this.onGameUpdate(g));
-        subscribeToFbObject(this, this.firebasePlayerRef, 'player', (p) => this.onPlayerUpdate(p));
     }
 
     componentWillUnmount() {
-        this.firebaseGameRef.off();
+        this.fluxActions.disconnectFromFirebase();
+    }
+
+    componentWillReceiveProps(newProps) {
+        const { params, firebase } = newProps;
+        const { games } = firebase;
+        if (games) {
+            const game = games[params.gameId];
+            const player = game.players[model.authId];
+            model.gameDay = game.day;
+            model.setPlayerData(player);
+            if (game.state === FINISHED) {
+                window.location.href = '/?#/gameOver/';
+            }
+        }
     }
 
     render() {

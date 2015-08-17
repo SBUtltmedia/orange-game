@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import { subscribeToFbList, getFbRef } from '../utils';
 import _ from 'lodash';
 import { MAX_PLAYERS } from '../constants/Settings';
 import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
@@ -8,6 +7,7 @@ import { joinGame, leaveGame } from '../actions/LobbyActions';
 import { startGame, deleteGame } from '../actions/AdminActions';
 import { authId } from '../model';
 import Griddle from 'griddle-react';
+import { connect } from 'redux/react';
 
 const styles = {
     container: {
@@ -64,56 +64,31 @@ const PLAYER_COL_META = [{
     "customComponent": PlayerActionsComponent
 }];
 
+@connect(state => ({
+    firebase: state.firebase
+}))
 export default class LobbyGames extends Component {
     static propTypes = {
         isAdmin: PropTypes.bool
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            games: []
-        };
-    }
-
-    gotoGameIfJoinedAndStarted() {
-        const { isAdmin } = this.props;
-        const { games } = this.state;
-        if (!isAdmin) {
-            const joinedGame = _.find(games, g => {
-                return _.contains(_.keys(g.players), authId);
-            });
-            if (joinedGame && joinedGame.state === STARTED) {
-                window.location.href = `/?#/game/${joinedGame.gameId}`;
-            }
-        }
-    }
-
-    componentWillMount() {
-        this.firebaseRef = getFbRef('/games');
-        const callback = () => this.gotoGameIfJoinedAndStarted();
-        subscribeToFbList(this, this.firebaseRef, 'games', 'gameId', callback);
-        this.gotoGameIfJoinedAndStarted();
-    }
-
-    componentWillUnmount() {
-        this.firebaseRef.off();
-    }
-
     render() {
-        const { isAdmin } = this.props;
-        const { games } = this.state;
-        const tableData = _.map(games, game => { return {
-            Joined: _.size(game.players),
-            Players: _.map(game.players, p => p.name).join(', '),
-            Actions: game
-        }})
-        return <div styles={[styles.container]}>
-            <Griddle results={tableData}
-                columns={[ 'Joined', 'Players', 'Actions' ]}
-                showPager={false} resultsPerPage={99} useFixedLayout={false}
-                tableClassName='big-griddle'
-                columnMetadata={ isAdmin ? ADMIN_COL_META : PLAYER_COL_META } />
-        </div>;
+        const { isAdmin, firebase } = this.props;
+        if (firebase) {
+            const { games } = firebase;
+            const tableData = _.map(games, (game, gameId) => { return {
+                Joined: _.size(game.players),
+                Players: _.map(game.players, p => p.name).join(', '),
+                Actions: _.extend({ gameId: gameId }, game)
+            }});
+            return <div styles={[styles.container]}>
+                <Griddle results={tableData}
+                    columns={[ 'Joined', 'Players', 'Actions' ]}
+                    showPager={false} resultsPerPage={99} useFixedLayout={false}
+                    tableClassName='big-griddle'
+                    columnMetadata={ isAdmin ? ADMIN_COL_META : PLAYER_COL_META } />
+            </div>;
+        }
+        return <div styles={[styles.container]}></div>;  // fallback
     }
 }

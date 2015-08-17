@@ -43,6 +43,9 @@ export function gameLoad(gameId) {
             model.setPlayerData(gameData);
         }
         else {
+
+            console.log(model.getPlayerData());
+
             updateFbObject(url, model.getPlayerData());
         }
     });
