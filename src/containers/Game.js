@@ -10,7 +10,6 @@ import Players from '../components/Players';
 import Chat from '../components/Chat';
 import { areaTheme } from '../styles/Themes';
 import { gameLoad, newDay } from '../actions/GameActions';
-import { getFbRef, subscribeToFbObject } from '../utils';
 import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
 import * as FluxActions from '../actions/FluxActions';
 import { bindActionCreators } from 'redux';
