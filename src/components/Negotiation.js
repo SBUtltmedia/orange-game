@@ -41,8 +41,9 @@ const styles = {
     }
 };
 
-function renderButton(title, fn, cssClass) {
-    return <button style={styles.button} className={`btn ${cssClass}`} onClick={fn}>
+function renderButton(title, fn, cssClass, enabled=true) {
+    return <button disabled={!enabled} style={styles.button}
+            className={`btn ${cssClass}`} onClick={fn}>
         {title}
     </button>;
 }
@@ -59,7 +60,9 @@ export default class Negotiation extends Component {
             thisTransaction: null,
             modalIsOpen: false,
             nowOranges: 1,
-            laterOranges: 1
+            laterOranges: 1,
+            originalNowOranges: 1,
+            originalLaterOranges: 1,
         }
     }
 
@@ -74,7 +77,9 @@ export default class Negotiation extends Component {
             this.setState({
                 thisTransaction: _.extend({id: transactionId}, transaction),
                 nowOranges: transaction.oranges.now,
-                laterOranges: transaction.oranges.later
+                laterOranges: transaction.oranges.later,
+                originalNowOranges: transaction.oranges.now,
+                originalLaterOranges: transaction.oranges.later
             })
         }
     }
@@ -126,7 +131,7 @@ export default class Negotiation extends Component {
         this.setState({ laterOranges: value });
     }
 
-    renderAcceptButton() {
+    renderAcceptButton(enabled=true) {
         const { thisTransaction } = this.state;
         const fn = () => {
             if (thisTransaction.state === CREATING) {
@@ -136,19 +141,20 @@ export default class Negotiation extends Component {
                 return () => this.accept();
             }
         }();
-        return renderButton('Accept', fn, 'btn-success');
+        return renderButton('Accept', fn, 'btn-success', enabled);
     }
 
-    renderRejectButton() {
-        return renderButton('Reject', () => this.reject(), 'btn-danger');
+    renderRejectButton(enabled=true) {
+        return renderButton('Reject', () => this.reject(), 'btn-danger', enabled);
     }
 
-    renderCounterButton() {
-        return renderButton('Send counter-offer', () => this.counter(), '');
+    renderCounterButton(enabled=true) {
+        return renderButton('Send counter-offer', () => this.counter(), '', enabled);
     }
 
     renderButtons() {
-        const { thisTransaction } = this.state;
+        const { thisTransaction, nowOranges, laterOranges, originalNowOranges,
+                                    originalLaterOranges } = this.state;
         if (thisTransaction) {
             if (thisTransaction.state === CREATING) {
                 return <div style={styles.buttons}>
@@ -163,9 +169,11 @@ export default class Negotiation extends Component {
                     </div>;
                 }
                 else {
+                    const hasChangedValues = nowOranges !== originalNowOranges ||
+                                           laterOranges !== originalLaterOranges;
                     return <div style={styles.buttons}>
-                        { this.renderAcceptButton() }
-                        { this.renderCounterButton() }
+                        { this.renderAcceptButton(!hasChangedValues) }
+                        { this.renderCounterButton(hasChangedValues) }
                         { this.renderRejectButton() }
                     </div>;
                 }
