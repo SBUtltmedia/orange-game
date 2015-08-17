@@ -23,9 +23,6 @@ export default class Lobby extends Component {
     gotoGameIfJoinedAndStarted(firebase) {
         const { isAdmin } = this.props;
         const { games } = firebase;
-
-        console.log(firebase);
-
         if (!isAdmin) {
             const joinedGameId = _.findKey(games, g => {
                 return _.contains(_.keys(g.players), authId) &&
