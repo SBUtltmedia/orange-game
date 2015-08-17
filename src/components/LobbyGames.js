@@ -72,28 +72,15 @@ export default class LobbyGames extends Component {
         isAdmin: PropTypes.bool
     };
 
-    gotoGameIfJoinedAndStarted() {
-        const { isAdmin, firebase } = this.props;
-        const { games } = firebase;
-        if (!isAdmin) {
-            const joinedGame = _.find(games, g => {
-                return _.contains(_.keys(g.players), authId);
-            });
-            if (joinedGame && joinedGame.state === STARTED) {
-                window.location.href = `/?#/game/${joinedGame.gameId}`;
-            }
-        }
-    }
-
     render() {
         const { isAdmin, firebase } = this.props;
         if (firebase) {
             const { games } = firebase;
-            const tableData = _.map(games, game => { return {
+            const tableData = _.map(games, (game, gameId) => { return {
                 Joined: _.size(game.players),
                 Players: _.map(game.players, p => p.name).join(', '),
-                Actions: game
-            }})
+                Actions: _.extend({ gameId: gameId }, game)
+            }});
             return <div styles={[styles.container]}>
                 <Griddle results={tableData}
                     columns={[ 'Joined', 'Players', 'Actions' ]}

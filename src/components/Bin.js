@@ -68,28 +68,32 @@ export default class Bin extends Component {
         const { style, name, textual, graphical, label, isOver,
                     canDrop, connectDropTarget, firebase } = this.props;
         const { gameId, authId } = model;
-        const { games } = firebase;
-        if (games) {
-            const game = games[gameId];
-            const player = game.players[authId];
-            if (player.oranges) {
-                const oranges = player.oranges[name];
-                const isActive = isOver && canDrop;
-                let backgroundColor = style.backgroundColor || styles.defaultBgColor;
-                if (isActive) {
-                    backgroundColor = dnd.isActive;
+        if (firebase) {
+            const { games } = firebase;
+            if (games) {
+                const game = games[gameId];
+                if (game) {
+                    const player = game.players[authId];
+                    if (player.oranges) {
+                        const oranges = player.oranges[name];
+                        const isActive = isOver && canDrop;
+                        let backgroundColor = style.backgroundColor || styles.defaultBgColor;
+                        if (isActive) {
+                            backgroundColor = dnd.isActive;
+                        }
+                        else if (canDrop) {
+                            backgroundColor = dnd.canDrop;
+                        }
+                        return connectDropTarget(
+                            <div style={{ ...style, backgroundColor }}>
+                                <div style={styles.inner}>
+                                    { textual ? renderTextual(oranges, name, label, isActive) : '' }
+                                    { graphical ? renderGraphical(oranges, name) : '' }
+                                </div>
+                            </div>
+                        );
+                    }    
                 }
-                else if (canDrop) {
-                    backgroundColor = dnd.canDrop;
-                }
-                return connectDropTarget(
-                    <div style={{ ...style, backgroundColor }}>
-                        <div style={styles.inner}>
-                            { textual ? renderTextual(oranges, name, label, isActive) : '' }
-                            { graphical ? renderGraphical(oranges, name) : '' }
-                        </div>
-                    </div>
-                );
             }
         }
         return <div style={{ ...style }}></div>;  // fallback

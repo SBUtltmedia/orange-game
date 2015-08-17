@@ -5,10 +5,10 @@ import { verticalCenter } from '../styles/Themes';
 import _ from 'lodash';
 import model from '../model';
 import NumberSelect from './NumberSelect';
-import { getFbRef, subscribeToFbList, updateFbObject } from '../utils';
 import { NumberPicker } from 'react-widgets';
 import { openOffer, updateOffer, rejectOffer, acceptOffer } from '../actions/MarketActions';
 import { CREATING, OPEN, ACCEPTED, REJECTED } from '../constants/NegotiationStates';
+import { connect } from 'redux/react';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
@@ -47,6 +47,9 @@ function renderButton(title, fn, cssClass) {
     </button>;
 }
 
+@connect(state => ({
+    firebase: state.firebase
+}))
 export default class Negotiation extends Component {
 
     constructor(props) {
@@ -62,27 +65,27 @@ export default class Negotiation extends Component {
 
     check(transactions) {
         const f = _.bind(transactionIsOpenAndContainsPlayer, {}, model);
-        const thisTransaction = _.find(transactions, f);
+        const transactionId = _.findKey(transactions, f);
+        const transaction = transactions[transactionId];
         this.setState({
-            modalIsOpen: !!thisTransaction
+            modalIsOpen: !!transaction
         });
-        if (thisTransaction) {
+        if (transaction) {
             this.setState({
-                thisTransaction: thisTransaction,
-                nowOranges: thisTransaction.oranges.now,
-                laterOranges: thisTransaction.oranges.later
+                thisTransaction: _.extend({id: transactionId}, transaction),
+                nowOranges: transaction.oranges.now,
+                laterOranges: transaction.oranges.later
             })
         }
     }
 
-    componentWillMount() {
-        this.firebaseRef = getFbRef(`/games/${model.gameId}/transactions`);
-        subscribeToFbList(this, this.firebaseRef, 'transactions', 'id',
-                            transactions => this.check(transactions));
-    }
-
-    componentWillUnmount() {
-        this.firebaseRef.off();
+    componentWillReceiveProps(newProps) {
+        const { firebase } = newProps;
+        const { games } = firebase;
+        if (games) {
+            const game = games[model.gameId];
+            this.check(game.transactions || {});
+        }
     }
 
     closeModal() {
