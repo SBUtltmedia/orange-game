@@ -186,6 +186,7 @@ export default class Negotiation extends Component {
 
     render() {
         const { modalIsOpen, thisTransaction, nowOranges, laterOranges } = this.state;
+        const lastToAct = thisTransaction && thisTransaction.lastToAct === model.authId;
         return <Modal className="Modal__Bootstrap modal-dialog medium"
                         isOpen={modalIsOpen} onRequestClose={() => {}}>
             <h2>Negotiate a loan</h2>
@@ -195,11 +196,11 @@ export default class Negotiation extends Component {
             <form ref="form" onSubmit={e => this.onFormSubmit(e)}>
                 <div style={styles.fl}>
                     <NumberPicker style={styles.numberPicker}
-                        value={nowOranges} min={1} max={9}
+                        value={nowOranges} min={1} max={9} disabled={lastToAct}
                         onChange={this.onNowChange.bind(this)} />
                     <div style={styles.sentenceWords}>oranges now for</div>
                     <NumberPicker style={styles.numberPicker}
-                        value={laterOranges} min={1} max={9}
+                        value={laterOranges} min={1} max={9} disabled={lastToAct}
                         onChange={this.onLaterChange.bind(this)} />
                     <div style={styles.sentenceWords}>oranges later</div>
                 </div>
