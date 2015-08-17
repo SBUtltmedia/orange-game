@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { subscribeToFbObject, getFbRef } from '../utils';
-import model from '../model';
+import { userName, authId } from '../model';
 
 const styles = {
     container: {
@@ -16,30 +15,9 @@ const styles = {
 
 export default class LobbyUserName extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            user: {
-                authId: model.authId,
-                name: null
-            }
-        }
-    }
-
-    componentWillMount() {
-        const { authId } = this.state.user;
-        this.firebaseRef = getFbRef(`/users/${authId}`);
-        subscribeToFbObject(this, this.firebaseRef, 'user');
-    }
-
-    componentWillUnmount() {
-        this.firebaseRef.off();
-    }
-
     render() {
-        const { name, authId } = this.state.user;
         return <div styles={styles.container}>
-            <div styles={styles.section}>Player name: {name}</div>
+            <div styles={styles.section}>Player name: {userName}</div>
         </div>;
     }
 }
