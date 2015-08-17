@@ -65,7 +65,7 @@ const PLAYER_COL_META = [{
 }];
 
 @connect(state => ({
-    games: state.firebase.games
+    firebase: state.firebase
 }))
 export default class LobbyGames extends Component {
     static propTypes = {
@@ -73,7 +73,8 @@ export default class LobbyGames extends Component {
     };
 
     gotoGameIfJoinedAndStarted() {
-        const { isAdmin, games } = this.props;
+        const { isAdmin, firebase } = this.props;
+        const { games } = firebase;
         if (!isAdmin) {
             const joinedGame = _.find(games, g => {
                 return _.contains(_.keys(g.players), authId);
@@ -85,21 +86,22 @@ export default class LobbyGames extends Component {
     }
 
     render() {
-        const { isAdmin, games } = this.props;
-
-        console.log(games);
-
-        const tableData = _.map(games, game => { return {
-            Joined: _.size(game.players),
-            Players: _.map(game.players, p => p.name).join(', '),
-            Actions: game
-        }})
-        return <div styles={[styles.container]}>
-            <Griddle results={tableData}
-                columns={[ 'Joined', 'Players', 'Actions' ]}
-                showPager={false} resultsPerPage={99} useFixedLayout={false}
-                tableClassName='big-griddle'
-                columnMetadata={ isAdmin ? ADMIN_COL_META : PLAYER_COL_META } />
-        </div>;
+        const { isAdmin, firebase } = this.props;
+        if (firebase) {
+            const { games } = firebase;
+            const tableData = _.map(games, game => { return {
+                Joined: _.size(game.players),
+                Players: _.map(game.players, p => p.name).join(', '),
+                Actions: game
+            }})
+            return <div styles={[styles.container]}>
+                <Griddle results={tableData}
+                    columns={[ 'Joined', 'Players', 'Actions' ]}
+                    showPager={false} resultsPerPage={99} useFixedLayout={false}
+                    tableClassName='big-griddle'
+                    columnMetadata={ isAdmin ? ADMIN_COL_META : PLAYER_COL_META } />
+            </div>;
+        }
+        return <div styles={[styles.container]}></div>;  // fallback
     }
 }
