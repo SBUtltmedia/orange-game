@@ -64,7 +64,9 @@ export default class Chat extends Component {
     scrollToBottom() {
         setTimeout(() => {
             const output = React.findDOMNode(this.refs.output);
-            output.scrollTop = 999999999;
+            if (output) {
+                output.scrollTop = 999999999;
+            }
         }, 100);
     }
 

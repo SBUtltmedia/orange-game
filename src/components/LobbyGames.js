@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import { subscribeToFbList, getFbRef } from '../utils';
 import _ from 'lodash';
 import { MAX_PLAYERS } from '../constants/Settings';
 import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
@@ -8,6 +7,7 @@ import { joinGame, leaveGame } from '../actions/LobbyActions';
 import { startGame, deleteGame } from '../actions/AdminActions';
 import { authId } from '../model';
 import Griddle from 'griddle-react';
+import { connect } from 'redux/react';
 
 const styles = {
     container: {
@@ -64,21 +64,16 @@ const PLAYER_COL_META = [{
     "customComponent": PlayerActionsComponent
 }];
 
+@connect(state => ({
+    games: state.firebase.games
+}))
 export default class LobbyGames extends Component {
     static propTypes = {
         isAdmin: PropTypes.bool
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            games: []
-        };
-    }
-
     gotoGameIfJoinedAndStarted() {
-        const { isAdmin } = this.props;
-        const { games } = this.state;
+        const { isAdmin, games } = this.props;
         if (!isAdmin) {
             const joinedGame = _.find(games, g => {
                 return _.contains(_.keys(g.players), authId);
@@ -89,20 +84,11 @@ export default class LobbyGames extends Component {
         }
     }
 
-    componentWillMount() {
-        this.firebaseRef = getFbRef('/games');
-        const callback = () => this.gotoGameIfJoinedAndStarted();
-        subscribeToFbList(this, this.firebaseRef, 'games', 'gameId', callback);
-        this.gotoGameIfJoinedAndStarted();
-    }
-
-    componentWillUnmount() {
-        this.firebaseRef.off();
-    }
-
     render() {
-        const { isAdmin } = this.props;
-        const { games } = this.state;
+        const { isAdmin, games } = this.props;
+
+        console.log(games);
+
         const tableData = _.map(games, game => { return {
             Joined: _.size(game.players),
             Players: _.map(game.players, p => p.name).join(', '),

@@ -38,14 +38,14 @@ export default class Game extends Component {
 
     componentWillMount() {
         const { params, dispatch } = this.props;
-        const fluxActions = bindActionCreators(FluxActions, dispatch);
-        fluxActions.listenToFirebase();
+        this.fluxActions = bindActionCreators(FluxActions, dispatch);
+        this.fluxActions.listenToFirebase();
         model.gameId = params.gameId;
         gameLoad(params.gameId);
     }
 
     componentWillUnmount() {
-        this.firebaseGameRef.off();
+        this.fluxActions.disconnectFromFirebase();
     }
 
     componentWillReceiveProps(newProps) {
