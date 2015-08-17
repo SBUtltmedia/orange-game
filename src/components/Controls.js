@@ -33,9 +33,6 @@ export default class Controls extends Component {
             const player = game.players[authId];
             if (player.oranges) {
                 const { oranges, day } = player;
-
-                // TODO: Player day is zero on Firebase.
-
                 return oranges.box === 0 && day < DAYS_IN_GAME;
             }
         }
