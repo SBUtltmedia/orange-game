@@ -2,7 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import { areaTheme, verticalCenter } from '../styles/Themes';
 import model from '../model';
 import { connect } from 'redux/react';
-import { getThisPlayer } from '../gameUtils';
+import { getThisPlayer, getThisPlayerDebts, getThisPlayerCredits } from '../gameUtils';
+import _ from 'lodash';
 
 const styles = {
   container: {
@@ -14,8 +15,13 @@ const styles = {
       paddingLeft: 50,
       textAlign: 'left'
   },
-  value: {
-    fontWeight: 'bold'
+  debt: {
+      color: 'red',
+      fontWeight: 'bold'
+  },
+  credit: {
+      color: 'green',
+      fontWeight: 'bold'
   }
 };
 
@@ -40,6 +46,20 @@ function formatChange(change) {
     }
 }
 
+function renderDebt(transaction) {
+    return <li>
+        {transaction.lender.name}: &nbsp;
+        <span style={styles.debt}>{transaction.oranges.later}</span>
+    </li>;
+}
+
+function renderCredit(transaction) {
+    return <li>
+        {transaction.borrower.name}: &nbsp;
+        <span style={styles.credit}>{transaction.oranges.later}</span>
+    </li>;
+}
+
 @connect(state => ({
     firebase: state.firebase
 }))
@@ -48,6 +68,8 @@ export default class Stats extends Component {
     render() {
         const { firebase } = this.props;
         const player = getThisPlayer(firebase);
+        const debts = getThisPlayerDebts(firebase);
+        const credits = getThisPlayerCredits(firebase);
         if (player) {
             const { fitness, fitnessChange, day } = player;
             var fitnessChangeColor = getFitnessChangeColor(fitnessChange);
@@ -74,10 +96,12 @@ export default class Stats extends Component {
                         </span>
                     </p>
                     <p>
-                        <span>Loans:</span>
-                        <ul>
-                            <li>John: <span style={styles.value}>3</span></li>
-                        </ul>
+                        <span>Debts:</span>
+                        <ul> { _.map(debts, d => renderDebt(d)) }</ul>
+                    </p>
+                    <p>
+                        <span>Credits:</span>
+                        <ul> { _.map(credits, c => renderCredit(c)) }</ul>
                     </p>
                 </div>
             </div>;

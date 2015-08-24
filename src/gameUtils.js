@@ -43,3 +43,23 @@ export function getPlayerTransactions(firebase, authId) {
 export function getThisPlayerTransactions(firebase) {
     return getThisPlayerTransactions(firebase, model.authId);
 }
+
+export function getPlayerDebts(firebase, authId) {
+    return _.filter(getPlayerTransactions(firebase, authId), t => {
+        return t.borrower.authId === authId;
+    });
+}
+
+export function getThisPlayerDebts(firebase) {
+    return getPlayerDebts(firebase, model.authId);
+}
+
+export function getPlayerCredits(firebase, authId) {
+    return _.filter(getPlayerTransactions(firebase, authId), t => {
+        return t.lender.authId === authId;
+    });
+}
+
+export function getThisPlayerCredits(firebase) {
+    return getPlayerCredits(firebase, model.authId);
+}
