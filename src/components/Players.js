@@ -7,6 +7,7 @@ import Griddle from 'griddle-react';
 import Negotiation from '../components/Negotiation';
 import { CREATING, OPEN, ACCEPTED, REJECTED } from '../constants/NegotiationStates';
 import { connect } from 'redux/react';
+import { getThisGame } from '../gameUtils';
 
 const styles = {
     container: {
@@ -119,64 +120,57 @@ export default class Players extends Component {
 
     calculateCredit(player) {
         const { firebase } = this.props;
-        if (firebase) {
-            const { games } = firebase;
-            if (games) {
-                const game = games[model.gameId];
-                const transactions = game.transactions || [];
-                return _.reduce(transactions, (total, t) => {
-                    if (t.state === ACCEPTED) {
-                        if (t.lender.authId === player.authId) {
-                            return total + t.oranges.later;
-                        }
-                        else if (t.borrower.authId === player.authId) {
-                            return total - t.oranges.later;
-                        }
+        const game = getThisGame(firebase);
+        if (game) {
+            const transactions = game.transactions || [];
+            return _.reduce(transactions, (total, t) => {
+                if (t.state === ACCEPTED) {
+                    if (t.lender.authId === player.authId) {
+                        return total + t.oranges.later;
                     }
-                    return total;
-                }, 0);
-            }
+                    else if (t.borrower.authId === player.authId) {
+                        return total - t.oranges.later;
+                    }
+                }
+                return total;
+            }, 0);
         }
     }
 
     render() {
         const { firebase } = this.props;
-        if (firebase) {
-            const { games } = firebase;
-            if (games) {
-                const game = games[model.gameId];
-                const players = game.players;
-                const tableData = _.map(players, player => {
-                    if (player.oranges) {
-                        return {
-                            Name: player.name,
-                            Fitness: player.fitness,
-                            Box: player.oranges.box,
-                            Basket: player.oranges.basket,
-                            Dish: player.oranges.dish,
-                            Credit: this.calculateCredit(player),
-                            Reputation: player.reputation,
-                            Loan: player,
-                            Ready: player
-                        };
-                    }
-                    else {
-                        return {
-                            Name: player.name
-                        };
-                    }
-                })
-                return <div styles={[styles.container]}>
-                    <Griddle results={tableData}
-                        columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish',
-                                    'Credit', 'Reputation', 'Loan', 'Ready' ]}
-                        showPager={false} resultsPerPage={99}
-                        useFixedLayout={false}
-                        tableClassName='little-griddle'
-                        columnMetadata={ COL_META } />
-                    <Negotiation />
-                </div>;
-            }
+        const game = getThisGame(firebase);
+        if (game) {
+            const tableData = _.map(game.players, player => {
+                if (player.oranges) {
+                    return {
+                        Name: player.name,
+                        Fitness: player.fitness,
+                        Box: player.oranges.box,
+                        Basket: player.oranges.basket,
+                        Dish: player.oranges.dish,
+                        Credit: this.calculateCredit(player),
+                        Reputation: player.reputation,
+                        Loan: player,
+                        Ready: player
+                    };
+                }
+                else {
+                    return {
+                        Name: player.name
+                    };
+                }
+            })
+            return <div styles={[styles.container]}>
+                <Griddle results={tableData}
+                    columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish',
+                                'Credit', 'Reputation', 'Loan', 'Ready' ]}
+                    showPager={false} resultsPerPage={99}
+                    useFixedLayout={false}
+                    tableClassName='little-griddle'
+                    columnMetadata={ COL_META } />
+                <Negotiation />
+            </div>;
         }
         return <div styles={[styles.container]}></div>;  // fallback
     }

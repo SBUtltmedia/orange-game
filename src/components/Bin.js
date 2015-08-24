@@ -7,6 +7,7 @@ import _ from 'lodash';
 import { dropOrange } from '../actions/GameActions';
 import model from '../model';
 import { connect } from 'redux/react';
+import { getThisPlayer } from '../gameUtils';
 
 const styles = {
   inner: {
@@ -68,33 +69,25 @@ export default class Bin extends Component {
         const { style, name, textual, graphical, label, isOver,
                     canDrop, connectDropTarget, firebase } = this.props;
         const { gameId, authId } = model;
-        if (firebase) {
-            const { games } = firebase;
-            if (games) {
-                const game = games[gameId];
-                if (game) {
-                    const player = game.players[authId];
-                    if (player.oranges) {
-                        const oranges = player.oranges[name];
-                        const isActive = isOver && canDrop;
-                        let backgroundColor = style.backgroundColor || styles.defaultBgColor;
-                        if (isActive) {
-                            backgroundColor = dnd.isActive;
-                        }
-                        else if (canDrop) {
-                            backgroundColor = dnd.canDrop;
-                        }
-                        return connectDropTarget(
-                            <div style={{ ...style, backgroundColor }}>
-                                <div style={styles.inner}>
-                                    { textual ? renderTextual(oranges, name, label, isActive) : '' }
-                                    { graphical ? renderGraphical(oranges, name) : '' }
-                                </div>
-                            </div>
-                        );
-                    }    
-                }
+        const player = getThisPlayer(firebase);
+        if (player && player.oranges) {
+            const oranges = player.oranges[name];
+            const isActive = isOver && canDrop;
+            let backgroundColor = style.backgroundColor || styles.defaultBgColor;
+            if (isActive) {
+                backgroundColor = dnd.isActive;
             }
+            else if (canDrop) {
+                backgroundColor = dnd.canDrop;
+            }
+            return connectDropTarget(
+                <div style={{ ...style, backgroundColor }}>
+                    <div style={styles.inner}>
+                        { textual ? renderTextual(oranges, name, label, isActive) : '' }
+                        { graphical ? renderGraphical(oranges, name) : '' }
+                    </div>
+                </div>
+            );
         }
         return <div style={{ ...style }}></div>;  // fallback
     }

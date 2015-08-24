@@ -5,6 +5,7 @@ import model from '../model';
 import { playerReady }from '../actions/GameActions';
 import { DAYS_IN_GAME } from '../constants/Settings';
 import { connect } from 'redux/react';
+import { getThisPlayer } from '../gameUtils';
 
 const styles = {
   container: {
@@ -25,16 +26,12 @@ const styles = {
 export default class Controls extends Component {
 
     canAdvanceDay() {
-        const { gameId, authId } = model;
+        const { authId } = model;
         const { firebase } = this.props;
-        const { games } = firebase;
-        if (games) {
-            const game = games[gameId];
-            const player = game.players[authId];
-            if (player.oranges) {
-                const { oranges, day } = player;
-                return oranges.box === 0 && day < DAYS_IN_GAME;
-            }
+        const player = getThisPlayer(firebase);
+        if (player && player.oranges) {
+            const { oranges, day } = player;
+            return oranges.box === 0 && day < DAYS_IN_GAME;
         }
         return false;
     }

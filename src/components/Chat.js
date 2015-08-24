@@ -6,6 +6,7 @@ import ChatMessage from '../components/ChatMessage';
 import _ from 'lodash';
 import model from '../model';
 import { connect } from 'redux/react';
+import { getThisGame } from '../gameUtils';
 
 const styles = {
   container: {
@@ -72,11 +73,10 @@ export default class Chat extends Component {
 
     render() {
         this.scrollToBottom();
-        const { gameId, authId } = model;
+        const { authId } = model;
         const { firebase } = this.props;
-        const { games } = firebase;
-        if (games) {
-            const game = games[gameId];
+        const game = getThisGame(firebase);
+        if (game) {
             const chat = game.chat;
             return <div style={styles.container}>
                 <div ref="output" style={styles.output}>

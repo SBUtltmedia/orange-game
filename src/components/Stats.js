@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { areaTheme, verticalCenter } from '../styles/Themes';
 import model from '../model';
 import { connect } from 'redux/react';
+import { getThisPlayer } from '../gameUtils';
 
 const styles = {
   container: {
@@ -46,44 +47,40 @@ export default class Stats extends Component {
 
     render() {
         const { firebase } = this.props;
-        if (firebase) {
-            const { games } = firebase;
-            if (games) {
-                const game = games[model.gameId];
-                const player = game.players[model.authId];
-                const { fitness, fitnessChange, day } = player;
-                var fitnessChangeColor = getFitnessChangeColor(fitnessChange);
-                return <div style={styles.container}>
-                    <br />
-                    <h4>Your stats</h4>
-                    <br /><br />
-                    <div style={styles.inner}>
-                        <p>
-                            <span>Day:</span>
-                            &nbsp;
-                            <span style={styles.value}>{day}</span>
-                        </p>
-                        <p>
-                            <span>Fitness:</span>
-                            &nbsp;
-                            <span style={styles.value}>{fitness}</span>
-                        </p>
-                        <p>
-                            <span>Change:</span>
-                            &nbsp;
-                            <span style={{...styles.value, color: fitnessChangeColor}}>
-                                            {formatChange(fitnessChange)}
-                            </span>
-                        </p>
-                        <p>
-                            <span>Loans:</span>
-                            <ul>
-                                <li>John: <span style={styles.value}>3</span></li>
-                            </ul>
-                        </p>
-                    </div>
-                </div>;
-            }
+        const player = getThisPlayer(firebase);
+        if (player) {
+            const { fitness, fitnessChange, day } = player;
+            var fitnessChangeColor = getFitnessChangeColor(fitnessChange);
+            return <div style={styles.container}>
+                <br />
+                <h4>Your stats</h4>
+                <br /><br />
+                <div style={styles.inner}>
+                    <p>
+                        <span>Day:</span>
+                        &nbsp;
+                        <span style={styles.value}>{day}</span>
+                    </p>
+                    <p>
+                        <span>Fitness:</span>
+                        &nbsp;
+                        <span style={styles.value}>{fitness}</span>
+                    </p>
+                    <p>
+                        <span>Change:</span>
+                        &nbsp;
+                        <span style={{...styles.value, color: fitnessChangeColor}}>
+                                        {formatChange(fitnessChange)}
+                        </span>
+                    </p>
+                    <p>
+                        <span>Loans:</span>
+                        <ul>
+                            <li>John: <span style={styles.value}>3</span></li>
+                        </ul>
+                    </p>
+                </div>
+            </div>;
         }
         return <div style={styles.container}></div>  // fallback
     }
