@@ -1,83 +1,8 @@
-import { MAX_ORANGES, MAX_FITNESS_BOOST, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
-import _ from 'lodash';
-
-function getRandomNumberOfOranges() {
-    return Math.floor(Math.random() * MAX_ORANGES);
-}
-
 class Model {
 
-    static playerData(player) {
-        return _.extend({ day: player.day || player.playerDay,
-                          name: player.name || player.userName },
-               _.pick(player, ['authId', 'fitness', 'fitnessChange', 'oranges' ]));
-    }
-
     constructor() {
-        this.oranges = {
-            box: getRandomNumberOfOranges(),
-            basket: 0,
-            dish: 0
-        };
-        this.gameDay = 1;
-        this.playerDay = 1;
-        this.fitness = 0 - DAILY_FITNESS_LOSS;
-        this.fitnessChange = 0 - DAILY_FITNESS_LOSS;
         this.gameId = null;
         this.authId = null;
-        this.userName = null;
-    }
-
-    getPlayerData(player) {
-        return Model.playerData(player || this);
-    }
-
-    dropOrange(source, dest) {
-        if (source !== dest) {
-            if (dest === 'dish') {
-                const fitnessBoost = MAX_FITNESS_BOOST - this.oranges.dish;
-                this.fitness += fitnessBoost;
-                this.fitnessChange += fitnessBoost;
-            }
-            else if (source === 'dish') {
-                const fitnessBoost = this.oranges.dish - MAX_FITNESS_BOOST - 1;
-                this.fitness += fitnessBoost;
-                this.fitnessChange += fitnessBoost;
-            }
-            this.oranges[source] -= 1;
-            this.oranges[dest] += 1;
-        }
-    }
-
-    newGameDay() {
-        this.gameDay += 1;
-    }
-
-    advancePlayerDay() {
-        this.playerDay += 1;
-        this.oranges.dish = 0;
-        this.oranges.box = getRandomNumberOfOranges();
-        this.fitness -= DAILY_FITNESS_LOSS;
-        this.fitnessChange = 0 - DAILY_FITNESS_LOSS;
-    }
-
-    setPlayerData(data) {
-        this.oranges = data.oranges;
-        this.playerDay = data.day;
-        this.fitness = data.fitness;
-        this.fitnessChange = data.fitnessChange;
-    }
-
-    get canAdvanceDay() {
-        return this.playerDay <= this.gameDay && this.oranges.box === 0;
-    }
-
-    get availableOranges() {
-        return this.oranges.box + this.oranges.basket;
-    }
-
-    get daysLeft() {
-        return DAYS_IN_GAME - this.gameDay;
     }
 }
 

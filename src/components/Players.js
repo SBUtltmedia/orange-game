@@ -6,7 +6,7 @@ import model from '../model';
 import Griddle from 'griddle-react';
 import Negotiation from '../components/Negotiation';
 import { connect } from 'redux/react';
-import { getThisGame, getPlayerTransactions } from '../gameUtils';
+import { getThisGame, getThisPlayer, getPlayerTransactions } from '../gameUtils';
 
 const styles = {
     container: {
@@ -35,7 +35,7 @@ class CreditComponent extends Component {
                 return 'transparent';  // if zero just show nothing
             }
         }();
-        
+
         return <div style={{color: color}}>{value}</div>;
     }
 }
@@ -65,10 +65,11 @@ function createOfferButton(player, canOffer) {
 
 class LoanComponent extends Component {
     render() {
-        const player = this.props.data;
+        const { player, firebase } = this.props.data;
         if (player && player.oranges) {
+            const me = getThisPlayer(firebase);
             const isSelf = player.authId === model.authId;
-            const canOffer = !isSelf && model.oranges.basket > 0;
+            const canOffer = !isSelf && me.oranges.basket > 0;
             const canAsk = !isSelf && player.oranges.basket > 0;
             return <div>
                 {createAskButton(player, canAsk)}
@@ -83,7 +84,7 @@ class LoanComponent extends Component {
 
 class ReadyComponent extends Component {
     render() {
-        const player = this.props.data;
+        const { player, firebase } = this.props.data;
         if (player && player.day > model.gameDay) {
             return <img style={styles.checkmark}
                     src={require("../../images/checkmark.png")} />;
@@ -148,8 +149,8 @@ export default class Players extends Component {
                         Dish: player.oranges.dish,
                         Credit: this.calculateCredit(player),
                         Reputation: player.reputation,
-                        Loan: player,
-                        Ready: player
+                        Loan: { player: player, firebase: firebase },
+                        Ready: { player: player, firebase: firebase }
                     };
                 }
                 else {

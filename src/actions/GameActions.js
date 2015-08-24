@@ -1,28 +1,32 @@
-import { getFbObject, updateFbObject, addToFbList } from '../utils';
+import { updateFbObject, addToFbList } from '../utils';
 import _ from 'lodash';
+import * as logic from '../logic';
 import model from '../model';
+import { getThisPlayer } from '../gameUtils';
 
-export function dropOrange(source, dest) {
-    model.dropOrange(source, dest);
+export function dropOrange(source, dest, appData) {
     const url = `/games/${model.gameId}/players/${model.authId}`;
-    updateFbObject(url, model.getPlayerData());
+    const playerData = getThisPlayer(appData);
+
+    console.log(playerData);
+
+    updateFbObject(url, logic.dropOrange(source, dest, playerData));
 }
 
-export function newDay() {
-    model.newGameDay();
-    updateFbObject(`/games/${model.gameId}`, { day: model.gameDay });
+export function newDay(appData) {
+    updateFbObject(`/games/${model.gameId}`, { day: logic.newGameDay(appData) });
 }
 
 export function playerReady() {
-    model.advancePlayerDay();
+    logic.advancePlayerDay();
     const url = `/games/${model.gameId}/players/${model.authId}`;
-    updateFbObject(url, model.getPlayerData());
+    updateFbObject(url, logic.getPlayerData());
     tryToAdvanceDay();
 }
 
 export function tryToAdvanceDay() {
     getFbObject(`/games/${model.gameId}/players`, players => {
-        if (_.every(players, p => p.day > model.gameDay)) {
+        if (_.every(players, p => p.day > logic.gameDay)) {
             newDay();
         }
     });
@@ -30,23 +34,8 @@ export function tryToAdvanceDay() {
 
 export function sendChat(text) {
     const msg = {
-        name: model.userName,
+        name: logic.userName,
         text: text
     };
     addToFbList(`/games/${model.gameId}/chat`, msg);
-}
-
-export function gameLoad(gameId) {
-    const url = `/games/${gameId}/players/${model.authId}`;
-    getFbObject(url, gameData => {
-        if (gameData.oranges) {
-            model.setPlayerData(gameData);
-        }
-        else {
-
-            console.log(model.getPlayerData());
-
-            updateFbObject(url, model.getPlayerData());
-        }
-    });
 }

@@ -18,7 +18,8 @@ const styles = {
 
 const binTarget = {
     drop(props, monitor) {
-        dropOrange(monitor.getItem().source, props.name);
+        const { firebase } = props;  // TODO: Firebase not in props
+        dropOrange(monitor.getItem().source, props.name, firebase);
     }
 };
 
