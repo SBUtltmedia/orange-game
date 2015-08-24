@@ -53,25 +53,38 @@ function formatChange(change) {
     }
 }
 
-function renderDebt(transaction) {
-    return <li>
-        {transaction.lender.name}: &nbsp;
-        <span style={styles.debt}>{transaction.oranges.later}</span>
-        <a onClick={() => payDebt(transaction)}>pay</a>
-    </li>;
-}
-
-function renderCredit(transaction) {
-    return <li>
-        {transaction.borrower.name}: &nbsp;
-        <span style={styles.credit}>{transaction.oranges.later}</span>
-    </li>;
-}
-
 @connect(state => ({
     firebase: state.firebase
 }))
 export default class Stats extends Component {
+
+    canPay(transaction) {
+        return true;
+    }
+
+    renderPayButton(transaction) {
+        if (this.canPay(transaction)) {
+            return <a onClick={() => payDebt(transaction)}>pay</a>;
+        }
+        else {
+            return <span></span>;
+        }
+    }
+
+    renderDebt(transaction) {
+        return <li>
+            {transaction.lender.name}: &nbsp;
+            <span style={styles.debt}>{transaction.oranges.later}</span>
+            { this.renderPayButton(transaction) }
+        </li>;
+    }
+
+    renderCredit(transaction) {
+        return <li>
+            {transaction.borrower.name}: &nbsp;
+            <span style={styles.credit}>{transaction.oranges.later}</span>
+        </li>;
+    }
 
     render() {
         const { firebase } = this.props;
@@ -103,11 +116,11 @@ export default class Stats extends Component {
                     </p>
                     <p>
                         <span>Debts:</span>
-                        <ul> { _.map(debts, d => renderDebt(d)) }</ul>
+                        <ul> { _.map(debts, d => this.renderDebt(d)) }</ul>
                     </p>
                     <p>
                         <span>Credits:</span>
-                        <ul> { _.map(credits, c => renderCredit(c)) }</ul>
+                        <ul> { _.map(credits, c => this.renderCredit(c)) }</ul>
                     </p>
                 </div>
             </div>;
