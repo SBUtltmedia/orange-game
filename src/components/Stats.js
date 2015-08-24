@@ -6,23 +6,28 @@ import { getThisPlayer, getThisPlayerDebts, getThisPlayerCredits } from '../game
 import _ from 'lodash';
 
 const styles = {
-  container: {
+    container: {
       ...areaTheme,
       backgroundColor: 'lightgreen',
       width: 250
-  },
-  inner: {
+    },
+    title: {
+      paddingTop: 16,
+      paddingBottom: 16,
+      fontWeight: 'bold'
+    },
+    inner: {
       paddingLeft: 50,
       textAlign: 'left'
-  },
-  debt: {
+    },
+    debt: {
       color: 'red',
       fontWeight: 'bold'
-  },
-  credit: {
+    },
+    credit: {
       color: 'green',
       fontWeight: 'bold'
-  }
+    }
 };
 
 function getFitnessChangeColor(change) {
@@ -74,9 +79,7 @@ export default class Stats extends Component {
             const { fitness, fitnessChange, day } = player;
             var fitnessChangeColor = getFitnessChangeColor(fitnessChange);
             return <div style={styles.container}>
-                <br />
-                <h4>Your stats</h4>
-                <br /><br />
+                <div style={styles.title}>Your stats</div>
                 <div style={styles.inner}>
                     <p>
                         <span>Day:</span>
