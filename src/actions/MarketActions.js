@@ -18,9 +18,6 @@ function createNegotation(givingPlayer, receivingPlayer) {
 }
 
 function update(transaction, nowOranges, laterOranges, extraData) {
-
-    console.log('update', transaction);
-
     const url = `/games/${model.gameId}/transactions/${transaction.id}`;
     const data = _.extend({
         oranges: {

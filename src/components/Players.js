@@ -5,6 +5,7 @@ import { openAskNegotiation, openOfferNegotiation } from '../actions/MarketActio
 import model from '../model';
 import Griddle from 'griddle-react';
 import Negotiation from '../components/Negotiation';
+import { CREATING, OPEN, ACCEPTED, REJECTED } from '../constants/NegotiationStates';
 import { connect } from 'redux/react';
 
 const styles = {
@@ -31,7 +32,7 @@ class CreditComponent extends Component {
                 return 'red';
             }
             else {
-                return 'black';
+                return 'transparent';  // if zero just show nothing
             }
         }();
         return <div style={{color: color}}>{value}</div>;
@@ -53,11 +54,11 @@ function createButton(title, onClick, show) {
     }
 }
 
-function createAskButton(canAsk) {
+function createAskButton(player, canAsk) {
     return createButton('Ask', () => openAskNegotiation(player), canAsk);
 }
 
-function createOfferButton(canOffer) {
+function createOfferButton(player, canOffer) {
     return createButton('Offer', () => openOfferNegotiation(player), canOffer);
 }
 
@@ -68,12 +69,9 @@ class LoanComponent extends Component {
             const isSelf = player.authId === model.authId;
             const canOffer = !isSelf && model.oranges.basket > 0;
             const canAsk = !isSelf && player.oranges.basket > 0;
-
-            console.log(canAsk);
-
             return <div>
-                {createAskButton(canAsk)}
-                {createOfferButton(canOffer)}
+                {createAskButton(player, canAsk)}
+                {createOfferButton(player, canOffer)}
             </div>;
         }
         else {
@@ -119,6 +117,28 @@ const COL_META = [
 }))
 export default class Players extends Component {
 
+    calculateCredit(player) {
+        const { firebase } = this.props;
+        if (firebase) {
+            const { games } = firebase;
+            if (games) {
+                const game = games[model.gameId];
+                const transactions = game.transactions || [];
+                return _.reduce(transactions, (total, t) => {
+                    if (t.state === ACCEPTED) {
+                        if (t.lender.authId === player.authId) {
+                            return total + t.oranges.later;
+                        }
+                        else if (t.borrower.authId === player.authId) {
+                            return total - t.oranges.later;
+                        }
+                    }
+                    return total;
+                }, 0);
+            }
+        }
+    }
+
     render() {
         const { firebase } = this.props;
         if (firebase) {
@@ -134,7 +154,7 @@ export default class Players extends Component {
                             Box: player.oranges.box,
                             Basket: player.oranges.basket,
                             Dish: player.oranges.dish,
-                            Credit: -5,
+                            Credit: this.calculateCredit(player),
                             Reputation: player.reputation,
                             Loan: player,
                             Ready: player
