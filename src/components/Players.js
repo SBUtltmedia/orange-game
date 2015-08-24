@@ -55,15 +55,20 @@ function createButton(title, onClick, show) {
     }
 }
 
-function createAskButton(player, canAsk) {
-    return createButton('Ask', () => openAskNegotiation(player), canAsk);
-}
-
-function createOfferButton(player, canOffer) {
-    return createButton('Offer', () => openOfferNegotiation(player), canOffer);
-}
-
 class LoanComponent extends Component {
+
+    createAskButton(player, canAsk) {
+        const { firebase } = this.props.data;
+        return createButton('Ask', () =>
+                    openAskNegotiation(player, firebase), canAsk);
+    }
+
+    createOfferButton(player, canOffer) {
+        const { firebase } = this.props.data;
+        return createButton('Offer', () =>
+                    openOfferNegotiation(player, firebase), canOffer);
+    }
+
     render() {
         const { player, firebase } = this.props.data;
         if (player && player.oranges) {
@@ -72,8 +77,8 @@ class LoanComponent extends Component {
             const canOffer = !isSelf && me.oranges.basket > 0;
             const canAsk = !isSelf && player.oranges.basket > 0;
             return <div>
-                {createAskButton(player, canAsk)}
-                {createOfferButton(player, canOffer)}
+                { this.createAskButton(player, canAsk) }
+                { this.createOfferButton(player, canOffer) }
             </div>;
         }
         else {
