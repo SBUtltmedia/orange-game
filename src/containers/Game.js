@@ -9,7 +9,7 @@ import Stats from '../components/Stats';
 import Players from '../components/Players';
 import Chat from '../components/Chat';
 import { areaTheme } from '../styles/Themes';
-import { gameLoad, newDay } from '../actions/GameActions';
+import { newDay } from '../actions/GameActions';
 import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
 import * as FluxActions from '../actions/FluxActions';
 import { bindActionCreators } from 'redux';
@@ -40,7 +40,6 @@ export default class Game extends Component {
         this.fluxActions = bindActionCreators(FluxActions, dispatch);
         this.fluxActions.listenToFirebase();
         model.gameId = params.gameId;
-        gameLoad(params.gameId);
     }
 
     componentWillUnmount() {
@@ -52,9 +51,6 @@ export default class Game extends Component {
         const { games } = firebase;
         if (games) {
             const game = games[params.gameId];
-            const player = game.players[model.authId];
-            model.gameDay = game.day;
-            model.setPlayerData(player);
             if (game.state === FINISHED) {
                 window.location.href = '/?#/gameOver/';
             }

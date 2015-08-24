@@ -6,7 +6,7 @@ import model from '../model';
 import Griddle from 'griddle-react';
 import Negotiation from '../components/Negotiation';
 import { connect } from 'redux/react';
-import { getThisGame, getPlayerTransactions } from '../gameUtils';
+import { getThisGame, getThisPlayer, getPlayerTransactions } from '../gameUtils';
 
 const styles = {
     container: {
@@ -35,7 +35,7 @@ class CreditComponent extends Component {
                 return 'transparent';  // if zero just show nothing
             }
         }();
-        
+
         return <div style={{color: color}}>{value}</div>;
     }
 }
@@ -55,42 +55,47 @@ function createButton(title, onClick, show) {
     }
 }
 
-function createAskButton(player, canAsk) {
-    return createButton('Ask', () => openAskNegotiation(player), canAsk);
-}
-
-function createOfferButton(player, canOffer) {
-    return createButton('Offer', () => openOfferNegotiation(player), canOffer);
-}
-
 class LoanComponent extends Component {
+
+    createAskButton(player, canAsk, firebase) {
+        return createButton('Ask', () =>
+                    openAskNegotiation(player, firebase), canAsk);
+    }
+
+    createOfferButton(player, canOffer, firebase) {
+        return createButton('Offer', () =>
+                    openOfferNegotiation(player, firebase), canOffer);
+    }
+
     render() {
-        const player = this.props.data;
-        if (player && player.oranges) {
-            const isSelf = player.authId === model.authId;
-            const canOffer = !isSelf && model.oranges.basket > 0;
-            const canAsk = !isSelf && player.oranges.basket > 0;
-            return <div>
-                {createAskButton(player, canAsk)}
-                {createOfferButton(player, canOffer)}
-            </div>;
+        if (this.props.data) {
+            const { player, firebase } = this.props.data;
+            if (player && player.oranges) {
+                const me = getThisPlayer(firebase);
+                const isSelf = player.authId === model.authId;
+                const canOffer = !isSelf && me.oranges.basket > 0;
+                const canAsk = !isSelf && player.oranges.basket > 0;
+                return <div>
+                    { this.createAskButton(player, canAsk, firebase) }
+                    { this.createOfferButton(player, canOffer, firebase) }
+                </div>;
+            }
         }
-        else {
-            return <div></div>;
-        }
+        return <div></div>;
     }
 }
 
 class ReadyComponent extends Component {
     render() {
-        const player = this.props.data;
-        if (player && player.day > model.gameDay) {
-            return <img style={styles.checkmark}
-                    src={require("../../images/checkmark.png")} />;
+        if (this.props.data) {
+            const { player, firebase } = this.props.data;
+            const game = getThisGame(firebase);
+            if (player && player.day > game.day) {
+                return <img style={styles.checkmark}
+                        src={require("../../images/checkmark.png")} />;
+            }
         }
-        else {
-            return <div></div>;
-        }
+        return <div></div>;
     }
 }
 
@@ -148,8 +153,8 @@ export default class Players extends Component {
                         Dish: player.oranges.dish,
                         Credit: this.calculateCredit(player),
                         Reputation: player.reputation,
-                        Loan: player,
-                        Ready: player
+                        Loan: { player: player, firebase: firebase },
+                        Ready: { player: player, firebase: firebase }
                     };
                 }
                 else {
@@ -157,7 +162,7 @@ export default class Players extends Component {
                         Name: player.name
                     };
                 }
-            })
+            });
             return <div styles={[styles.container]}>
                 <Griddle results={tableData}
                     columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish',

@@ -1,52 +1,38 @@
-import { getFbObject, updateFbObject, addToFbList } from '../utils';
+import { updateFbObject, addToFbList } from '../utils';
 import _ from 'lodash';
+import * as logic from '../logic';
 import model from '../model';
+import { getThisPlayer, getThisGame } from '../gameUtils';
 
-export function dropOrange(source, dest) {
-    model.dropOrange(source, dest);
+export function dropOrange(source, dest, appData) {
     const url = `/games/${model.gameId}/players/${model.authId}`;
-    updateFbObject(url, model.getPlayerData());
+    const playerData = getThisPlayer(appData);
+    updateFbObject(url, logic.dropOrange(source, dest, playerData));
 }
 
-export function newDay() {
-    model.newGameDay();
-    updateFbObject(`/games/${model.gameId}`, { day: model.gameDay });
+export function newDay(appData) {
+    updateFbObject(`/games/${model.gameId}`, { day: logic.newGameDay(appData) });
 }
 
-export function playerReady() {
-    model.advancePlayerDay();
+export function playerReady(appData) {
     const url = `/games/${model.gameId}/players/${model.authId}`;
-    updateFbObject(url, model.getPlayerData());
-    tryToAdvanceDay();
+    const playerData = getThisPlayer(appData);
+    updateFbObject(url, logic.advancePlayerDay(playerData));
+    tryToAdvanceDay(appData);
 }
 
-export function tryToAdvanceDay() {
-    getFbObject(`/games/${model.gameId}/players`, players => {
-        if (_.every(players, p => p.day > model.gameDay)) {
-            newDay();
-        }
-    });
+export function tryToAdvanceDay(appData) {
+    const game = getThisGame(appData);
+    if (_.every(game.players, p => p.day > game.day)) {
+        newDay();
+    }
 }
 
-export function sendChat(text) {
+export function sendChat(text, appData) {
+    const playerData = getThisPlayer(appData);
     const msg = {
-        name: model.userName,
+        name: playerData.name,
         text: text
     };
     addToFbList(`/games/${model.gameId}/chat`, msg);
-}
-
-export function gameLoad(gameId) {
-    const url = `/games/${gameId}/players/${model.authId}`;
-    getFbObject(url, gameData => {
-        if (gameData.oranges) {
-            model.setPlayerData(gameData);
-        }
-        else {
-
-            console.log(model.getPlayerData());
-
-            updateFbObject(url, model.getPlayerData());
-        }
-    });
 }

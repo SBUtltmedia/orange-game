@@ -37,9 +37,10 @@ export default class Controls extends Component {
     }
 
     render() {
+        const { firebase } = this.props;
         return <div style={styles.container}>
             <OrangeBox />
-            <button style={styles.button} onClick={playerReady}
+            <button style={styles.button} onClick={() => playerReady(firebase)}
                     disabled={!this.canAdvanceDay()}>
                 I'm done for today
             </button>

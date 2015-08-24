@@ -1,4 +1,5 @@
 import { addToFbList, updateFbObject } from '../utils';
+import { getThisPlayer } from '../gameUtils';
 import _ from 'lodash';
 import model from '../model';
 import { CREATING, OPEN, ACCEPTED, REJECTED, PAID } from '../constants/NegotiationStates';
@@ -70,10 +71,10 @@ export function acceptOffer(transaction, callback) {
     updateFbObject(url, data, () => transferOrangesForLoan(transaction));
 }
 
-export function openAskNegotiation(withPlayer) {
-    createNegotation(model.getPlayerData(withPlayer), model.getPlayerData());
+export function openAskNegotiation(withPlayer, appData) {
+    createNegotation(withPlayer, getThisPlayer(appData));
 }
 
-export function openOfferNegotiation(withPlayer) {
-    createNegotation(model.getPlayerData(), model.getPlayerData(withPlayer));
+export function openOfferNegotiation(withPlayer, appData) {
+    createNegotation(getThisPlayer(appData), withPlayer);
 }

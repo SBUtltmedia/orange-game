@@ -1,13 +1,11 @@
-import { getFbRef, getFbObject } from '../utils';
+import { getFbRef, updateFbObject } from '../utils';
 import _ from 'lodash';
 import model from '../model';
+import * as logic from '../logic';
 
-function hasAlreadyJoinedSomeGame(callback) {
-    getFbObject('/games', games => {
-        const b = _.some(games, game => {
-            return _.some(_.keys(game.players), key => key === model.authId);
-        });
-        callback(b);
+function hasAlreadyJoinedSomeGame(appData) {
+    return _.some(appData.games, game => {
+        return _.some(_.keys(game.players), key => key === model.authId);
     });
 }
 
@@ -18,23 +16,28 @@ export function checkIfNameTaken(name, callback) {
 }
 
 export function setName(authId, name) {
-    const ref = getFbRef(`/users/${authId}`);
-    const user = { name: name };
-    ref.update(user);
-    model.userName = name;
+    updateFbObject(`/users/${authId}`, { name: name });
 }
 
-export function joinGame(gameId) {
-    if (hasAlreadyJoinedSomeGame(yes => {
-        if (yes) {
-            alert("You're already in a game.");
-        }
-        else {
-            const ref = getFbRef(`/games/${gameId}/players/${model.authId}`);
-            const player = { name: model.userName };
-            ref.update(player);
-        }
-    }));
+export function joinGame(gameId, appData) {
+    if (hasAlreadyJoinedSomeGame(appData)) {
+        alert("You're already in a game.");
+    }
+    else {
+        const ref = getFbRef(`/games/${gameId}/players/${model.authId}`);
+        const player = {
+            name: model.userName,
+            oranges: {
+                box: logic.getRandomNumberOfOranges(),
+                basket: 0,
+                dish: 0
+            },
+            fitness: 0,
+            fitnessChange: 0,
+            day: 1
+        };
+        ref.update(player);
+    }
 }
 
 export function leaveGame(gameId) {

@@ -33,8 +33,8 @@ gulp.task('clean', function() {
     return gulp.src([paths.build_path], { read: false }).pipe(clean());
 });
 
-gulp.task('watch', ['default'], function () {
-    gulp.watch([paths.tests], ['tests:babel']);
+gulp.task('watch', function () {
+    gulp.watch([paths.scripts, paths.tests], ['tests']);
 });
 
 gulp.task('tests', ['tests:babel'], function() {
@@ -42,5 +42,3 @@ gulp.task('tests', ['tests:babel'], function() {
             // gulp-mocha needs filepaths so you can't have any plugins before it
             .pipe(mocha({reporter: 'nyan'}));
 });
-
-gulp.task('heroku:dev', ['default']);

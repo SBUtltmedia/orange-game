@@ -2,35 +2,36 @@ import model from './model';
 import _ from 'lodash';
 import { ACCEPTED } from './constants/NegotiationStates';
 
-export function getGame(firebase, id) {
-    if (firebase) {
-        const { games } = firebase;
+export function getGame(appData, id) {
+    if (appData) {
+        const { games } = appData;
         if (games) {
             return games[id];
         }
     }
 }
 
-export function getThisGame(firebase) {
-    return getGame(firebase, model.gameId);
+export function getThisGame(appData) {
+    return getGame(appData, model.gameId);
 }
 
-export function getPlayer(firebase, gameId, authId) {
-    const game = getGame(firebase, gameId);
+export function getPlayer(appData, gameId, authId) {
+    const game = getGame(appData, gameId);
     if (game) {
         return game.players[authId];
     }
 }
 
-export function getThisPlayer(firebase) {
-    const game = getThisGame(firebase);
+export function getThisPlayer(appData) {
+    const game = getThisGame(appData);
     if (game) {
-        return game.players[model.authId];
+        const player = game.players[model.authId];
+        return _.extend({ authId: _.findKey(game.players, player) }, player);
     }
 }
 
-export function getPlayerTransactions(firebase, authId) {
-    const game = getThisGame(firebase);
+export function getPlayerTransactions(appData, authId) {
+    const game = getThisGame(appData);
     if (game) {
         const transactions = _.filter(game.transactions, t => {
             return t.state === ACCEPTED &&
@@ -43,26 +44,26 @@ export function getPlayerTransactions(firebase, authId) {
     return [];
 }
 
-export function getThisPlayerTransactions(firebase) {
-    return getThisPlayerTransactions(firebase, model.authId);
+export function getThisPlayerTransactions(appData) {
+    return getThisPlayerTransactions(appData, model.authId);
 }
 
-export function getPlayerDebts(firebase, authId) {
-    return _.filter(getPlayerTransactions(firebase, authId), t => {
+export function getPlayerDebts(appData, authId) {
+    return _.filter(getPlayerTransactions(appData, authId), t => {
         return t.borrower.authId === authId;
     });
 }
 
-export function getThisPlayerDebts(firebase) {
-    return getPlayerDebts(firebase, model.authId);
+export function getThisPlayerDebts(appData) {
+    return getPlayerDebts(appData, model.authId);
 }
 
-export function getPlayerCredits(firebase, authId) {
-    return _.filter(getPlayerTransactions(firebase, authId), t => {
+export function getPlayerCredits(appData, authId) {
+    return _.filter(getPlayerTransactions(appData, authId), t => {
         return t.lender.authId === authId;
     });
 }
 
-export function getThisPlayerCredits(firebase) {
-    return getPlayerCredits(firebase, model.authId);
+export function getThisPlayerCredits(appData) {
+    return getPlayerCredits(appData, model.authId);
 }

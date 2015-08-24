@@ -22,7 +22,7 @@ function renderAction(text, f) {
 
 class AdminActionsComponent extends Component {
     render() {
-        const game = this.props.data;
+        const { game } = this.props.data;
         if (game.state === STARTED) {
             return <div>
                 { renderAction('End game', () => console.log('Not implemented')) },&nbsp;
@@ -41,13 +41,13 @@ class AdminActionsComponent extends Component {
 
 class PlayerActionsComponent extends Component {
     render() {
-        const game = this.props.data;
+        const { game, firebase } = this.props.data;
         if (game.state === STARTED) {
             return <div></div>;
         }
         else {
             return <div>
-                { renderAction('Join game', () => joinGame(game.gameId)) },&nbsp;
+                { renderAction('Join game', () => joinGame(game.gameId, firebase)) },&nbsp;
                 { renderAction('Leave game', () => leaveGame(game.gameId)) }
             </div>;
         }
@@ -79,7 +79,10 @@ export default class LobbyGames extends Component {
             const tableData = _.map(games, (game, gameId) => { return {
                 Joined: _.size(game.players),
                 Players: _.map(game.players, p => p.name).join(', '),
-                Actions: _.extend({ gameId: gameId }, game)
+                Actions: {
+                    game: _.extend({ gameId: gameId }, game),
+                    firebase: firebase
+                }
             }});
             return <div styles={[styles.container]}>
                 <Griddle results={tableData}
