@@ -59,7 +59,9 @@ function formatChange(change) {
 export default class Stats extends Component {
 
     canPay(transaction) {
-        return true;
+        const { firebase } = this.props;
+        const player = getThisPlayer(firebase);
+        return player.oranges.basket >= transaction.oranges.later;
     }
 
     renderPayButton(transaction) {
