@@ -8,7 +8,6 @@ function createNegotation(givingPlayer, receivingPlayer) {
         lender: givingPlayer,
         borrower: receivingPlayer,
         state: CREATING,
-        lastToAct: model.authId,
         createdBy: model.authId,
         oranges: {
             now: 1,
