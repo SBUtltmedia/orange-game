@@ -1,4 +1,6 @@
 import model from './model';
+import _ from 'lodash';
+import { ACCEPTED } from './constants/NegotiationStates';
 
 export function getGame(firebase, id) {
     if (firebase) {
@@ -25,4 +27,19 @@ export function getThisPlayer(firebase) {
     if (game) {
         return game.players[model.authId];
     }
+}
+
+export function getPlayerTransactions(firebase, authId) {
+    const game = getThisGame(firebase);
+    if (game) {
+        return _.filter(game.transactions, t => {
+            return t.state === ACCEPTED &&
+                (t.lender.authId === authId || t.borrower.authId === authId);
+        });
+    }
+    return [];
+}
+
+export function getThisPlayerTransactions(firebase) {
+    return getThisPlayerTransactions(firebase, model.authId);
 }

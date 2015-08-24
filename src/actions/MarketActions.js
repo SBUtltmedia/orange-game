@@ -1,7 +1,7 @@
 import { addToFbList, updateFbObject } from '../utils';
 import _ from 'lodash';
 import model from '../model';
-import { CREATING, OPEN, ACCEPTED, REJECTED } from '../constants/NegotiationStates';
+import { CREATING, OPEN, ACCEPTED, REJECTED, PAID } from '../constants/NegotiationStates';
 
 function createNegotation(givingPlayer, receivingPlayer) {
     const transaction = {

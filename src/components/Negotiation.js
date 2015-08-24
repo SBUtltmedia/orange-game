@@ -6,7 +6,7 @@ import _ from 'lodash';
 import model from '../model';
 import { NumberPicker } from 'react-widgets';
 import { openOffer, updateOffer, rejectOffer, acceptOffer } from '../actions/MarketActions';
-import { CREATING, OPEN, ACCEPTED, REJECTED } from '../constants/NegotiationStates';
+import { CREATING, OPEN, ACCEPTED, REJECTED, PAID } from '../constants/NegotiationStates';
 import { connect } from 'redux/react';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);

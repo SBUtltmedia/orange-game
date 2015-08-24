@@ -5,9 +5,8 @@ import { openAskNegotiation, openOfferNegotiation } from '../actions/MarketActio
 import model from '../model';
 import Griddle from 'griddle-react';
 import Negotiation from '../components/Negotiation';
-import { CREATING, OPEN, ACCEPTED, REJECTED } from '../constants/NegotiationStates';
 import { connect } from 'redux/react';
-import { getThisGame } from '../gameUtils';
+import { getThisGame, getPlayerTransactions } from '../gameUtils';
 
 const styles = {
     container: {
@@ -36,6 +35,7 @@ class CreditComponent extends Component {
                 return 'transparent';  // if zero just show nothing
             }
         }();
+        
         return <div style={{color: color}}>{value}</div>;
     }
 }
@@ -122,17 +122,14 @@ export default class Players extends Component {
         const { firebase } = this.props;
         const game = getThisGame(firebase);
         if (game) {
-            const transactions = game.transactions || [];
+            const transactions = getPlayerTransactions(firebase, player.authId);
             return _.reduce(transactions, (total, t) => {
-                if (t.state === ACCEPTED) {
-                    if (t.lender.authId === player.authId) {
-                        return total + t.oranges.later;
-                    }
-                    else if (t.borrower.authId === player.authId) {
-                        return total - t.oranges.later;
-                    }
+                if (t.lender.authId === player.authId) {
+                    return total + t.oranges.later;
                 }
-                return total;
+                else if (t.borrower.authId === player.authId) {
+                    return total - t.oranges.later;
+                }
             }, 0);
         }
     }
