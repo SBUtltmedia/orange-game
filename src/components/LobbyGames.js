@@ -17,7 +17,7 @@ const styles = {
 };
 
 function renderAction(text, f) {
-    return <a style={styles.link} onClick={f}>{text}</a>;
+    return <a onClick={f}>{text}</a>;
 }
 
 class AdminActionsComponent extends Component {

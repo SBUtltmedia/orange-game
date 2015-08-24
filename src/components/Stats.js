@@ -4,6 +4,7 @@ import model from '../model';
 import { connect } from 'redux/react';
 import { getThisPlayer, getThisPlayerDebts, getThisPlayerCredits } from '../gameUtils';
 import _ from 'lodash';
+import { payDebt } from '../actions/MarketActions';
 
 const styles = {
     container: {
@@ -22,7 +23,8 @@ const styles = {
     },
     debt: {
       color: 'red',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      marginRight: 8
     },
     credit: {
       color: 'green',
@@ -55,6 +57,7 @@ function renderDebt(transaction) {
     return <li>
         {transaction.lender.name}: &nbsp;
         <span style={styles.debt}>{transaction.oranges.later}</span>
+        <a onClick={() => payDebt(transaction)}>pay</a>
     </li>;
 }
 

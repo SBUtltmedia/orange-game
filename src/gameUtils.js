@@ -32,9 +32,12 @@ export function getThisPlayer(firebase) {
 export function getPlayerTransactions(firebase, authId) {
     const game = getThisGame(firebase);
     if (game) {
-        return _.filter(game.transactions, t => {
+        const transactions = _.filter(game.transactions, t => {
             return t.state === ACCEPTED &&
                 (t.lender.authId === authId || t.borrower.authId === authId);
+        });
+        return _.map(transactions, t => {
+            return _.extend({ id: _.findKey(game.transactions, t) }, t);
         });
     }
     return [];
