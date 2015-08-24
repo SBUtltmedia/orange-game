@@ -24,7 +24,17 @@ export function joinGame(gameId, appData) {
     }
     else {
         const ref = getFbRef(`/games/${gameId}/players/${model.authId}`);
-        const player = { name: model.userName };
+        const player = {
+            name: model.userName,
+            oranges: {
+                box: 0,
+                basket: 0,
+                dish: 0
+            },
+            fitness: 0,
+            fitnessChange: 0,
+            day: 1
+        };
         ref.update(player);
     }
 }

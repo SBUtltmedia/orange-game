@@ -2,14 +2,11 @@ import { updateFbObject, addToFbList } from '../utils';
 import _ from 'lodash';
 import * as logic from '../logic';
 import model from '../model';
-import { getThisPlayer } from '../gameUtils';
+import { getThisPlayer, getThisGame } from '../gameUtils';
 
 export function dropOrange(source, dest, appData) {
     const url = `/games/${model.gameId}/players/${model.authId}`;
     const playerData = getThisPlayer(appData);
-
-    console.log(playerData);
-
     updateFbObject(url, logic.dropOrange(source, dest, playerData));
 }
 
@@ -17,19 +14,18 @@ export function newDay(appData) {
     updateFbObject(`/games/${model.gameId}`, { day: logic.newGameDay(appData) });
 }
 
-export function playerReady() {
-    logic.advancePlayerDay();
+export function playerReady(appData) {
     const url = `/games/${model.gameId}/players/${model.authId}`;
-    updateFbObject(url, logic.getPlayerData());
-    tryToAdvanceDay();
+    const playerData = getThisPlayer(appData);
+    updateFbObject(url, logic.advancePlayerDay(playerData));
+    tryToAdvanceDay(appData);
 }
 
-export function tryToAdvanceDay() {
-    getFbObject(`/games/${model.gameId}/players`, players => {
-        if (_.every(players, p => p.day > logic.gameDay)) {
-            newDay();
-        }
-    });
+export function tryToAdvanceDay(appData) {
+    const game = getThisGame(appData);
+    if (_.every(game.players, p => p.day > game.day)) {
+        newDay();
+    }
 }
 
 export function sendChat(text) {

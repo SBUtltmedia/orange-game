@@ -68,34 +68,34 @@ class LoanComponent extends Component {
     }
 
     render() {
-        const { player, firebase } = this.props.data;
-        if (player && player.oranges) {
-            const me = getThisPlayer(firebase);
-            const isSelf = player.authId === model.authId;
-            const canOffer = !isSelf && me.oranges.basket > 0;
-            const canAsk = !isSelf && player.oranges.basket > 0;
-            return <div>
-                { this.createAskButton(player, canAsk, firebase) }
-                { this.createOfferButton(player, canOffer, firebase) }
-            </div>;
+        if (this.props.data) {
+            const { player, firebase } = this.props.data;
+            if (player && player.oranges) {
+                const me = getThisPlayer(firebase);
+                const isSelf = player.authId === model.authId;
+                const canOffer = !isSelf && me.oranges.basket > 0;
+                const canAsk = !isSelf && player.oranges.basket > 0;
+                return <div>
+                    { this.createAskButton(player, canAsk, firebase) }
+                    { this.createOfferButton(player, canOffer, firebase) }
+                </div>;
+            }
         }
-        else {
-            return <div></div>;
-        }
+        return <div></div>;
     }
 }
 
 class ReadyComponent extends Component {
     render() {
-        const { player, firebase } = this.props.data;
-        const game = getThisGame(firebase);
-        if (player && player.day > game.day) {
-            return <img style={styles.checkmark}
-                    src={require("../../images/checkmark.png")} />;
+        if (this.props.data) {
+            const { player, firebase } = this.props.data;
+            const game = getThisGame(firebase);
+            if (player && player.day > game.day) {
+                return <img style={styles.checkmark}
+                        src={require("../../images/checkmark.png")} />;
+            }
         }
-        else {
-            return <div></div>;
-        }
+        return <div></div>;
     }
 }
 
@@ -162,7 +162,10 @@ export default class Players extends Component {
                         Name: player.name
                     };
                 }
-            })
+            });
+
+            console.log(tableData);
+
             return <div styles={[styles.container]}>
                 <Griddle results={tableData}
                     columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish',

@@ -32,16 +32,17 @@ export function dropOrange(source, dest, env) {
 }
 
 export function newGameDay(env) {
-    env.gameDay += 1;
+    env.day += 1;
     return env;
 }
 
 export function advancePlayerDay(env) {
-    env.playerDay += 1;
+    env.day += 1;
     env.oranges.dish = 0;
     env.oranges.box = getRandomNumberOfOranges();
     env.fitness -= DAILY_FITNESS_LOSS;
     env.fitnessChange = 0 - DAILY_FITNESS_LOSS;
+    return env;
 }
 
 export function canAdvanceDay(env) {
