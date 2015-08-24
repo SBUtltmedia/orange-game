@@ -44,13 +44,36 @@ class ReputationComponent extends Component {
     }
 }
 
+function createButton(title, onClick, show) {
+    if (show) {
+        return <button onClick={onClick}>{title}</button>;
+    }
+    else {
+        return <div></div>;
+    }
+}
+
+function createAskButton(canAsk) {
+    return createButton('Ask', () => openAskNegotiation(player), canAsk);
+}
+
+function createOfferButton(canOffer) {
+    return createButton('Offer', () => openOfferNegotiation(player), canOffer);
+}
+
 class LoanComponent extends Component {
     render() {
         const player = this.props.data;
-        if (player && player.authId !== model.authId && player.oranges) {
+        if (player && player.oranges) {
+            const isSelf = player.authId === model.authId;
+            const canOffer = !isSelf && model.oranges.basket > 0;
+            const canAsk = !isSelf && player.oranges.basket > 0;
+
+            console.log(canAsk);
+
             return <div>
-                <button onClick={() => openAskNegotiation(player)}>Ask</button>
-                <button onClick={() => openOfferNegotiation(player)}>Offer</button>
+                {createAskButton(canAsk)}
+                {createOfferButton(canOffer)}
             </div>;
         }
         else {
