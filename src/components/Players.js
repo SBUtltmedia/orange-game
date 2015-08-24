@@ -57,14 +57,12 @@ function createButton(title, onClick, show) {
 
 class LoanComponent extends Component {
 
-    createAskButton(player, canAsk) {
-        const { firebase } = this.props.data;
+    createAskButton(player, canAsk, firebase) {
         return createButton('Ask', () =>
                     openAskNegotiation(player, firebase), canAsk);
     }
 
-    createOfferButton(player, canOffer) {
-        const { firebase } = this.props.data;
+    createOfferButton(player, canOffer, firebase) {
         return createButton('Offer', () =>
                     openOfferNegotiation(player, firebase), canOffer);
     }
@@ -77,8 +75,8 @@ class LoanComponent extends Component {
             const canOffer = !isSelf && me.oranges.basket > 0;
             const canAsk = !isSelf && player.oranges.basket > 0;
             return <div>
-                { this.createAskButton(player, canAsk) }
-                { this.createOfferButton(player, canOffer) }
+                { this.createAskButton(player, canAsk, firebase) }
+                { this.createOfferButton(player, canOffer, firebase) }
             </div>;
         }
         else {
@@ -90,7 +88,8 @@ class LoanComponent extends Component {
 class ReadyComponent extends Component {
     render() {
         const { player, firebase } = this.props.data;
-        if (player && player.day > model.gameDay) {
+        const game = getThisGame(firebase);
+        if (player && player.day > game.day) {
             return <img style={styles.checkmark}
                     src={require("../../images/checkmark.png")} />;
         }
