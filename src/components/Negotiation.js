@@ -4,7 +4,6 @@ import { APP_ROOT_ELEMENT } from '../constants/Settings';
 import { verticalCenter } from '../styles/Themes';
 import _ from 'lodash';
 import model from '../model';
-import NumberSelect from './NumberSelect';
 import { NumberPicker } from 'react-widgets';
 import { openOffer, updateOffer, rejectOffer, acceptOffer } from '../actions/MarketActions';
 import { CREATING, OPEN, ACCEPTED, REJECTED } from '../constants/NegotiationStates';
