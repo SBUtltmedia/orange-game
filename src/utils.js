@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import Firebase from 'firebase';
 import { FIREBASE_APP_URL } from './constants/Settings';
 
