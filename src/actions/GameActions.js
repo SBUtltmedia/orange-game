@@ -28,9 +28,10 @@ export function tryToAdvanceDay(appData) {
     }
 }
 
-export function sendChat(text) {
+export function sendChat(text, appData) {
+    const playerData = getThisPlayer(appData);
     const msg = {
-        name: logic.userName,
+        name: playerData.name,
         text: text
     };
     addToFbList(`/games/${model.gameId}/chat`, msg);

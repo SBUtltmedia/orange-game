@@ -46,10 +46,11 @@ const OFFER_PRESET_TEXT = 'I have oranges to borrow.';
 export default class Chat extends Component {
 
     onFormSubmit(event) {
+        const { firebase } = this.props;
         const textBox = React.findDOMNode(this.refs.textBox);
         const text = trimString(textBox.value);
         if (text !== '') {
-            sendChat(text);
+            sendChat(text, firebase);
             textBox.value = '';
         }
         event.preventDefault();
