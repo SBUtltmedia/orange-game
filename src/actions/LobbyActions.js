@@ -27,7 +27,7 @@ export function joinGame(gameId, appData) {
         const player = {
             name: model.userName,
             oranges: {
-                box: 0,
+                box: logic.getRandomNumberOfOranges(),
                 basket: 0,
                 dish: 0
             },

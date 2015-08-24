@@ -25,7 +25,8 @@ export function getPlayer(appData, gameId, authId) {
 export function getThisPlayer(appData) {
     const game = getThisGame(appData);
     if (game) {
-        return game.players[model.authId];
+        const player = game.players[model.authId];
+        return _.extend({ authId: _.findKey(game.players, player) }, player);
     }
 }
 

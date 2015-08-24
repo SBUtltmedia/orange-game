@@ -163,9 +163,6 @@ export default class Players extends Component {
                     };
                 }
             });
-
-            console.log(tableData);
-
             return <div styles={[styles.container]}>
                 <Griddle results={tableData}
                     columns={[ 'Name', 'Fitness', 'Box', 'Basket', 'Dish',

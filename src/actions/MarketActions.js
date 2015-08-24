@@ -21,9 +21,6 @@ function createNegotation(givingPlayer, receivingPlayer) {
             later: 1
         }
     };
-
-    console.log('transa', transaction);
-
     addToFbList(`/games/${model.gameId}/transactions`, transaction);
 }
 

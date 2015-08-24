@@ -1,7 +1,7 @@
 import { MAX_ORANGES, MAX_FITNESS_BOOST, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
 import _ from 'lodash';
 
-function getRandomNumberOfOranges() {
+export function getRandomNumberOfOranges() {
     return Math.floor(Math.random() * MAX_ORANGES);
 }
 
