@@ -1,6 +1,7 @@
 import { getFbRef, updateFbObject } from '../utils';
 import _ from 'lodash';
 import model from '../model';
+import * as logic from '../logic';
 
 function hasAlreadyJoinedSomeGame(appData) {
     return _.some(appData.games, game => {
