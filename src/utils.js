@@ -6,12 +6,6 @@ export function trimString(s) {  // Strip whitespace
       return (s || '').replace(/^\s+|\s+$/g, '');
 }
 
-function setComponentState(component, stateKey, value) {
-    const data = {};
-    data[stateKey] = value;
-    component.setState(data);
-}
-
 export function getFbObject(path, callback=() => {}) {
     getFbRef(path).once('value', snapshot => callback(snapshot.val()));
 }
