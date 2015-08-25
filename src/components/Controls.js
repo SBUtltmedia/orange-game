@@ -1,11 +1,11 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
 import OrangeBox from './OrangeBox';
-import model from '../model';
+import * as logic from '../logic';
 import { playerReady }from '../actions/GameActions';
 import { DAYS_IN_GAME } from '../constants/Settings';
 import { connect } from 'redux/react';
-import { getThisPlayer } from '../gameUtils';
+import { getThisPlayer, getThisGame } from '../gameUtils';
 
 const styles = {
   container: {
@@ -25,25 +25,22 @@ const styles = {
 }))
 export default class Controls extends Component {
 
-    canAdvanceDay() {
-        const { authId } = model;
-        const { firebase } = this.props;
-        const player = getThisPlayer(firebase);
-        if (player && player.oranges) {
-            const { oranges, day } = player;
-            return oranges.box === 0 && day < DAYS_IN_GAME;
-        }
-        return false;
-    }
-
     render() {
         const { firebase } = this.props;
-        return <div style={styles.container}>
-            <OrangeBox />
-            <button style={styles.button} onClick={() => playerReady(firebase)}
-                    disabled={!this.canAdvanceDay()}>
-                I'm done for today
-            </button>
-        </div>;
+        const player = getThisPlayer(firebase);
+        const game = getThisGame(firebase);
+
+        if (player && game) {
+            return <div style={styles.container}>
+                <OrangeBox />
+                <button style={styles.button} onClick={() => playerReady(firebase)}
+                        disabled={!logic.canAdvanceDay(player, game)}>
+                    I am done for today
+                </button>
+            </div>;
+        }
+        else {
+            return <div style={styles.container}></div>;
+        }
     }
 }

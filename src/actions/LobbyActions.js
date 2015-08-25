@@ -1,4 +1,5 @@
 import { getFbRef, updateFbObject } from '../utils';
+import { getThisPlayer } from '../gameUtils';
 import _ from 'lodash';
 import model from '../model';
 import * as logic from '../logic';
@@ -25,18 +26,8 @@ export function joinGame(gameId, appData) {
     }
     else {
         const ref = getFbRef(`/games/${gameId}/players/${model.authId}`);
-        const player = {
-            name: model.userName,
-            oranges: {
-                box: logic.getRandomNumberOfOranges(),
-                basket: 0,
-                dish: 0
-            },
-            fitness: 0,
-            fitnessChange: 0,
-            day: 1
-        };
-        ref.update(player);
+        const player = getThisPlayer(appData);
+        ref.update(logic.getInitialState(player));
     }
 }
 

@@ -14,10 +14,19 @@ export function newDay(appData) {
     updateFbObject(`/games/${model.gameId}`, { day: logic.newGameDay(appData) });
 }
 
+export function dealNewDay(appData) {
+
+    console.log("DEAL");
+
+    const url = `/games/${model.gameId}/players/${model.authId}`;
+    const playerData = getThisPlayer(appData);
+    updateFbObject(url, logic.dealNewDay(playerData));
+}
+
 export function playerReady(appData) {
     const url = `/games/${model.gameId}/players/${model.authId}`;
     const playerData = getThisPlayer(appData);
-    updateFbObject(url, logic.advancePlayerDay(playerData));
+    updateFbObject(url, logic.newPlayerDay(playerData));
     tryToAdvanceDay(appData);
 }
 
