@@ -31,7 +31,9 @@ export function getThisPlayer(appData) {
 }
 
 export function getUser(appData, authId) {
-    return appData.users[authId];
+    if (appData.users) {
+        return appData.users[authId];
+    }
 }
 
 export function getThisUser(appData) {

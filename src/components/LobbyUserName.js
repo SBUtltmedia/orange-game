@@ -21,10 +21,10 @@ export default class LobbyUserName extends Component {
 
     render() {
         const { firebase } = this.props;
-        const player = getThisUser(firebase);
-        if (player) {
+        const user = getThisUser(firebase);
+        if (user) {
             return <div styles={styles.container}>
-                <div styles={styles.section}>Player name: {player.name}</div>
+                <div styles={styles.section}>Player name: {user.name}</div>
             </div>;
         }
         else {
