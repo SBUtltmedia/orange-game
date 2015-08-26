@@ -10,7 +10,7 @@ export function dropOrange(source, dest, appData) {
     updateFbObject(url, logic.dropOrange(source, dest, playerData));
 }
 
-export function newDay(appData) {
+export function newGameDay(appData) {
     updateFbObject(`/games/${model.gameId}`, { day: logic.newGameDay(appData) });
 }
 
@@ -23,14 +23,18 @@ export function dealNewDay(appData) {
 export function playerReady(appData) {
     const url = `/games/${model.gameId}/players/${model.authId}`;
     const playerData = getThisPlayer(appData);
-    updateFbObject(url, logic.newPlayerDay(playerData));
-    tryToAdvanceDay(appData);
+    updateFbObject(url, logic.newPlayerDay(playerData), () => {
+        tryToAdvanceDay(appData);
+    });
 }
 
 export function tryToAdvanceDay(appData) {
     const game = getThisGame(appData);
+
+    console.log(game);  // player.day hasn't been updated in appData
+
     if (_.every(game.players, p => p.day > game.day)) {
-        newDay();
+        newGameDay();
     }
 }
 
