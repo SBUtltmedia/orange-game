@@ -21,13 +21,7 @@ export default class LobbyUserName extends Component {
 
     render() {
         const { firebase } = this.props;
-
-        console.log(firebase);
-
         const player = getThisUser(firebase);
-
-        console.log(player);
-
         if (player) {
             return <div styles={styles.container}>
                 <div styles={styles.section}>Player name: {player.name}</div>
