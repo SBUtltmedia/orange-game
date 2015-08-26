@@ -9,11 +9,12 @@ import Stats from '../components/Stats';
 import Players from '../components/Players';
 import Chat from '../components/Chat';
 import { areaTheme } from '../styles/Themes';
-import { newDay } from '../actions/GameActions';
+import { dealNewDay } from '../actions/GameActions';
 import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
 import * as FluxActions from '../actions/FluxActions';
 import { bindActionCreators } from 'redux';
 import model from '../model';
+import { getFbRef } from '../utils';
 import _ from 'lodash';
 import { connect } from 'redux/react';
 
@@ -40,10 +41,13 @@ export default class Game extends Component {
         this.fluxActions = bindActionCreators(FluxActions, dispatch);
         this.fluxActions.listenToFirebase();
         model.gameId = params.gameId;
+        this.firebaseRef = getFbRef(`/games/${model.gameId}/day}`);
+        this.firebaseRef.on('child_changed', snapshot => dealNewDay(snapshot.val()));
     }
 
     componentWillUnmount() {
         this.fluxActions.disconnectFromFirebase();
+        this.firebaseRef.off();
     }
 
     componentWillReceiveProps(newProps) {

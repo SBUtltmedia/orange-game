@@ -5,13 +5,19 @@ export function getRandomNumberOfOranges() {
     return Math.floor(Math.random() * MAX_ORANGES);
 }
 
-/*
-static playerData(player) {
-    return _.extend({ day: player.day || player.playerDay,
-                      name: player.name || player.userName },
-           _.pick(player, ['authId', 'fitness', 'fitnessChange', 'oranges' ]));
+export function getInitialState(user) {
+    return {
+        name: user.name,
+        oranges: {
+            box: getRandomNumberOfOranges(),
+            basket: 0,
+            dish: 0
+        },
+        fitness: 0 - DAILY_FITNESS_LOSS,
+        fitnessChange: 0 - DAILY_FITNESS_LOSS,
+        day: 1
+    };
 }
-*/
 
 export function dropOrange(source, dest, env) {
     if (source !== dest) {
@@ -36,8 +42,12 @@ export function newGameDay(env) {
     return env;
 }
 
-export function advancePlayerDay(env) {
+export function newPlayerDay(env) {
     env.day += 1;
+    return env;
+}
+
+export function dealNewDay(env) {
     env.oranges.dish = 0;
     env.oranges.box = getRandomNumberOfOranges();
     env.fitness -= DAILY_FITNESS_LOSS;
@@ -45,8 +55,8 @@ export function advancePlayerDay(env) {
     return env;
 }
 
-export function canAdvanceDay(env) {
-    return env.playerDay <= env.gameDay && env.oranges.box === 0;
+export function canAdvanceDay(player, game) {
+    return player.day <= game.day && player.oranges.box === 0;
 }
 
 export function getAvailableOranges(env) {

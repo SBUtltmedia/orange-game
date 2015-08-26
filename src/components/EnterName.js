@@ -5,6 +5,7 @@ import { APP_ROOT_ELEMENT } from '../constants/Settings';
 import { authId } from '../model';
 import { trimString } from '../utils';
 import StyleSheet from'react-style';
+import { connect } from 'redux/react';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
@@ -18,6 +19,9 @@ const styles = StyleSheet.create({
     }
 });
 
+@connect(state => ({
+    firebase: state.firebase
+}))
 export default class EnterName extends Component {
     static propTypes = {
         open: PropTypes.bool.isRequired
@@ -32,20 +36,19 @@ export default class EnterName extends Component {
     }
 
     onSubmit(event) {
+        const { firebase } = this.props;
         const name = trimString(React.findDOMNode(this.refs.textBox).value);
         if (name === '') {
             this.setState({ error: 'Name cannot be blank' });
         }
         else {
-            checkIfNameTaken(name, taken => {
-                if (taken) {
-                    this.setState({ error: 'Name is already taken' });
-                }
-                else {
-                    setName(authId, name);
-                    this.closeModal();
-                }
-            });
+            if (checkIfNameTaken(name, firebase)) {
+                this.setState({ error: 'Name is already taken' });
+            }
+            else {
+                setName(authId, name);
+                this.closeModal();
+            }
         }
         event.preventDefault();
     }

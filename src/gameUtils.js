@@ -30,6 +30,16 @@ export function getThisPlayer(appData) {
     }
 }
 
+export function getUser(appData, authId) {
+    if (appData.users) {
+        return appData.users[authId];
+    }
+}
+
+export function getThisUser(appData) {
+    return getUser(appData, model.authId);
+}
+
 export function getPlayerTransactions(appData, authId) {
     const game = getThisGame(appData);
     if (game) {
