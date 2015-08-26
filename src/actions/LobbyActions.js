@@ -1,5 +1,5 @@
 import { getFbRef, updateFbObject } from '../utils';
-import { getThisPlayer } from '../gameUtils';
+import { getThisUser } from '../gameUtils';
 import _ from 'lodash';
 import model from '../model';
 import * as logic from '../logic';
@@ -24,8 +24,8 @@ export function joinGame(gameId, appData) {
     }
     else {
         const ref = getFbRef(`/games/${gameId}/players/${model.authId}`);
-        const player = getThisPlayer(appData);
-        ref.update(logic.getInitialState(player));
+        const user = getThisUser(appData);
+        ref.update(logic.getInitialState(user));
     }
 }
 

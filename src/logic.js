@@ -5,11 +5,11 @@ export function getRandomNumberOfOranges() {
     return Math.floor(Math.random() * MAX_ORANGES);
 }
 
-export function getInitialState(player) {
+export function getInitialState(user) {
     return {
-        name: player.name,
+        name: user.name,
         oranges: {
-            box: logic.getRandomNumberOfOranges(),
+            box: getRandomNumberOfOranges(),
             basket: 0,
             dish: 0
         },
