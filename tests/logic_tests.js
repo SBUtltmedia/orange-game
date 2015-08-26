@@ -1,39 +1,45 @@
-import * as logic from '../logic';
+import * as logic from '../src/logic';
 import { expect } from 'chai';
 
 describe('logic', () => {
 
     it('cannot advance day if there are oranges in box', () => {
-        const env = {
-            gameDay: 1,
-            playerDay: 1,
+        const player = {
+            day: 1,
             oranges: {
                 box: 1
             }
         };
-        expect(logic.canAdvanceDay(env)).to.be.false;
+        const game = {
+            day: 1
+        };
+        expect(logic.canAdvanceDay(player, game)).to.be.false;
     });
 
     it('cannot advance day if the game day is less than the player day', () => {
-        const env = {
-            gameDay: 1,
-            playerDay: 2,
+        const player = {
+            day: 2,
             oranges: {
                 box: 0
             }
         };
-        expect(logic.canAdvanceDay(env)).to.be.false;
+        const game = {
+            day: 1
+        };
+        expect(logic.canAdvanceDay(player, game)).to.be.false;
     });
 
     it('can advance day if conditions are met', () => {
-        const env = {
-            gameDay: 1,
-            playerDay: 1,
+        const player = {
+            day: 1,
             oranges: {
                 box: 0
             }
         };
-        expect(logic.canAdvanceDay(env)).to.be.true;
+        const game = {
+            day: 1
+        };
+        expect(logic.canAdvanceDay(player, game)).to.be.true;
     });
 
     it('reduces fitness on a new day', () => {

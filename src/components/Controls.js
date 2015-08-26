@@ -29,7 +29,6 @@ export default class Controls extends Component {
         const { firebase } = this.props;
         const player = getThisPlayer(firebase);
         const game = getThisGame(firebase);
-
         if (player && game) {
             return <div style={styles.container}>
                 <OrangeBox />

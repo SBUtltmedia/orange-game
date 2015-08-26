@@ -12,8 +12,8 @@ describe('model', () => {
         it('is a singleton', () => {
             const model1 = require('../src/model');
             const model2 = require('../src/model');
-            model1.newGameDay();
-            expect(model2.gameDay).to.equal(2);
+            model1.authId = '123';
+            expect(model2.authId).to.equal('123');
         });
     });
 });
