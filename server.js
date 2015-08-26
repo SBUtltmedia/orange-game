@@ -1,14 +1,17 @@
-var express = require('express'),
-       path = require('path'),
-        app = express(),
-       port = process.env.PORT || 5000;;
+var webpack = require('webpack');
+var WebpackDevServer = require('webpack-dev-server');
+var config = require('./webpack.config');
+var port = process.env.PORT || 3000;
+var host = '0.0.0.0';
 
-// Include static assets. Not advised for production
-app.use(express.static(path.join(__dirname, 'build')));
+new WebpackDevServer(webpack(config), {
+  publicPath: config.output.publicPath,
+  hot: true,
+  historyApiFallback: true
+}).listen(port, host, function (err, result) {
+  if (err) {
+    console.log(err);
+  }
 
-app.get('/', function(req, res){
-  res.sendFile('/index.html');
+  console.log('Listening on port ' + port);
 });
-
-app.listen(port);
-console.log('Server running http://localhost:' + port);

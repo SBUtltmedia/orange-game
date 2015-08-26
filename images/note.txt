@@ -1,0 +1,1 @@
+Orange image is 64-bit encoded as per react-dnd library.

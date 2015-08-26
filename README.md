@@ -7,6 +7,7 @@ Written in [React](http://facebook.github.io/react/)
 
 ```
 npm install
+npm start
 ```
 
-Build changes with `gulp` or run `gulp watch` to watch for changes.
+-Use `gulp tests` to run tests

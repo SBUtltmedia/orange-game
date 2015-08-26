@@ -1,0 +1,54 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  font-family: Arial, sans-serif !important;
+  background-color: #ffad00
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.modal-dialog.wide {
+    width: 90% !important;
+}
+
+.modal-dialog.short {
+    height: 240px !important;
+}
+
+.modal-dialog.medium {
+    height: 360px !important;
+}
+
+/*
+button {
+    border-radius: 16px;
+}
+*/
+
+button:disabled {
+    color: gray;
+}
+
+.little-griddle, .big-griddle, .little-griddle th, .big-griddle th  {
+    text-align: center;
+}
+
+.little-griddle {
+    font-size: 10pt;
+}
