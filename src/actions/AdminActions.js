@@ -13,7 +13,8 @@ export function createGame() {
 export function startGame(gameId) {
     const ref = getFbRef(`/games/${gameId}`);
     ref.update({
-        state: STARTED
+        state: STARTED,
+        day: 1
     });
 }
 

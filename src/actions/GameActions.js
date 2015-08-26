@@ -15,9 +15,6 @@ export function newDay(appData) {
 }
 
 export function dealNewDay(appData) {
-
-    console.log("DEAL");
-
     const url = `/games/${model.gameId}/players/${model.authId}`;
     const playerData = getThisPlayer(appData);
     updateFbObject(url, logic.dealNewDay(playerData));
