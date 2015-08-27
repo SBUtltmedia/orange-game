@@ -2,10 +2,11 @@ import React, { PropTypes, Component } from 'react';
 import Modal from 'react-modal';
 import { setName, checkIfNameTaken } from '../actions/LobbyActions';
 import { APP_ROOT_ELEMENT } from '../constants/Settings';
-import { authId } from '../model';
+import model from '../model';
 import { trimString } from '../utils';
 import StyleSheet from'react-style';
 import { connect } from 'redux/react';
+import { getThisUser } from '../gameUtils';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
@@ -23,14 +24,9 @@ const styles = StyleSheet.create({
     firebase: state.firebase
 }))
 export default class EnterName extends Component {
-    static propTypes = {
-        open: PropTypes.bool.isRequired
-    };
-
     constructor(props) {
         super(props);
         this.state = {
-            modalIsOpen: props.open,
             error: null
         };
     }
@@ -46,7 +42,7 @@ export default class EnterName extends Component {
                 this.setState({ error: 'Name is already taken' });
             }
             else {
-                setName(authId, name);
+                setName(model.authId, name);
                 this.closeModal();
             }
         }
@@ -62,8 +58,10 @@ export default class EnterName extends Component {
     }
 
     render() {
+        const { firebase } = this.props;
+        const user = getThisUser(firebase);
         return <Modal className="Modal__Bootstrap modal-dialog short"
-                        isOpen={this.state.modalIsOpen}
+                        isOpen={!user || !user.name}
                         onRequestClose={() => this.closeModal()}>
               <h2>Enter name</h2>
               <form onSubmit={e => this.onSubmit(e)}>

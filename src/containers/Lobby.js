@@ -4,7 +4,7 @@ import LobbyGames from '../components/LobbyGames';
 import LobbyUserName from '../components/LobbyUserName';
 import EnterName from '../components/EnterName';
 import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
-import { authId, userName } from '../model';
+import model from '../model';
 import * as FluxActions from '../actions/FluxActions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'redux/react';
@@ -25,7 +25,7 @@ export default class Lobby extends Component {
         const { games } = firebase;
         if (!isAdmin) {
             const joinedGameId = _.findKey(games, g => {
-                return _.contains(_.keys(g.players), authId) &&
+                return _.contains(_.keys(g.players), model.authId) &&
                             g.state === STARTED;
             });
             if (joinedGameId) {
@@ -55,7 +55,7 @@ export default class Lobby extends Component {
         return <div style={styles.page}>
             <LobbyUserName />
             <LobbyGames />
-            <EnterName open={!!!userName} />
+            <EnterName />
         </div>;
     }
 }
