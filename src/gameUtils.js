@@ -40,6 +40,13 @@ export function getThisUser(appData) {
     return getUser(appData, model.authId);
 }
 
+export function updateThisPlayer(appData, playerData) {
+    const newAppData = _.clone(appData);
+    const game = getThisGame(newAppData);
+    game.players[model.authId] = playerData;
+    return newAppData;
+}
+
 export function getPlayerTransactions(appData, authId) {
     const game = getThisGame(appData);
     if (game) {

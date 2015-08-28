@@ -14,7 +14,6 @@ import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
 import * as FluxActions from '../actions/FluxActions';
 import { bindActionCreators } from 'redux';
 import model from '../model';
-import { getFbRef } from '../utils';
 import _ from 'lodash';
 import { connect } from 'redux/react';
 
@@ -37,17 +36,14 @@ const styles = {
 export default class Game extends Component {
 
     componentWillMount() {
-        const { params, dispatch } = this.props;
+        const { params, dispatch, firebase } = this.props;
         this.fluxActions = bindActionCreators(FluxActions, dispatch);
         this.fluxActions.listenToFirebase();
         model.gameId = params.gameId;
-        this.firebaseRef = getFbRef(`/games/${model.gameId}/day}`);
-        this.firebaseRef.on('child_changed', snapshot => dealNewDay(snapshot.val()));
     }
 
     componentWillUnmount() {
         this.fluxActions.disconnectFromFirebase();
-        this.firebaseRef.off();
     }
 
     componentWillReceiveProps(newProps) {
@@ -58,6 +54,14 @@ export default class Game extends Component {
             if (game.state === FINISHED) {
                 window.location.href = '/?#/gameOver/';
             }
+        }
+        if (firebase) {
+            // TODO: Store day history and check for it here
+            /*
+            if () {  // no day history for today
+                dealNewDay(firebase);
+            }
+            */
         }
     }
 

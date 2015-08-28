@@ -2,7 +2,7 @@ import { updateFbObject, addToFbList } from '../utils';
 import _ from 'lodash';
 import * as logic from '../logic';
 import model from '../model';
-import { getThisPlayer, getThisGame } from '../gameUtils';
+import { getThisPlayer, getThisGame, updateThisPlayer } from '../gameUtils';
 
 export function dropOrange(source, dest, appData) {
     const url = `/games/${model.gameId}/players/${model.authId}`;
@@ -10,11 +10,8 @@ export function dropOrange(source, dest, appData) {
     updateFbObject(url, logic.dropOrange(source, dest, playerData));
 }
 
-export function newGameDay(appData) {
-    updateFbObject(`/games/${model.gameId}`, { day: logic.newGameDay(appData) });
-}
-
 export function dealNewDay(appData) {
+    console.log("DEAL NEW DAY", appData);
     const url = `/games/${model.gameId}/players/${model.authId}`;
     const playerData = getThisPlayer(appData);
     updateFbObject(url, logic.dealNewDay(playerData));
@@ -22,19 +19,16 @@ export function dealNewDay(appData) {
 
 export function playerReady(appData) {
     const url = `/games/${model.gameId}/players/${model.authId}`;
-    const playerData = getThisPlayer(appData);
-    updateFbObject(url, logic.newPlayerDay(playerData), () => {
-        tryToAdvanceDay(appData);
-    });
+    const player = getThisPlayer(appData);
+    player.day += 1;
+    updateFbObject(url, player);
+    tryToAdvanceDay(updateThisPlayer(appData, player));
 }
 
 export function tryToAdvanceDay(appData) {
     const game = getThisGame(appData);
-
-    console.log(game);  // player.day hasn't been updated in appData
-
-    if (_.every(game.players, p => p.day > game.day)) {
-        newGameDay();
+    if (_.all(game.players, p => p.day > game.day)) {
+        updateFbObject(`/games/${model.gameId}`, { day: game.day + 1 });
     }
 }
 

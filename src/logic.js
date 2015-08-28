@@ -37,16 +37,6 @@ export function dropOrange(source, dest, env) {
     return env;
 }
 
-export function newGameDay(env) {
-    env.day += 1;
-    return env;
-}
-
-export function newPlayerDay(env) {
-    env.day += 1;
-    return env;
-}
-
 export function dealNewDay(env) {
     env.oranges.dish = 0;
     env.oranges.box = getRandomNumberOfOranges();
