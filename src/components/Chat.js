@@ -81,7 +81,7 @@ export default class Chat extends Component {
             const chat = game.chat;
             return <div style={styles.container}>
                 <div ref="output" style={styles.output}>
-                    {_.map(chat, msg => <ChatMessage message={msg} />)}
+                    {_.map(chat, (msg, i) => <ChatMessage message={msg} key={i} />)}
                 </div>
                 <form ref="form" style={styles.input} onSubmit={e => this.onFormSubmit(e)}>
                     <input ref="textBox" style={styles.textBox} />
