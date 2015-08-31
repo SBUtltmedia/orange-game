@@ -7,9 +7,6 @@ import BinDisplay from './BinDisplay';
 }))
 export default class Bin extends Component {
     static propTypes = {
-        connectDropTarget: PropTypes.func.isRequired,
-        isOver: PropTypes.bool.isRequired,
-        canDrop: PropTypes.bool.isRequired,
         style: PropTypes.object,
         textual: PropTypes.bool,
         graphical: PropTypes.bool,
