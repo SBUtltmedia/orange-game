@@ -2,6 +2,22 @@ import model from './model';
 import _ from 'lodash';
 import { ACCEPTED } from './constants/NegotiationStates';
 
+export function getEventsInGame(appData, gameId, eventType=null) {
+    const game = getGame(gameId);
+    if (game) {
+        if (eventType) {
+            return _.filter(game.events, e => e.type === eventType);
+        }
+        else {
+            return game.events;
+        }
+    }
+}
+
+export function getEventsInThisGame(appData, eventType) {
+    return getEventsInGame(appData, eventType, model.gameId);
+}
+
 export function getGame(appData, id) {
     if (appData) {
         const { games } = appData;

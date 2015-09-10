@@ -9,7 +9,7 @@ import Stats from '../components/Stats';
 import Players from '../components/Players';
 import Chat from '../components/Chat';
 import { areaTheme } from '../styles/Themes';
-import { dealNewDay } from '../actions/GameActions';
+import { dealNewDayIfNeeded, advanceDayIfNeeded } from '../actions/GameActions';
 import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
 import * as FluxActions from '../actions/FluxActions';
 import { bindActionCreators } from 'redux';
@@ -57,12 +57,8 @@ export default class Game extends Component {
             }
         }
         if (firebase) {
-            // TODO: Store day history and check for it here
-            /*
-            if () {  // no day history for today
-                dealNewDay(firebase);
-            }
-            */
+            advanceDayIfNeeded();
+            dealNewDayIfNeeded();
         }
     }
 
