@@ -1,5 +1,4 @@
-import { getFbRef } from '../utils';
-
+import { getFbRef } from '../firebaseUtils';
 const fbRef = getFbRef();
 
 export function listenToFirebase() {

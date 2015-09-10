@@ -3,6 +3,7 @@ import _ from 'lodash';
 import * as logic from '../logic';
 import model from '../model';
 import { getThisPlayer, getThisGame, updateThisPlayer } from '../gameUtils';
+import { saveEvent } from '../firebaseUtils';
 
 export function dropOrange(source, dest, appData) {
     const url = `/games/${model.gameId}/players/${model.authId}`;
@@ -18,11 +19,13 @@ export function dealNewDay(appData) {
 }
 
 export function playerReady(appData) {
-    const url = `/games/${model.gameId}/players/${model.authId}`;
-    const player = getThisPlayer(appData);
-    player.day += 1;
-    updateFbObject(url, player);
-    tryToAdvanceDay(updateThisPlayer(appData, player));
+    const game = getThisGame(appData);
+    const eventData = {
+        type: 'player-done',
+        playerId: model.authId,
+        day: game.day
+    };
+    saveEvent(model.gameId, eventData);
 }
 
 export function tryToAdvanceDay(appData) {
