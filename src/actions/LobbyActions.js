@@ -25,7 +25,7 @@ export function joinGame(gameId, appData) {
     else {
         const ref = getFbRef(`/games/${gameId}/players/${model.authId}`);
         const user = getThisUser(appData);
-        ref.update(logic.getInitialState(user));
+        ref.update({ name: user.name });
     }
 }
 

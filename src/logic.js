@@ -1,23 +1,5 @@
-import { MAX_ORANGES, MAX_FITNESS_BOOST, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
+import { MAX_FITNESS_BOOST, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
 import _ from 'lodash';
-
-export function getRandomNumberOfOranges() {
-    return Math.floor(Math.random() * MAX_ORANGES);
-}
-
-export function getInitialState(user) {
-    return {
-        name: user.name,
-        oranges: {
-            box: getRandomNumberOfOranges(),
-            basket: 0,
-            dish: 0
-        },
-        fitness: 0 - DAILY_FITNESS_LOSS,
-        fitnessChange: 0 - DAILY_FITNESS_LOSS,
-        day: 1
-    };
-}
 
 export function dropOrange(source, dest, env) {
     if (source !== dest) {
@@ -34,14 +16,6 @@ export function dropOrange(source, dest, env) {
         env.oranges[source] -= 1;
         env.oranges[dest] += 1;
     }
-    return env;
-}
-
-export function dealNewDay(env) {
-    env.oranges.dish = 0;
-    env.oranges.box = getRandomNumberOfOranges();
-    env.fitness -= DAILY_FITNESS_LOSS;
-    env.fitnessChange = 0 - DAILY_FITNESS_LOSS;
     return env;
 }
 

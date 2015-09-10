@@ -1,6 +1,7 @@
 import model from './model';
 import _ from 'lodash';
 import { ACCEPTED } from './constants/NegotiationStates';
+import { DAY_ADVANCED } from './constants/EventTypes';
 
 export function getEventsInGame(appData, gameId, eventType=null) {
     const game = getGame(appData, gameId);

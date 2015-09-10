@@ -5,6 +5,11 @@ import model from '../model';
 import { getThisPlayer, getThisGame, updateThisPlayer, getEventsInThisGame, getThisGameDay } from '../gameUtils';
 import { saveEvent } from '../firebaseUtils';
 import { ORANGES_DEALT, PLAYER_DONE, DAY_ADVANCED } from '../constants/EventTypes';
+import { MAX_ORANGES } from '../constants/Settings';
+
+function getRandomNumberOfOranges() {
+    return Math.floor(Math.random() * MAX_ORANGES);
+}
 
 export function dropOrange(source, dest, appData) {
     const url = `/games/${model.gameId}/players/${model.authId}`;
@@ -37,7 +42,7 @@ function dealNewDay(appData) {
         type: ORANGES_DEALT,
         day: game.day,
         playerId: model.authId,
-        oranges: logic.getRandomNumberOfOranges()
+        oranges: getRandomNumberOfOranges()
     };
     saveEvent(model.gameId, eventData);
 }
