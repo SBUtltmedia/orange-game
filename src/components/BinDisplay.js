@@ -7,7 +7,6 @@ import _ from 'lodash';
 import { dropOrange } from '../actions/GameActions';
 import model from '../model';
 import { connect } from 'redux/react';
-import { getThisPlayer } from '../gameUtils';
 
 const styles = {
   inner: {

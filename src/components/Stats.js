@@ -75,8 +75,13 @@ export default class Stats extends Component {
 
     canPay(transaction) {
         const { firebase } = this.props;
-        const player = getThisPlayer(firebase);
-        return player.oranges.basket >= transaction.oranges.later;
+
+        //const player = getThisPlayer(firebase);
+        //return player.oranges.basket >= transaction.oranges.later;
+
+        // TODO: Fix
+
+        return true;
     }
 
     renderPayButton(transaction) {
