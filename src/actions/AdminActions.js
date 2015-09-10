@@ -1,6 +1,6 @@
 import { MAX_PLAYERS } from '../constants/Settings';
 import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
-import { getFbRef } from '../utils';
+import { getFbRef } from '../firebaseUtils';
 
 export function createGame() {
     const ref = getFbRef('/games');

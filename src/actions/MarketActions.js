@@ -1,4 +1,4 @@
-import { addToFbList, updateFbObject } from '../utils';
+import { addToFbList, updateFbObject } from '../firebaseUtils';
 import { getThisPlayer } from '../gameUtils';
 import _ from 'lodash';
 import model from '../model';

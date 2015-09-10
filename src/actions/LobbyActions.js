@@ -1,4 +1,4 @@
-import { getFbRef, updateFbObject } from '../utils';
+import { getFbRef, updateFbObject } from '../firebaseUtils';
 import { getThisUser } from '../gameUtils';
 import _ from 'lodash';
 import model from '../model';

@@ -1,4 +1,4 @@
-import { updateFbObject, addToFbList } from '../utils';
+import { updateFbObject, addToFbList } from '../firebaseUtils';
 import _ from 'lodash';
 import * as logic from '../logic';
 import model from '../model';

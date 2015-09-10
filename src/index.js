@@ -6,7 +6,7 @@ import { createRedux } from 'redux';
 import * as stores from './stores';
 import { APP_ROOT_ELEMENT } from './constants/Settings';
 import model from './model';
-import { getAuth, getFbRef, getFbObject } from './utils';
+import { getAuth, getFbRef, getFbObject } from './firebaseUtils';
 
 const redux = createRedux(stores);
 const mountNode = document.getElementById(APP_ROOT_ELEMENT);
