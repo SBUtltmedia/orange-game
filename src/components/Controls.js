@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
-import OrangeBox from './OrangeBox';
+import Box from './Box';
 import * as logic from '../logic';
 import { playerReady }from '../actions/GameActions';
 import { DAYS_IN_GAME } from '../constants/Settings';
@@ -31,7 +31,7 @@ export default class Controls extends Component {
         const game = getThisGame(firebase);
         if (player && game) {
             return <div style={styles.container}>
-                <OrangeBox />
+                <Box />
                 <button style={styles.button} onClick={() => playerReady(firebase)}
                         disabled={!logic.canAdvanceDay(player, game)}>
                     I am done for today

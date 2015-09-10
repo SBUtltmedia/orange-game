@@ -86,6 +86,5 @@ export default class Bin extends Component {
                 </div>
             </div>
         );
-        return <div style={{ ...style }}></div>;  // fallback
     }
 }

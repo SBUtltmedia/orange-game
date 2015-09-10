@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd/modules/backends/HTML5';
 import Controls from '../components/Controls';
-import OrangeBox from '../components/OrangeBox';
+import Box from '../components/Box';
 import Basket from '../components/Basket';
 import Dish from '../components/Dish';
 import Stats from '../components/Stats';

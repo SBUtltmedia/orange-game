@@ -1,15 +1,15 @@
-import { MAX_FITNESS_BOOST, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
+import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
 import _ from 'lodash';
 
 export function dropOrange(source, dest, env) {
     if (source !== dest) {
         if (dest === 'dish') {
-            const fitnessBoost = MAX_FITNESS_BOOST - env.oranges.dish;
+            const fitnessBoost = MAX_FITNESS_GAIN - env.oranges.dish;
             env.fitness += fitnessBoost;
             env.fitnessChange += fitnessBoost;
         }
         else if (source === 'dish') {
-            const fitnessBoost = env.oranges.dish - MAX_FITNESS_BOOST - 1;
+            const fitnessBoost = env.oranges.dish - MAX_FITNESS_GAIN - 1;
             env.fitness += fitnessBoost;
             env.fitnessChange += fitnessBoost;
         }

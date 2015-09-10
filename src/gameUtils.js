@@ -2,6 +2,7 @@ import model from './model';
 import _ from 'lodash';
 import { ACCEPTED } from './constants/NegotiationStates';
 import { DAY_ADVANCED, ORANGE_MOVED, ORANGES_DEALT } from './constants/EventTypes';
+import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
 
 export function getEventsInGame(appData, gameId, eventType=null) {
     const game = getGame(appData, gameId);
@@ -19,14 +20,23 @@ export function getEventsInThisGame(appData, eventType) {
     return getEventsInGame(appData, model.gameId, eventType);
 }
 
-function getOrangesInDishOrBasket(appData, name, gameId, authId) {
+function getOrangesDroppedInDishOrBasket(appData, name, gameId, authId) {
     const orangeMovedEvents = getEventsInGame(appData, gameId, ORANGE_MOVED);
-    const droppedEvents = _.filter(orangeMovedEvents, e => e.dest === name);
-    return _.size(droppedEvents);
+    return _.filter(orangeMovedEvents, e => e.dest === name);
+}
+
+function getOrangesDroppedInDish(appData, gameId, authId) {
+    return getOrangesDroppedInDishOrBasket(appData, 'dish', gameId, authId);
+}
+
+function getOrangesDroppedInBasket(appData, gameId, authId) {
+    return getOrangesDroppedInDishOrBasket(appData, 'basket', gameId, authId);
 }
 
 export function getOrangesInDish(appData, gameId, authId) {
-    return getOrangesInDishOrBasket(appData, 'dish', gameId, authId);
+    const orangesDropped = getOrangesDroppedInDish(appData, gameId, authId);
+    const game = getGame(appData, gameId);
+    return _.size(_.filter(orangesDropped, o => o.day === game.day));
 }
 
 export function getOrangesInThisDish(appData) {
@@ -34,11 +44,13 @@ export function getOrangesInThisDish(appData) {
 }
 
 export function getOrangesInBasket(appData, gameId, authId) {
-    return getOrangesInDishOrBasket(appData, 'basket', gameId, authId);
+    const orangesDropped = getOrangesDroppedInBasket(appData, gameId, authId);
+    const game = getGame(appData, gameId);
+    return _.size(_.filter(orangesDropped, o => o.day === game.day));
 }
 
 export function getOrangesInThisBasket(appData) {
-    return getOrangesInDish(appData, model.gameId, model.authId);
+    return getOrangesInBasket(appData, model.gameId, model.authId);
 }
 
 export function getOrangesInBox(appData, gameId, authId) {
@@ -58,6 +70,40 @@ export function getGameDay(appData, gameId) {
 
 export function getThisGameDay(appData) {
     return getGameDay(appData, model.gameId);
+}
+
+function getFitnessGainForOrangesEatenInSameDay(orangesEaten) {
+    var accum = 0;
+    for (var i = 0; i < _.size(orangesEaten); i++) {
+        accum += MAX_FITNESS_GAIN - i;
+    }
+    return accum;
+}
+
+function getFitnessGainForOrangesEaten(orangesEaten) {
+    return _.sum(_.map(_.range(1, DAYS_IN_GAME + 1), i =>
+            getFitnessGainForOrangesEatenInSameDay(_.filter(orangesEaten, o =>
+                o.day === 1))));
+}
+
+export function getFitness(appData, gameId, authId) {
+    const orangesEaten = getOrangesDroppedInDish(appData, gameId, authId);
+    const fitnessGain = getFitnessGainForOrangesEaten(orangesEaten);
+    const day = getGameDay(appData, gameId);
+    const fitnessLoss = day * DAILY_FITNESS_LOSS;
+    return fitnessGain - fitnessLoss;
+}
+
+export function getMyFitness(appData) {
+    return getFitness(appData, model.gameId, model.authId);
+}
+
+export function getFitnessChange(appData, gameId, authId) {
+
+}
+
+export function getMyFitnessChange(appData) {
+    return getFitnessChange(appData, model.gameId, model.authId);
 }
 
 export function getGame(appData, id) {
