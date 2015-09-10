@@ -1,7 +1,7 @@
 import model from './model';
 import _ from 'lodash';
 import { ACCEPTED } from './constants/NegotiationStates';
-import { DAY_ADVANCED } from './constants/EventTypes';
+import { DAY_ADVANCED, ORANGE_MOVED } from './constants/EventTypes';
 
 export function getEventsInGame(appData, gameId, eventType=null) {
     const game = getGame(appData, gameId);
@@ -17,6 +17,28 @@ export function getEventsInGame(appData, gameId, eventType=null) {
 
 export function getEventsInThisGame(appData, eventType) {
     return getEventsInGame(appData, model.gameId, eventType);
+}
+
+function getOrangesInDishOrBasket(appData, name, gameId, authId) {
+    const orangeMovedEvents = getEventsInGame(appData, gameId, ORANGE_MOVED);
+    const droppedEvents = _.filter(orangeMovedEvents, e => e.dest === name);
+    return _.size(droppedEvents);
+}
+
+export function getOrangesInDish(appData, gameId, authId) {
+    return getOrangesInDishOrBasket(appData, 'dish', gameId, authId);
+}
+
+export function getOrangesInThisDish(appData) {
+    return getOrangesInDish(appData, model.gameId, model.authId);
+}
+
+export function getOrangesInBasket(appData, gameId, authId) {
+    return getOrangesInDishOrBasket(appData, 'basket', gameId, authId);
+}
+
+export function getOrangesInThisBasket(appData) {
+    return getOrangesInDish(appData, model.gameId, model.authId);
 }
 
 export function getGameDay(appData, gameId) {
