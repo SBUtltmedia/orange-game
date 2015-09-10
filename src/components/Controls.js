@@ -5,7 +5,7 @@ import * as logic from '../logic';
 import { playerReady }from '../actions/GameActions';
 import { DAYS_IN_GAME } from '../constants/Settings';
 import { connect } from 'redux/react';
-import { getThisPlayer, getThisGame } from '../gameUtils';
+import { canAdvanceDay } from '../gameUtils';
 
 const styles = {
   container: {
@@ -27,19 +27,12 @@ export default class Controls extends Component {
 
     render() {
         const { firebase } = this.props;
-        const player = getThisPlayer(firebase);
-        const game = getThisGame(firebase);
-        if (player && game) {
-            return <div style={styles.container}>
-                <Box />
-                <button style={styles.button} onClick={() => playerReady(firebase)}
-                        disabled={!logic.canAdvanceDay(player, game)}>
-                    I am done for today
-                </button>
-            </div>;
-        }
-        else {
-            return <div style={styles.container}></div>;
-        }
+        return <div style={styles.container}>
+            <Box />
+            <button style={styles.button} onClick={() => playerReady(firebase)}
+                    disabled={!canAdvanceDay()}>
+                I am done for today
+            </button>
+        </div>;
     }
 }

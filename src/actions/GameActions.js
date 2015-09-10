@@ -4,7 +4,7 @@ import * as logic from '../logic';
 import model from '../model';
 import { getThisPlayer, getThisGame, updateThisPlayer, getEventsInThisGame, getThisGameDay } from '../gameUtils';
 import { saveEvent } from '../firebaseUtils';
-import { ORANGES_DEALT, PLAYER_DONE, DAY_ADVANCED } from '../constants/EventTypes';
+import { ORANGES_DEALT, PLAYER_DONE, DAY_ADVANCE, ORANGE_MOVED } from '../constants/EventTypes';
 import { MAX_ORANGES } from '../constants/Settings';
 
 function getRandomNumberOfOranges() {
@@ -12,9 +12,15 @@ function getRandomNumberOfOranges() {
 }
 
 export function dropOrange(source, dest, appData) {
-    const url = `/games/${model.gameId}/players/${model.authId}`;
-    const playerData = getThisPlayer(appData);
-    updateFbObject(url, logic.dropOrange(source, dest, playerData));
+    const game = getThisGame(appData);
+    const eventData = {
+        type: ORANGES_MOVED,
+        day: game.day,
+        playerId: model.authId,
+        src: source,
+        dest: dest
+    };
+    saveEvent(model.gameId, eventData);
 }
 
 function shouldDealNewDay(appData) {

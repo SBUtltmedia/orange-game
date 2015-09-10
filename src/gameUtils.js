@@ -60,7 +60,7 @@ export function getOrangesInBox(appData, gameId, authId) {
 }
 
 export function getOrangesInThisBox(appData) {
-    return getOrangeInBox(appData, model.gameId, model.authId);
+    return getOrangesInBox(appData, model.gameId, model.authId);
 }
 
 export function getGameDay(appData, gameId) {
@@ -187,4 +187,10 @@ export function getPlayerCredits(appData, authId) {
 
 export function getThisPlayerCredits(appData) {
     return getPlayerCredits(appData, model.authId);
+}
+
+export function canAdvanceDay(appData) {
+    const boxOranges = getOrangesInThisBox(appData);
+    const gameDay = getThisGameDay(appData);
+    return boxOranges === 0 && gameDay < DAYS_IN_GAME;
 }

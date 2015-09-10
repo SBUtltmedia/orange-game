@@ -19,10 +19,6 @@ export function dropOrange(source, dest, env) {
     return env;
 }
 
-export function canAdvanceDay(player, game) {
-    return player.day <= game.day && player.oranges.box === 0;
-}
-
 export function getAvailableOranges(env) {
     return env.oranges.box + env.oranges.basket;
 }
