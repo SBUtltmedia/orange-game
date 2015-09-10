@@ -57,8 +57,8 @@ export default class Game extends Component {
             }
         }
         if (firebase) {
-            advanceDayIfNeeded();
-            dealNewDayIfNeeded();
+            advanceDayIfNeeded(firebase);
+            dealNewDayIfNeeded(firebase);
         }
     }
 

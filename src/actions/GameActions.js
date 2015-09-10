@@ -2,9 +2,9 @@ import { updateFbObject, addToFbList } from '../firebaseUtils';
 import _ from 'lodash';
 import * as logic from '../logic';
 import model from '../model';
-import { getThisPlayer, getThisGame, updateThisPlayer, getEventsInThisGame } from '../gameUtils';
+import { getThisPlayer, getThisGame, updateThisPlayer, getEventsInThisGame, getThisGameDay } from '../gameUtils';
 import { saveEvent } from '../firebaseUtils';
-import { ORANGES_DEALT, PLAYER_DONE } from '../constants/EventTypes';
+import { ORANGES_DEALT, PLAYER_DONE, DAY_ADVANCED } from '../constants/EventTypes';
 
 export function dropOrange(source, dest, appData) {
     const url = `/games/${model.gameId}/players/${model.authId}`;
@@ -14,16 +14,21 @@ export function dropOrange(source, dest, appData) {
 
 function shouldDealNewDay(appData) {
     const game = getThisGame(appData);
-    const dealEvents = getEventsInThisGame(appData, ORANGES_DEALT);
-    const myDealEvents = _.filter(dealEvents, e => e.playerId === model.authId);
-    return _.size(myDealEvents) < game.day;
+    if (game) {
+        const dealEvents = getEventsInThisGame(appData, ORANGES_DEALT);
+        const myDealEvents = _.filter(dealEvents, e => e.playerId === model.authId);
+        return _.size(myDealEvents) < getThisGameDay();
+    }
 }
 
 function shouldAdvanceDay(appData) {
     const game = getThisGame(appData);
-    const doneEvents = getEventsInThisGame(appData, PLAYER_DONE);
-    const doneEventsToday = _.filter(doneEvents, e => e.day === game.day);
-    return _.size(doneEventsToday) >= _.size(game.players);
+    if (game) {
+        const day = getThisGameDay();
+        const doneEvents = getEventsInThisGame(appData, PLAYER_DONE);
+        const doneEventsToday = _.filter(doneEvents, e => e.day === day);
+        return _.size(doneEventsToday) >= _.size(game.players);
+    }
 }
 
 function dealNewDay(appData) {

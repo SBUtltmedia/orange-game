@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { ACCEPTED } from './constants/NegotiationStates';
 
 export function getEventsInGame(appData, gameId, eventType=null) {
-    const game = getGame(gameId);
+    const game = getGame(appData, gameId);
     if (game) {
         if (eventType) {
             return _.filter(game.events, e => e.type === eventType);
@@ -15,7 +15,16 @@ export function getEventsInGame(appData, gameId, eventType=null) {
 }
 
 export function getEventsInThisGame(appData, eventType) {
-    return getEventsInGame(appData, eventType, model.gameId);
+    return getEventsInGame(appData, model.gameId, eventType);
+}
+
+export function getGameDay(appData, gameId) {
+    const dayAdvancedEvents = getEventsInGame(appData, gameId, DAY_ADVANCED);
+    return _.size(dayAdvancedEvents);
+}
+
+export function getThisGameDay(appData) {
+    return getGameDay(appData, model.gameId);
 }
 
 export function getGame(appData, id) {
