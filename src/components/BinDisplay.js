@@ -68,28 +68,24 @@ export default class Bin extends Component {
 
     render() {
         const { style, name, textual, graphical, label, isOver,
-                    canDrop, connectDropTarget, firebase } = this.props;
+                    canDrop, connectDropTarget, firebase, oranges } = this.props;
         const { gameId, authId } = model;
-        const player = getThisPlayer(firebase);
-        if (player && player.oranges) {
-            const oranges = player.oranges[name];
-            const isActive = isOver && canDrop;
-            let backgroundColor = style.backgroundColor || styles.defaultBgColor;
-            if (isActive) {
-                backgroundColor = dnd.isActive;
-            }
-            else if (canDrop) {
-                backgroundColor = dnd.canDrop;
-            }
-            return connectDropTarget(
-                <div style={{ ...style, backgroundColor }}>
-                    <div style={styles.inner}>
-                        { textual ? renderTextual(oranges, name, label, isActive) : '' }
-                        { graphical ? renderGraphical(oranges, name) : '' }
-                    </div>
-                </div>
-            );
+        const isActive = isOver && canDrop;
+        let backgroundColor = style.backgroundColor || styles.defaultBgColor;
+        if (isActive) {
+            backgroundColor = dnd.isActive;
         }
+        else if (canDrop) {
+            backgroundColor = dnd.canDrop;
+        }
+        return connectDropTarget(
+            <div style={{ ...style, backgroundColor }}>
+                <div style={styles.inner}>
+                    { textual ? renderTextual(oranges, name, label, isActive) : '' }
+                    { graphical ? renderGraphical(oranges, name) : '' }
+                </div>
+            </div>
+        );
         return <div style={{ ...style }}></div>;  // fallback
     }
 }
