@@ -18,15 +18,15 @@ import _ from 'lodash';
 import { connect } from 'redux/react';
 
 const styles = {
-  container: {
-    backgroundColor: '#ffad00',
-    color: '#000',
-    height: "100%"
-  },
-  row: {
-      display: "flex",
-      height: areaTheme.height + areaTheme.margin
-  }
+    container: {
+        backgroundColor: '#ffad00',
+        color: '#000',
+        height: "100%"
+    },
+    row: {
+        display: "flex",
+        height: areaTheme.height + areaTheme.margin
+    }
 };
 
 @DragDropContext(HTML5Backend)

@@ -2,7 +2,8 @@ import Firebase from 'firebase';
 import { FIREBASE_APP_URL } from './constants/Settings';
 
 export function saveEvent(gameId, data) {
-    addToFbList(`/games/${gameId}/events`, data);
+    const url = `/games/${gameId}/events`;
+    addToFbList(url, _.extend({ time: new Date().getTime() }, data));
 }
 
 export function getFbObject(path, callback=() => {}) {

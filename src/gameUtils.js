@@ -35,8 +35,8 @@ function getOrangesDroppedInBasket(appData, gameId, authId) {
 
 export function getOrangesInDish(appData, gameId, authId) {
     const orangesDropped = getOrangesDroppedInDish(appData, gameId, authId);
-    const game = getGame(appData, gameId);
-    return _.size(_.filter(orangesDropped, o => o.day === game.day));
+    const gameDay = getGameDay(appData, gameId);
+    return _.size(_.filter(orangesDropped, o => getEventDay(o) === gameDay));
 }
 
 export function getOrangesInThisDish(appData) {
@@ -45,8 +45,8 @@ export function getOrangesInThisDish(appData) {
 
 export function getOrangesInBasket(appData, gameId, authId) {
     const orangesDropped = getOrangesDroppedInBasket(appData, gameId, authId);
-    const game = getGame(appData, gameId);
-    return _.size(_.filter(orangesDropped, o => o.day === game.day));
+    const gameDay = getGameDay(appData, gameId);
+    return _.size(_.filter(orangesDropped, o => getEventDay(o) === gameDay));
 }
 
 export function getOrangesInThisBasket(appData) {
@@ -72,6 +72,11 @@ export function getThisGameDay(appData) {
     return getGameDay(appData, model.gameId);
 }
 
+export function getEventDay(appData, event) {
+    const dayAdvancedEvents = getEventsInGame(appData, gameId, DAY_ADVANCED);
+    return _.size(_.filter(dayAdvancedEvents, e => e.time < event.time));
+}
+
 function getFitnessGainForOrangesEatenInSameDay(orangesEaten) {
     var accum = 0;
     for (var i = 0; i < _.size(orangesEaten); i++) {
@@ -83,7 +88,7 @@ function getFitnessGainForOrangesEatenInSameDay(orangesEaten) {
 function getFitnessGainForOrangesEaten(orangesEaten) {
     return _.sum(_.map(_.range(1, DAYS_IN_GAME + 1), i =>
             getFitnessGainForOrangesEatenInSameDay(_.filter(orangesEaten, o =>
-                o.day === 1))));
+                getGameDay(o) === 1))));
 }
 
 export function getFitness(appData, gameId, authId) {
