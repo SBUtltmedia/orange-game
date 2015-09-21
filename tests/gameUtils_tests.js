@@ -24,6 +24,17 @@ describe('gameUtils', () => {
         expect(GameUtils.canAdvanceDayDerived(data)).to.be.false;
     });
 
+    it('cannot advance day (derived) if all players are not done ', () => {
+        const data = {
+            day: DAYS_IN_GAME + 1,
+            oranges: {
+                box: 1
+            },
+            playersReady: 
+        };
+        expect(GameUtils.canAdvanceDayDerived(data)).to.be.false;
+    });
+
     it('can advance day (derived) if conditions are met', () => {
         const data = {
             day: 1,
