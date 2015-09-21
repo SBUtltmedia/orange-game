@@ -195,7 +195,20 @@ export function getThisPlayerCredits(appData) {
 }
 
 export function canAdvanceDay(appData) {
-    const boxOranges = getOrangesInThisBox(appData);
-    const gameDay = getThisGameDay(appData);
-    return boxOranges === 0 && gameDay < DAYS_IN_GAME;
+    return canAdvanceDayDerived(deriveData(appData));
+}
+
+export function deriveData(appData) {
+    return {
+        oranges: {
+            box: getOrangesInThisBox(appData),
+            basket: getOrangesInThisBasket(appData),
+            dish: getOrangesInThisDish(appData)
+        },
+        day: getThisGameDay(appData)
+    };
+}
+
+export function canAdvanceDayDerived(derivedData) {
+    return derivedData.oranges.box === 0 && derivedData.day < DAYS_IN_GAME;
 }

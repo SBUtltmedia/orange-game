@@ -2,7 +2,6 @@ import { getFbRef, updateFbObject } from '../firebaseUtils';
 import { getThisUser } from '../gameUtils';
 import _ from 'lodash';
 import model from '../model';
-import * as logic from '../logic';
 
 function hasAlreadyJoinedSomeGame(appData) {
     return _.some(appData.games, game => {

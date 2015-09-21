@@ -1,6 +1,5 @@
 import { updateFbObject, addToFbList } from '../firebaseUtils';
 import _ from 'lodash';
-import * as logic from '../logic';
 import model from '../model';
 import { getThisPlayer, getThisGame, updateThisPlayer, getEventsInThisGame,
             getThisGameDay, getEventDay } from '../gameUtils';
@@ -34,9 +33,18 @@ function shouldDealNewDay(appData) {
 }
 
 function shouldAdvanceDay(appData) {
+
+    console.log("SHOULD?");
+
     const game = getThisGame(appData);
     if (game) {
+
+        console.log("HAS GAME");
+
         const gameDay = getThisGameDay();
+
+        console.log("Game day", gameDay);
+
         if (gameDay === 0) {
             return true;
         }
@@ -84,7 +92,7 @@ export function advanceDayIfNeeded(appData) {
 
         console.log("ADVANCE!");
 
-        advanceDay(appData);
+        //advanceDay(appData);
     }
 }
 
