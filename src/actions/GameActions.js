@@ -2,7 +2,8 @@ import { updateFbObject, addToFbList } from '../firebaseUtils';
 import _ from 'lodash';
 import model from '../model';
 import { getThisPlayer, getThisGame, updateThisPlayer, getEventsInThisGame,
-            getThisGameDay, getEventDay } from '../gameUtils';
+            getThisGameDay, getEventDay, canPlayerAdvanceDay,
+            canDealNewDay } from '../gameUtils';
 import { saveEvent } from '../firebaseUtils';
 import { ORANGES_DEALT, PLAYER_DONE, DAY_ADVANCED, ORANGE_MOVED }
             from '../constants/EventTypes';
