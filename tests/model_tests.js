@@ -1,3 +1,4 @@
+require('source-map-support').install();
 import requireUncached from 'require-uncached';
 import { expect } from 'chai';
 

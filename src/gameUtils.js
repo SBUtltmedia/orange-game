@@ -1,7 +1,7 @@
 import model from './model';
 import _ from 'lodash';
 import { ACCEPTED } from './constants/NegotiationStates';
-import { DAY_ADVANCED, ORANGE_MOVED, ORANGES_DEALT } from './constants/EventTypes';
+import { DAY_ADVANCED, ORANGE_MOVED, PLAYER_DONE, ORANGES_DEALT } from './constants/EventTypes';
 import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
 
 export function getEventsInGame(appData, gameId, eventType=null) {
@@ -104,7 +104,7 @@ export function getMyFitness(appData) {
 }
 
 export function getFitnessChange(appData, gameId, authId) {
-
+    // TODO: Implement
 }
 
 export function getMyFitnessChange(appData) {
@@ -194,8 +194,20 @@ export function getThisPlayerCredits(appData) {
     return getPlayerCredits(appData, model.authId);
 }
 
-export function canAdvanceDay(appData) {
-    return canAdvanceDayDerived(deriveData(appData));
+export function canPlayerAdvanceDay(appData) {
+    return canPlayerAdvanceDayDerived(deriveData(appData));
+}
+
+export function canDealNewDay(appData) {
+    return canDealNewDayDerived(deriveData(appData));
+}
+
+export function derivePlayers(appData) {
+    const game = getThisGame(appData);
+    const playerDoneEvents = getEventsInThisGame(appData, PLAYER_DONE);
+    _.map(game.players, p => { return {
+        ready: _.size(playerDoneEvents) >= getThisGameDay()
+    }});
 }
 
 export function deriveData(appData) {
@@ -205,10 +217,15 @@ export function deriveData(appData) {
             basket: getOrangesInThisBasket(appData),
             dish: getOrangesInThisDish(appData)
         },
-        day: getThisGameDay(appData)
+        day: getThisGameDay(appData),
+        players: derivePlayers(appData)
     };
 }
 
-export function canAdvanceDayDerived(derivedData) {
+export function canPlayerAdvanceDayDerived(derivedData) {
     return derivedData.oranges.box === 0 && derivedData.day < DAYS_IN_GAME;
+}
+
+export function canDealNewDayDerived(derivedData) {
+    return _.every(derivedData.players, p => p.ready);
 }

@@ -1,6 +1,9 @@
+require('source-map-support').install();
 import * as GameUtils from '../src/gameUtils';
 import { expect } from 'chai';
+import model from "../src/model";
 import { DAYS_IN_GAME } from '../src/constants/Settings';
+import { PLAYER_DONE } from '../src/constants/EventTypes';
 
 describe('gameUtils', () => {
 
@@ -11,28 +14,17 @@ describe('gameUtils', () => {
                 box: 1
             }
         };
-        expect(GameUtils.canAdvanceDayDerived(data)).to.be.false;
+        expect(GameUtils.canPlayerAdvanceDayDerived(data)).to.be.false;
     });
 
-    it('cannot advance day (derived) if the game day is >= days in game ', () => {
+    it('cannot advance day (derived) if the game day is >= days in game', () => {
         const data = {
             day: DAYS_IN_GAME + 1,
             oranges: {
                 box: 1
             }
         };
-        expect(GameUtils.canAdvanceDayDerived(data)).to.be.false;
-    });
-
-    it('cannot advance day (derived) if all players are not done ', () => {
-        const data = {
-            day: DAYS_IN_GAME + 1,
-            oranges: {
-                box: 1
-            },
-            playersReady: 
-        };
-        expect(GameUtils.canAdvanceDayDerived(data)).to.be.false;
+        expect(GameUtils.canPlayerAdvanceDayDerived(data)).to.be.false;
     });
 
     it('can advance day (derived) if conditions are met', () => {
@@ -42,7 +34,45 @@ describe('gameUtils', () => {
                 box: 0
             }
         };
-        expect(GameUtils.canAdvanceDayDerived(data)).to.be.true;
+        expect(GameUtils.canPlayerAdvanceDayDerived(data)).to.be.true;
+    });
+
+    it('cannot deal new day (derived) if all players are not done', () => {
+        const data = {
+            players: [
+                { ready: false }
+            ]
+        };
+        expect(GameUtils.canDealNewDayDerived(data)).to.be.false;
+    });
+
+    it('can deal new day (derived) if all players are done', () => {
+        const data = {
+            players: [
+                { ready: true }
+            ]
+        };
+        expect(GameUtils.canDealNewDayDerived(data)).to.be.true;
+    });
+
+    it('can derive players from appData', () => {
+        const appData = {
+            games: {
+                game1: {
+                    events: [
+                        { type: PLAYER_DONE, authId: 'ABC' }
+                    ]
+                }
+            }
+        };
+        const derived = {
+            day: 1,
+            players: [
+                { ready: true }
+            ]
+        };
+        model.gameId = 'game1';
+        expect(GameUtils.deriveData(appData)).to.equal(derived);
     });
 
     it('reduces fitness on a new day', () => {
