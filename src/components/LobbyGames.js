@@ -87,7 +87,7 @@ export default class LobbyGames extends Component {
             return <div styles={[styles.container]}>
                 <Griddle results={tableData}
                     columns={[ 'Joined', 'Players', 'Actions' ]}
-                    showPager={false} resultsPerPage={99} useFixedLayout={false}
+                    showPager={false} resultsPerPage={999} useFixedLayout={false}
                     tableClassName='big-griddle'
                     columnMetadata={ isAdmin ? ADMIN_COL_META : PLAYER_COL_META } />
             </div>;

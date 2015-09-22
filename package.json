@@ -7,7 +7,6 @@
   "dependencies": {
     "babel-runtime": "^5.6.15",
     "classnames": "^1.2.2",
-    "css-loader": "^0.16.0",
     "express": "~4.0.0",
     "firebase": "^2.2.9",
     "griddle-react": "^0.2.13",
@@ -21,14 +20,14 @@
     "react-style": "^0.5.5",
     "react-tools": "^0.13.3",
     "react-widgets": "^2.8.0",
-    "redux": "^0.12.0",
-    "underscore": "^1.8.3"
+    "redux": "^0.12.0"
   },
   "devDependencies": {
     "babel-core": "^5.8.22",
     "babel-eslint": "^4.0.5",
     "babel-loader": "^5.3.2",
     "chai": "^3.0.0",
+    "css-loader": "^0.16.0",
     "eslint-plugin-react": "^3.2.2",
     "file-loader": "^0.8.4",
     "gulp": "~3.9.0",

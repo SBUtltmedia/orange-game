@@ -35,7 +35,6 @@ class CreditComponent extends Component {
                 return 'transparent';  // if zero just show nothing
             }
         }();
-
         return <div style={{color: color}}>{value}</div>;
     }
 }

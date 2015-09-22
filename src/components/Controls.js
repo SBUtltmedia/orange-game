@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
 import Box from './Box';
-import * as logic from '../logic';
 import { playerReady }from '../actions/GameActions';
 import { DAYS_IN_GAME } from '../constants/Settings';
 import { connect } from 'redux/react';
