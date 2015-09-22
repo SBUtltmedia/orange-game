@@ -59,6 +59,11 @@ describe('gameUtils', () => {
         const appData = {
             games: {
                 game1: {
+                    players: {
+                        ABC: {
+                            name: 'Ken'
+                        }
+                    },
                     events: [
                         { type: PLAYER_DONE, authId: 'ABC' }
                     ]
@@ -66,13 +71,18 @@ describe('gameUtils', () => {
             }
         };
         const derived = {
-            day: 1,
+            day: 0,
+            oranges: {
+                basket: 0,
+                dish: 0,
+                box: 0
+            },
             players: [
-                { ready: true }
+                { name: 'Ken', ready: true }
             ]
         };
         model.gameId = 'game1';
-        expect(GameUtils.deriveData(appData)).to.equal(derived);
+        expect(GameUtils.deriveData(appData)).to.deep.equal(derived);
     });
 
     it('reduces fitness on a new day', () => {

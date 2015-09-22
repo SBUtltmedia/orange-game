@@ -205,7 +205,8 @@ export function canDealNewDay(appData) {
 export function derivePlayers(appData) {
     const game = getThisGame(appData);
     const playerDoneEvents = getEventsInThisGame(appData, PLAYER_DONE);
-    _.map(game.players, p => { return {
+    return _.map(game.players, p => { return {
+        name: p.name,
         ready: _.size(playerDoneEvents) >= getThisGameDay()
     }});
 }
