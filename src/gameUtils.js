@@ -72,7 +72,7 @@ function getEventsBeforeTime(events, time) {
 }
 
 export function getGameDay(appData, gameId) {
-    const doneEvents = getEventsInThisGame(appData, PLAYER_DONE);
+    const doneEvents = getEventsInGame(appData, gameId, PLAYER_DONE);
     return _.min(countEventsByPlayer(doneEvents));
 }
 
