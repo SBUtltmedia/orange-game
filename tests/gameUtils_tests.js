@@ -55,6 +55,27 @@ describe('gameUtils', () => {
         expect(GameUtils.canDealNewDayDerived(data)).to.be.true;
     });
 
+    it('can derive game day', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: [
+                        { type: PLAYER_DONE, authId: 'ABC' },
+                        { type: PLAYER_DONE, authId: 'DEF' },
+                        { type: PLAYER_DONE, authId: 'ABC' },
+                        { type: PLAYER_DONE, authId: 'DEF' },
+                        { type: PLAYER_DONE, authId: 'ABC' }
+                    ]
+                }
+            }
+        };
+        expect(GameUtils.getGameDay(appData, 'game1')).to.equal(2);
+    });
+
     it('can derive appData', () => {
         const appData = {
             games: {
