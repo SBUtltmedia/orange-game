@@ -77,7 +77,13 @@ function getEventsBeforeTime(events, time) {
 }
 
 export function getGameDay(appData, gameId) {
-    return _.min(getDoneEventCountByPlayer(appData, gameId));
+    const counts = getDoneEventCountByPlayer(appData, gameId);
+    if (_.isEmpty(counts)) {
+        return 1;
+    }
+    else {
+        return _.min(getDoneEventCountByPlayer(appData, gameId)) + 1;
+    }
 }
 
 export function getThisGameDay(appData) {

@@ -1,11 +1,16 @@
 require('source-map-support').install();
+import requireUncached from 'require-uncached';
 import * as GameUtils from '../src/gameUtils';
 import { expect } from 'chai';
-import model from "../src/model";
 import { DAYS_IN_GAME } from '../src/constants/Settings';
 import { PLAYER_DONE } from '../src/constants/EventTypes';
 
 describe('gameUtils', () => {
+    var model;
+
+    beforeEach(() => {
+        model = requireUncached('../src/model');
+    });
 
     it('cannot advance day (derived) if there are oranges in box', () => {
         const data = {
@@ -55,7 +60,22 @@ describe('gameUtils', () => {
         expect(GameUtils.canDealNewDayDerived(data)).to.be.true;
     });
 
-    it('can derive game day', () => {
+    it('can derive game day 1', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: []
+                }
+            }
+        };
+        expect(GameUtils.getGameDay(appData, 'game1')).to.equal(1);
+    });
+
+    it('can derive game day 3', () => {
         const appData = {
             games: {
                 game1: {
@@ -73,7 +93,7 @@ describe('gameUtils', () => {
                 }
             }
         };
-        expect(GameUtils.getGameDay(appData, 'game1')).to.equal(2);
+        expect(GameUtils.getGameDay(appData, 'game1')).to.equal(3);
     });
 
     it('can derive appData', () => {
@@ -92,7 +112,7 @@ describe('gameUtils', () => {
             }
         };
         const derived = {
-            day: 0,
+            day: 1,
             oranges: {
                 basket: 0,
                 dish: 0,
