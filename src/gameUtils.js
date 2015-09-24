@@ -1,7 +1,7 @@
 import model from './model';
 import _ from 'lodash';
 import { ACCEPTED } from './constants/NegotiationStates';
-import { DAY_ADVANCED, ORANGE_MOVED, PLAYER_DONE, ORANGES_DEALT } from './constants/EventTypes';
+import { ORANGE_MOVED, PLAYER_DONE, ORANGES_DEALT } from './constants/EventTypes';
 import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
 
 export function getEventsInGame(appData, gameId, eventType=null) {
@@ -63,9 +63,17 @@ export function getOrangesInThisBox(appData) {
     return getOrangesInBox(appData, model.gameId, model.authId);
 }
 
+function countEventsByPlayer(events) {
+    return _.map(_.groupBy(events, e => e.authId), _.size);
+}
+
+function getEventsBeforeTime(events, time) {
+    return _.filter(events, e => e.time < time);
+}
+
 export function getGameDay(appData, gameId) {
-    const dayAdvancedEvents = getEventsInGame(appData, gameId, DAY_ADVANCED);
-    return _.size(dayAdvancedEvents);
+    const doneEvents = getEventsInThisGame(appData, PLAYER_DONE);
+    return _.min(countEventsByPlayer(doneEvents));
 }
 
 export function getThisGameDay(appData) {
@@ -73,8 +81,9 @@ export function getThisGameDay(appData) {
 }
 
 export function getEventDay(appData, event) {
-    const dayAdvancedEvents = getEventsInGame(appData, gameId, DAY_ADVANCED);
-    return _.size(_.filter(dayAdvancedEvents, e => e.time < event.time));
+    const doneEvents = getEventsInThisGame(appData, PLAYER_DONE);
+    const doneEventsBeforeEvent = getEventsBeforeTime(doneEvents, event.time);
+    return _.min(countEventsByPlayer(doneEventsBeforeEvent));
 }
 
 function getFitnessGainForOrangesEatenInSameDay(orangesEaten) {
@@ -204,11 +213,16 @@ export function canDealNewDay(appData) {
 
 export function derivePlayers(appData) {
     const game = getThisGame(appData);
-    const playerDoneEvents = getEventsInThisGame(appData, PLAYER_DONE);
-    return _.map(game.players, p => { return {
-        name: p.name,
-        ready: _.size(playerDoneEvents) >= getThisGameDay()
-    }});
+    if (game) {
+        const playerDoneEvents = getEventsInThisGame(appData, PLAYER_DONE);
+        return _.map(game.players, p => { return {
+            name: p.name,
+            ready: _.size(playerDoneEvents) >= getThisGameDay()
+        }});
+    }
+    else {
+        return [];
+    }
 }
 
 export function deriveData(appData) {

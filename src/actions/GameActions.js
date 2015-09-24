@@ -5,8 +5,7 @@ import { getThisPlayer, getThisGame, updateThisPlayer, getEventsInThisGame,
             getThisGameDay, getEventDay, canPlayerAdvanceDay,
             canDealNewDay } from '../gameUtils';
 import { saveEvent } from '../firebaseUtils';
-import { ORANGES_DEALT, PLAYER_DONE, DAY_ADVANCED, ORANGE_MOVED }
-            from '../constants/EventTypes';
+import { ORANGES_DEALT, PLAYER_DONE, ORANGE_MOVED } from '../constants/EventTypes';
 import { MAX_ORANGES } from '../constants/Settings';
 
 function getRandomNumberOfOranges() {
@@ -24,40 +23,6 @@ export function dropOrange(source, dest, appData) {
     saveEvent(model.gameId, eventData);
 }
 
-function shouldDealNewDay(appData) {
-    const game = getThisGame(appData);
-    if (game) {
-        const dealEvents = getEventsInThisGame(appData, ORANGES_DEALT);
-        const myEvents = _.filter(dealEvents, e => e.playerId === model.authId);
-        return _.size(myEvents) < getThisGameDay();
-    }
-}
-
-function shouldAdvanceDay(appData) {
-
-    console.log("SHOULD?");
-
-    const game = getThisGame(appData);
-    if (game) {
-
-        console.log("HAS GAME");
-
-        const gameDay = getThisGameDay();
-
-        console.log("Game day", gameDay);
-
-        if (gameDay === 0) {
-            return true;
-        }
-        const doneEvents = getEventsInThisGame(appData, PLAYER_DONE);
-        const doneEventsToday = _.filter(doneEvents, e => {
-            const eventDay = getEventDay(appData, e);
-            return eventDay === gameDay;
-        });
-        return _.size(doneEventsToday) >= _.size(game.players);
-    }
-}
-
 function dealNewDay(appData) {
     const game = getThisGame(appData);
     const eventData = {
@@ -68,32 +33,21 @@ function dealNewDay(appData) {
     saveEvent(model.gameId, eventData);
 }
 
-function advanceDay(appData) {
-    const game = getThisGame(appData);
-    const eventData = {
-        type: DAY_ADVANCED
-    };
-
-    console.log(eventData);
-
-    saveEvent(model.gameId, eventData);
-}
-
 export function dealNewDayIfNeeded(appData) {
-    if (shouldDealNewDay(appData)) {
+    if (canDealNewDay(appData)) {
 
-        console.log("DREALING");
+        console.log("DEALING");
 
         dealNewDay(appData);
     }
 }
 
 export function advanceDayIfNeeded(appData) {
-    if (shouldAdvanceDay(appData)) {
+    if (canPlayerAdvanceDay(appData)) {
 
         console.log("ADVANCE!");
 
-        //advanceDay(appData);
+        advanceDay(appData);
     }
 }
 

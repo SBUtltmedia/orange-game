@@ -55,7 +55,7 @@ describe('gameUtils', () => {
         expect(GameUtils.canDealNewDayDerived(data)).to.be.true;
     });
 
-    it('can derive players from appData', () => {
+    it('can derive appData', () => {
         const appData = {
             games: {
                 game1: {
