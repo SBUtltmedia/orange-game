@@ -63,6 +63,11 @@ export function getOrangesInThisBox(appData) {
     return getOrangesInBox(appData, model.gameId, model.authId);
 }
 
+function getDoneEventCountByPlayer(appData, gameId) {
+    const doneEvents = getEventsInGame(appData, gameId, PLAYER_DONE);
+    return countEventsByPlayer(doneEvents);
+}
+
 function countEventsByPlayer(events) {
     return _.map(_.groupBy(events, e => e.authId), _.size);
 }
@@ -72,8 +77,7 @@ function getEventsBeforeTime(events, time) {
 }
 
 export function getGameDay(appData, gameId) {
-    const doneEvents = getEventsInGame(appData, gameId, PLAYER_DONE);
-    return _.min(countEventsByPlayer(doneEvents));
+    return _.min(getDoneEventCountByPlayer(appData, gameId));
 }
 
 export function getThisGameDay(appData) {
