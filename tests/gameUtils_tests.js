@@ -2,14 +2,14 @@ require('source-map-support').install();
 import requireUncached from 'require-uncached';
 import * as GameUtils from '../src/gameUtils';
 import { expect } from 'chai';
+import model from '../src/model';
 import { DAYS_IN_GAME } from '../src/constants/Settings';
 import { PLAYER_DONE } from '../src/constants/EventTypes';
 
 describe('gameUtils', () => {
-    var model;
 
-    beforeEach(() => {
-        model = requireUncached('../src/model');
+    afterEach(() => {
+        model.reset();
     });
 
     it('cannot advance day (derived) if there are oranges in box', () => {
@@ -101,9 +101,8 @@ describe('gameUtils', () => {
             games: {
                 game1: {
                     players: {
-                        ABC: {
-                            name: 'Ken'
-                        }
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
                     },
                     events: [
                         { type: PLAYER_DONE, authId: 'ABC' }
@@ -119,7 +118,8 @@ describe('gameUtils', () => {
                 box: 0
             },
             players: [
-                { name: 'Ken', ready: true }
+                { name: 'Ken', ready: true },
+                { name: 'Jen', ready: false }
             ]
         };
         model.gameId = 'game1';
