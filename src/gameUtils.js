@@ -55,7 +55,7 @@ export function getOrangesInThisBasket(appData) {
 
 export function getOrangesInBox(appData, gameId, authId) {
     const orangesDealtEvents = getEventsInGame(appData, gameId, ORANGES_DEALT);
-    const myEvents = _.filter(orangesDealtEvents, e => e.playerId === authId);
+    const myEvents = _.filter(orangesDealtEvents, e => e.authId === authId);
     return _.sum(myEvents, e => e.oranges);
 }
 
@@ -217,8 +217,19 @@ export function canPlayerAdvanceDay(appData) {
     return canPlayerAdvanceDayDerived(deriveData(appData));
 }
 
-export function canDealNewDay(appData) {
-    return canDealNewDayDerived(deriveData(appData));
+export function shouldDealNewDay(appData) {
+    return shouldDealNewDayDerived(deriveData(appData));
+}
+
+export function canPlayerAdvanceDayDerived(derivedData) {
+    return derivedData.oranges.box === 0 && derivedData.day < DAYS_IN_GAME;
+}
+
+export function shouldDealNewDayDerived(derivedData) {
+
+    console.log(derivedData);
+
+    return _.every(derivedData.players, p => p.ready);
 }
 
 export function derivePlayers(appData) {
@@ -249,12 +260,4 @@ export function deriveData(appData) {
         day: getThisGameDay(appData),
         players: derivePlayers(appData)
     };
-}
-
-export function canPlayerAdvanceDayDerived(derivedData) {
-    return derivedData.oranges.box === 0 && derivedData.day < DAYS_IN_GAME;
-}
-
-export function canDealNewDayDerived(derivedData) {
-    return _.every(derivedData.players, p => p.ready);
 }

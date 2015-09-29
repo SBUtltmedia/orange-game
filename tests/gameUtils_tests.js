@@ -4,7 +4,7 @@ import * as GameUtils from '../src/gameUtils';
 import { expect } from 'chai';
 import model from '../src/model';
 import { DAYS_IN_GAME } from '../src/constants/Settings';
-import { PLAYER_DONE } from '../src/constants/EventTypes';
+import { ORANGES_DEALT, PLAYER_DONE } from '../src/constants/EventTypes';
 
 describe('gameUtils', () => {
 
@@ -48,7 +48,7 @@ describe('gameUtils', () => {
                 { ready: false }
             ]
         };
-        expect(GameUtils.canDealNewDayDerived(data)).to.be.false;
+        expect(GameUtils.shouldDealNewDayDerived(data)).to.be.false;
     });
 
     it('can deal new day (derived) if all players are done', () => {
@@ -57,7 +57,7 @@ describe('gameUtils', () => {
                 { ready: true }
             ]
         };
-        expect(GameUtils.canDealNewDayDerived(data)).to.be.true;
+        expect(GameUtils.shouldDealNewDayDerived(data)).to.be.true;
     });
 
     it('can derive game day 1', () => {
@@ -107,7 +107,9 @@ describe('gameUtils', () => {
                         DEF: { name: 'Jen' }
                     },
                     events: [
-                        { type: PLAYER_DONE, authId: 'ABC' }
+                        { type: PLAYER_DONE, authId: 'ABC' },
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1 },
+                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3 }
                     ]
                 }
             }
@@ -117,7 +119,7 @@ describe('gameUtils', () => {
             oranges: {
                 basket: 0,
                 dish: 0,
-                box: 0
+                box: 3
             },
             players: [
                 { name: 'Ken', ready: true },
@@ -125,6 +127,7 @@ describe('gameUtils', () => {
             ]
         };
         model.gameId = 'game1';
+        model.authId = 'DEF';
         expect(GameUtils.deriveData(appData)).to.deep.equal(derived);
     });
 
