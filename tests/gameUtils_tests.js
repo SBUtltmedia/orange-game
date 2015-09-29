@@ -68,7 +68,9 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' },
                         DEF: { name: 'Jen' }
                     },
-                    events: []
+                    events: [
+                        { type: PLAYER_DONE, authId: 'ABC' }
+                    ]
                 }
             }
         };
