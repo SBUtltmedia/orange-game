@@ -20,23 +20,43 @@ export function getEventsInThisGame(appData, eventType) {
     return getEventsInGame(appData, model.gameId, eventType);
 }
 
-function getOrangesDroppedInDishOrBasket(appData, name, gameId, authId) {
+function getOrangesDroppedIn(appData, name, gameId, authId) {
     const orangeMovedEvents = getEventsInGame(appData, gameId, ORANGE_MOVED);
     return _.filter(orangeMovedEvents, e => e.dest === name);
 }
 
+function getOrangesDroppedFrom(appData, name, gameId, authId) {
+    const orangeMovedEvents = getEventsInGame(appData, gameId, ORANGE_MOVED);
+    return _.filter(orangeMovedEvents, e => e.src === name);
+}
+
 function getOrangesDroppedInDish(appData, gameId, authId) {
-    return getOrangesDroppedInDishOrBasket(appData, 'dish', gameId, authId);
+    return getOrangesDroppedIn(appData, 'dish', gameId, authId);
 }
 
 function getOrangesDroppedInBasket(appData, gameId, authId) {
-    return getOrangesDroppedInDishOrBasket(appData, 'basket', gameId, authId);
+    return getOrangesDroppedIn(appData, 'basket', gameId, authId);
+}
+
+function getOrangesDroppedInBox(appData, gameId, authId) {
+    return getOrangesDroppedIn(appData, 'box', gameId, authId);
+}
+
+function getOrangesDroppedFromDish(appData, gameId, authId) {
+    return getOrangesDroppedFrom(appData, 'dish', gameId, authId);
+}
+
+function getOrangesDroppedFromBasket(appData, gameId, authId) {
+    return getOrangesDroppedFrom(appData, 'basket', gameId, authId);
+}
+
+function getOrangesDroppedFromBox(appData, gameId, authId) {
+    return getOrangesDroppedFrom(appData, 'box', gameId, authId);
 }
 
 export function getOrangesInDish(appData, gameId, authId) {
-    const orangesDropped = getOrangesDroppedInDish(appData, gameId, authId);
-    const gameDay = getGameDay(appData, gameId);
-    return _.size(_.filter(orangesDropped, o => getEventDay(o) === gameDay));
+    return getOrangesDroppedInDish(appData, gameId, authId) -
+           getOrangesDroppedFromDish(appData, gameId, authId);
 }
 
 export function getOrangesInThisDish(appData) {
@@ -44,23 +64,43 @@ export function getOrangesInThisDish(appData) {
 }
 
 export function getOrangesInBasket(appData, gameId, authId) {
-    const orangesDropped = getOrangesDroppedInBasket(appData, gameId, authId);
-    const gameDay = getGameDay(appData, gameId);
-    return _.size(_.filter(orangesDropped, o => getEventDay(o) === gameDay));
+    return getOrangesDroppedInBasket(appData, gameId, authId) -
+           getOrangesDroppedFromBasket(appData, gameId, authId);
 }
 
 export function getOrangesInThisBasket(appData) {
     return getOrangesInBasket(appData, model.gameId, model.authId);
 }
 
-export function getOrangesInBox(appData, gameId, authId) {
+function getOrangesDealt(appData, gameId, authId) {
     const orangesDealtEvents = getEventsInGame(appData, gameId, ORANGES_DEALT);
     const myEvents = _.filter(orangesDealtEvents, e => e.authId === authId);
+
+    console.log(appData, gameId, authId);
+
     return _.sum(myEvents, e => e.oranges);
+}
+
+export function getOrangesInBox(appData, gameId, authId) {
+    return getOrangesDealt(appData, gameId, authId) +
+           getOrangesDroppedInBox(appData, gameId, authId) -
+           getOrangesDroppedFromBox(appData, gameId, authId);
 }
 
 export function getOrangesInThisBox(appData) {
     return getOrangesInBox(appData, model.gameId, model.authId);
+}
+
+export function getOranges(appData, gameId, authId) {
+    return {
+        box: getOrangesInBox(appData, gameId, authId),
+        basket: getOrangesInBasket(appData, gameId, authId),
+        dish: getOrangesInDish(appData, gameId, authId)
+    };
+}
+
+export function getMyOranges(appData) {
+    return getOranges(appData, model.gameId, model.authId);
 }
 
 function getLowestEventCountByPlayer(appData, events, gameId) {
@@ -226,9 +266,6 @@ export function canPlayerAdvanceDayDerived(derivedData) {
 }
 
 export function shouldDealNewDayDerived(derivedData) {
-
-    console.log(derivedData);
-
     return _.every(derivedData.players, p => p.ready);
 }
 
@@ -239,9 +276,11 @@ export function derivePlayers(appData) {
         return _.map(game.players, p => {
             const authId = _.findKey(game.players, p);
             const playerDoneEvents = _.filter(doneEvents, e => e.authId === authId);
+            const oranges = getOranges(appData, model.gameId, authId);
             return {
                 name: p.name,
-                ready: _.size(playerDoneEvents) >= getThisGameDay()
+                ready: oranges.box === 0 && _.size(playerDoneEvents) >= getThisGameDay(),
+                oranges: oranges
             };
         });
     }
@@ -252,11 +291,7 @@ export function derivePlayers(appData) {
 
 export function deriveData(appData) {
     return {
-        oranges: {
-            box: getOrangesInThisBox(appData),
-            basket: getOrangesInThisBasket(appData),
-            dish: getOrangesInThisDish(appData)
-        },
+        oranges: getMyOranges(appData),
         day: getThisGameDay(appData),
         players: derivePlayers(appData)
     };

@@ -122,8 +122,24 @@ describe('gameUtils', () => {
                 box: 3
             },
             players: [
-                { name: 'Ken', ready: true },
-                { name: 'Jen', ready: false }
+                {
+                    name: 'Ken',
+                    ready: true,
+                    oranges: {
+                        basket: 0,
+                        box: 0,
+                        dish: 0
+                    }
+                },
+                {
+                    name: 'Jen',
+                    ready: false,
+                    oranges: {
+                        basket: 0,
+                        box: 3,
+                        dish: 0
+                    }
+                }
             ]
         };
         model.gameId = 'game1';
