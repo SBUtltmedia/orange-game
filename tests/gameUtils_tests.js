@@ -124,10 +124,10 @@ describe('gameUtils', () => {
             players: [
                 {
                     name: 'Ken',
-                    ready: true,
+                    ready: false,
                     oranges: {
                         basket: 0,
-                        box: 0,
+                        box: 1,
                         dish: 0
                     }
                 },
