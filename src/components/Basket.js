@@ -10,6 +10,9 @@ const styles = {
     }
 }
 
+@connect(state => ({
+    firebase: state.firebase
+}))
 export default class Basket extends Component {
 
     render() {

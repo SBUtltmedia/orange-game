@@ -16,14 +16,14 @@ const styles = {
     }
 };
 
+@connect(state => ({
+    firebase: state.firebase
+}))
 export default class Box extends Component {
 
     render() {
         const { firebase } = this.props;
         const oranges = getOrangesInMyBox(firebase);
-
-        console.log("ORANGES", oranges);
-
         return <Bin style={styles.box} textual={false} graphical={true}
                     name="box" showName={false} oranges={oranges} />
     }

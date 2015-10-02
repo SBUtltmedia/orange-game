@@ -73,7 +73,7 @@ describe('gameUtils', () => {
     });
 
     it('does not deal day if appData is null', () => {
-        expect(GameUtils.shouldDealNewDayDerived(null)).to.be.false;    
+        expect(GameUtils.shouldDealNewDayDerived(null)).to.be.false;
     });
 
     it('derives game day 1', () => {
@@ -180,6 +180,24 @@ describe('gameUtils', () => {
         model.gameId = 'game1';
         model.authId = 'ABC';
         expect(GameUtils.getOrangesInMyBox(appData)).to.equal(1);
+    });
+
+    it('gets oranges dropped in box', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' }
+                    },
+                    events: [
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1 }
+                    ]
+                }
+            }
+        };
+        model.gameId = 'game1';
+        model.authId = 'ABC';
+        expect(GameUtils.getOrangesDroppedInBox(appData, 'game1', 'ABC')).to.equal(0);
     });
 
     it('reduces fitness on a new day', () => {

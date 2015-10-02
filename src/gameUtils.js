@@ -22,35 +22,35 @@ export function getEventsInThisGame(appData, eventType) {
 
 function getOrangesDroppedIn(appData, name, gameId, authId) {
     const orangeMovedEvents = getEventsInGame(appData, gameId, ORANGE_MOVED);
-    return _.filter(orangeMovedEvents, e => e.dest === name);
+    return _.sum(_.filter(orangeMovedEvents, e => e.dest === name));
 }
 
 function getOrangesDroppedFrom(appData, name, gameId, authId) {
     const orangeMovedEvents = getEventsInGame(appData, gameId, ORANGE_MOVED);
-    return _.filter(orangeMovedEvents, e => e.src === name);
+    return _.sum(_.filter(orangeMovedEvents, e => e.src === name));
 }
 
-function getOrangesDroppedInDish(appData, gameId, authId) {
+export function getOrangesDroppedInDish(appData, gameId, authId) {
     return getOrangesDroppedIn(appData, 'dish', gameId, authId);
 }
 
-function getOrangesDroppedInBasket(appData, gameId, authId) {
+export function getOrangesDroppedInBasket(appData, gameId, authId) {
     return getOrangesDroppedIn(appData, 'basket', gameId, authId);
 }
 
-function getOrangesDroppedInBox(appData, gameId, authId) {
+export function getOrangesDroppedInBox(appData, gameId, authId) {
     return getOrangesDroppedIn(appData, 'box', gameId, authId);
 }
 
-function getOrangesDroppedFromDish(appData, gameId, authId) {
+export function getOrangesDroppedFromDish(appData, gameId, authId) {
     return getOrangesDroppedFrom(appData, 'dish', gameId, authId);
 }
 
-function getOrangesDroppedFromBasket(appData, gameId, authId) {
+export function getOrangesDroppedFromBasket(appData, gameId, authId) {
     return getOrangesDroppedFrom(appData, 'basket', gameId, authId);
 }
 
-function getOrangesDroppedFromBox(appData, gameId, authId) {
+export function getOrangesDroppedFromBox(appData, gameId, authId) {
     return getOrangesDroppedFrom(appData, 'box', gameId, authId);
 }
 
@@ -87,6 +87,9 @@ function getOrangesDealt(appData, gameId, authId) {
 }
 
 export function getOrangesInBox(appData, gameId, authId) {
+
+    console.log(appData, gameId, authId, getOrangesDealt(appData, gameId, authId));
+
     return getOrangesDealt(appData, gameId, authId) +
            getOrangesDroppedInBox(appData, gameId, authId) -
            getOrangesDroppedFromBox(appData, gameId, authId);
