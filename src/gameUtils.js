@@ -267,10 +267,16 @@ export function shouldDealNewDay(appData) {
 }
 
 export function canPlayerAdvanceDayDerived(derivedData) {
+    if (!derivedData) {
+        return false;
+    }
     return derivedData.oranges.box === 0 && derivedData.day < DAYS_IN_GAME;
 }
 
 export function shouldDealNewDayDerived(derivedData) {
+    if (!derivedData) {
+        return false;
+    }
     return _.isEmpty(derivedData.dailyOranges) ||
            _.every(derivedData.players, p => p.ready);
 }

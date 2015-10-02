@@ -62,7 +62,7 @@ describe('gameUtils', () => {
         expect(GameUtils.shouldDealNewDayDerived(data)).to.be.true;
     });
 
-    it('can deal new day (derived) if all player has never gotten oranges', () => {
+    it('can deals new day (derived) if all player has never gotten oranges', () => {
         const data = {
             dailyOranges: [],
             players: [
@@ -70,6 +70,10 @@ describe('gameUtils', () => {
             ]
         };
         expect(GameUtils.shouldDealNewDayDerived(data)).to.be.true;
+    });
+
+    it('does not deal day if appData is null', () => {
+        expect(GameUtils.shouldDealNewDayDerived(null)).to.be.false;    
     });
 
     it('derives game day 1', () => {
