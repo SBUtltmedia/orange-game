@@ -72,13 +72,18 @@ export function getOrangesInThisBasket(appData) {
     return getOrangesInBasket(appData, model.gameId, model.authId);
 }
 
-function getOrangesDealt(appData, gameId, authId) {
+export function getDailyOranges(appData, gameId, authId) {
     const orangesDealtEvents = getEventsInGame(appData, gameId, ORANGES_DEALT);
-    const myEvents = _.filter(orangesDealtEvents, e => e.authId === authId);
+    const playerEvents = _.filter(orangesDealtEvents, e => e.authId === authId);
+    return _.map(playerEvents, e => e.oranges);
+}
 
-    console.log(appData, gameId, authId);
+export function getMyDailyOranges(appData) {
+    return getDailyOranges(appData, model.gameId, model.authId);
+}
 
-    return _.sum(myEvents, e => e.oranges);
+function getOrangesDealt(appData, gameId, authId) {
+    return _.sum(getDailyOranges(appData, gameId, authId));
 }
 
 export function getOrangesInBox(appData, gameId, authId) {
@@ -266,7 +271,8 @@ export function canPlayerAdvanceDayDerived(derivedData) {
 }
 
 export function shouldDealNewDayDerived(derivedData) {
-    return _.every(derivedData.players, p => p.ready);
+    return _.isEmpty(derivedData.dailyOranges) ||
+           _.every(derivedData.players, p => p.ready);
 }
 
 export function derivePlayers(appData) {
@@ -291,6 +297,7 @@ export function derivePlayers(appData) {
 
 export function deriveData(appData) {
     return {
+        dailyOranges: getMyDailyOranges(appData),
         oranges: getMyOranges(appData),
         day: getThisGameDay(appData),
         players: derivePlayers(appData)

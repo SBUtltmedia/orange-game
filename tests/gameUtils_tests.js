@@ -44,6 +44,7 @@ describe('gameUtils', () => {
 
     it('cannot deal new day (derived) if all players are not done', () => {
         const data = {
+            dailyOranges: [ 1 ],
             players: [
                 { ready: false }
             ]
@@ -53,6 +54,7 @@ describe('gameUtils', () => {
 
     it('can deal new day (derived) if all players are done', () => {
         const data = {
+            dailyOranges: [ 1 ],
             players: [
                 { ready: true }
             ]
@@ -60,7 +62,17 @@ describe('gameUtils', () => {
         expect(GameUtils.shouldDealNewDayDerived(data)).to.be.true;
     });
 
-    it('can derive game day 1', () => {
+    it('can deal new day (derived) if all player has never gotten oranges', () => {
+        const data = {
+            dailyOranges: [],
+            players: [
+                { ready: false }
+            ]
+        };
+        expect(GameUtils.shouldDealNewDayDerived(data)).to.be.true;
+    });
+
+    it('derives game day 1', () => {
         const appData = {
             games: {
                 game1: {
@@ -77,7 +89,7 @@ describe('gameUtils', () => {
         expect(GameUtils.getGameDay(appData, 'game1')).to.equal(1);
     });
 
-    it('can derive game day 3', () => {
+    it('derives game day 3', () => {
         const appData = {
             games: {
                 game1: {
@@ -98,7 +110,7 @@ describe('gameUtils', () => {
         expect(GameUtils.getGameDay(appData, 'game1')).to.equal(3);
     });
 
-    it('can derive appData', () => {
+    it('derives appData', () => {
         const appData = {
             games: {
                 game1: {
@@ -116,6 +128,7 @@ describe('gameUtils', () => {
         };
         const derived = {
             day: 1,
+            dailyOranges: [ 3 ],
             oranges: {
                 basket: 0,
                 dish: 0,
