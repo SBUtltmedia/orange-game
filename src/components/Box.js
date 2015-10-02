@@ -16,9 +16,9 @@ const styles = {
     }
 };
 
-@connect(state => ({
+@connect(state => { return {
     firebase: state.firebase
-}))
+}})
 export default class Box extends Component {
 
     render() {

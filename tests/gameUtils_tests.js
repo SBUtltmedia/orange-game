@@ -198,6 +198,9 @@ describe('gameUtils', () => {
         model.gameId = 'game1';
         model.authId = 'ABC';
         expect(GameUtils.getOrangesDroppedInBox(appData, 'game1', 'ABC')).to.equal(0);
+        appData.games.game1.events.push({
+            { type: ORANGE_MOVED, authId: 'ABC', oranges: 1, src: 'box', dest: 'basket' }
+        });
     });
 
     it('reduces fitness on a new day', () => {

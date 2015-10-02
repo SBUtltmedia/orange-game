@@ -14,7 +14,7 @@ function getRandomNumberOfOranges() {
 export function dropOrange(source, dest, appData) {
     const game = getThisGame(appData);
     const eventData = {
-        type: ORANGES_MOVED,
+        type: ORANGE_MOVED,
         authId: model.authId,
         src: source,
         dest: dest
