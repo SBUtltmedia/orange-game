@@ -59,7 +59,7 @@ export function getOrangesInDish(appData, gameId, authId) {
            getOrangesDroppedFromDish(appData, gameId, authId);
 }
 
-export function getOrangesInThisDish(appData) {
+export function getOrangesInMyDish(appData) {
     return getOrangesInDish(appData, model.gameId, model.authId);
 }
 
@@ -68,7 +68,7 @@ export function getOrangesInBasket(appData, gameId, authId) {
            getOrangesDroppedFromBasket(appData, gameId, authId);
 }
 
-export function getOrangesInThisBasket(appData) {
+export function getOrangesInMyBasket(appData) {
     return getOrangesInBasket(appData, model.gameId, model.authId);
 }
 
@@ -92,7 +92,7 @@ export function getOrangesInBox(appData, gameId, authId) {
            getOrangesDroppedFromBox(appData, gameId, authId);
 }
 
-export function getOrangesInThisBox(appData) {
+export function getOrangesInMyBox(appData) {
     return getOrangesInBox(appData, model.gameId, model.authId);
 }
 

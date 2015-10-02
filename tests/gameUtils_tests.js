@@ -160,6 +160,24 @@ describe('gameUtils', () => {
         expect(GameUtils.deriveData(appData)).to.deep.equal(derived);
     });
 
+    it('gets oranges in my box', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' }
+                    },
+                    events: [
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1 }
+                    ]
+                }
+            }
+        };
+        model.gameId = 'game1';
+        model.authId = 'ABC';
+        expect(GameUtils.getOrangesInMyBox(appData)).to.equal(1);
+    });
+
     it('reduces fitness on a new day', () => {
 
     });

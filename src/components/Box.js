@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { verticalCenter } from '../styles/Themes';
 import Bin from './Bin';
-import { getOrangesInBox } from '../gameUtils';
+import { getOrangesInMyBox } from '../gameUtils';
 import { connect } from 'redux/react';
 
 const styles = {
@@ -20,7 +20,10 @@ export default class Box extends Component {
 
     render() {
         const { firebase } = this.props;
-        const oranges = getOrangesInBox(firebase);
+        const oranges = getOrangesInMyBox(firebase);
+
+        console.log("ORANGES", oranges);
+
         return <Bin style={styles.box} textual={false} graphical={true}
                     name="box" showName={false} oranges={oranges} />
     }
