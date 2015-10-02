@@ -8,7 +8,7 @@ import { ORANGES_DEALT, PLAYER_DONE, ORANGE_MOVED } from '../constants/EventType
 import { MAX_ORANGES } from '../constants/Settings';
 
 function getRandomNumberOfOranges() {
-    return Math.floor(Math.random() * MAX_ORANGES);
+    return Math.ceil(Math.random() * MAX_ORANGES);
 }
 
 export function dropOrange(source, dest, appData) {
