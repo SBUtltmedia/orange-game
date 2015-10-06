@@ -20,18 +20,14 @@ export function getEventsInThisGame(appData, eventType) {
     return getEventsInGame(appData, model.gameId, eventType);
 }
 
-function sumOrangeMovedEvents(events) {
-    return _.sum(_.map(events, e => e.oranges));
-}
-
 function getOrangesDroppedIn(appData, name, gameId, authId) {
     const events = getEventsInGame(appData, gameId, ORANGE_MOVED);
-    return sumOrangeMovedEvents(_.filter(events, e => e.dest === name));
+    return _.size(_.filter(events, e => e.dest === name));
 }
 
 function getOrangesDroppedFrom(appData, name, gameId, authId) {
     const events = getEventsInGame(appData, gameId, ORANGE_MOVED);
-    return sumOrangeMovedEvents(_.filter(events, e => e.src === name));
+    return _.size(_.filter(events, e => e.src === name));
 }
 
 export function getOrangesDroppedInDish(appData, gameId, authId) {

@@ -200,7 +200,7 @@ describe('gameUtils', () => {
         expect(GameUtils.getOrangesDroppedInBox(appData, 'game1', 'ABC')).to.equal(0);
         expect(GameUtils.getOrangesDroppedInBasket(appData, 'game1', 'ABC')).to.equal(0);
         appData.games.game1.events.push({
-            type: ORANGE_MOVED, authId: 'ABC', oranges: 1, src: 'box', dest: 'basket'
+            type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket'
         });
         expect(GameUtils.getOrangesDroppedInBox(appData, 'game1', 'ABC')).to.equal(0);
         expect(GameUtils.getOrangesDroppedInBasket(appData, 'game1', 'ABC')).to.equal(1);
