@@ -2,7 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import { areaTheme, verticalCenter } from '../styles/Themes';
 import model from '../model';
 import { connect } from 'redux/react';
-import { getThisPlayerDebts, getThisPlayerCredits, getThisGameDay, getMyFitness, getMyFitnessChange } from '../gameUtils';
+import { getThisPlayerDebts, getThisPlayerCredits, getThisGameDay, getMyFitness,
+        getMyFitnessChange } from '../gameUtils';
 import _ from 'lodash';
 import { payDebt } from '../actions/MarketActions';
 

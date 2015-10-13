@@ -228,6 +228,22 @@ describe('gameUtils', () => {
     });
 
     it('reduces fitness on a new day', () => {
-
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' }
+                    },
+                    events: []
+                }
+            }
+        };
+        model.gameId = 'game1';
+        model.authId = 'ABC';
+        expect(GameUtils.getMyFitness(appData)).to.equal(0);
+        appData.games.game1.events.push({
+            type: ORANGES_DEALT, authId: 'ABC', oranges: 8, time: 2
+        });
+        expect(GameUtils.getMyFitness(appData)).to.equal(-10);
     });
 });
