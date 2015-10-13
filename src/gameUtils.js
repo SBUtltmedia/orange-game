@@ -26,19 +26,55 @@ function getTodayStart(appData, gameId, authId) {
     return _.isEmpty(playerDoneEvents) ? 0 : _.last(playerDoneEvents).time;
 }
 
-function getOrangesDropped(prop, appData, name, gameId, authId, onlyToday) {
+function getOrangeDropEvents(prop, appData, name, gameId, authId, onlyToday) {
     const events = getEventsAfterTime(
                         getEventsInGame(appData, gameId, ORANGE_MOVED),
                         onlyToday ? getTodayStart(appData, gameId, authId) : 0);
-    return _.size(_.filter(events, e => e[prop] === name && e.authId === authId));
+    return _.filter(events, e => e[prop] === name && e.authId === authId);
+}
+
+function getOrangesDropped(prop, appData, name, gameId, authId, onlyToday) {
+    return _.size(getOrangeDropEvents(prop, appData, name, gameId, authId, onlyToday));
+}
+
+function getOrangeDropInEvents(appData, name, gameId, authId, onlyToday) {
+    return getOrangeDropEvents('dest', appData, name, gameId, authId, onlyToday);
 }
 
 function getOrangesDroppedIn(appData, name, gameId, authId, onlyToday) {
     return getOrangesDropped('dest', appData, name, gameId, authId, onlyToday);
 }
 
+function getOrangeDropFromEvents(appData, name, gameId, authId, onlyToday) {
+    return getOrangeDropEvents('src', appData, name, gameId, authId, onlyToday);
+}
+
 function getOrangesDroppedFrom(appData, name, gameId, authId, onlyToday) {
     return getOrangesDropped('src', appData, name, gameId, authId, onlyToday);
+}
+
+export function getOrangeDropInDishEvents(appData, gameId, authId) {
+    return getOrangeDropInEvents(appData, 'dish', gameId, authId);
+}
+
+export function getOrangeDropInBasketEvents(appData, gameId, authId) {
+    return getOrangeDropInEvents(appData, 'basket', gameId, authId);
+}
+
+export function getOrangeDropInBoxEvents(appData, gameId, authId) {
+    return getOrangeDropInEvents(appData, 'box', gameId, authId);
+}
+
+export function getOrangeDropFromDishEvents(appData, gameId, authId) {
+    return getOrangeDropFromEvents(appData, 'dish', gameId, authId);
+}
+
+export function getOrangeDropFromBasketEvents(appData, gameId, authId) {
+    return getOrangeDropFromEvents(appData, 'basket', gameId, authId);
+}
+
+export function getOrangeDropFromBoxEvents(appData, gameId, authId) {
+    return getOrangeDropFromEvents(appData, 'box', gameId, authId);
 }
 
 export function getOrangesDroppedInDish(appData, gameId, authId) {
@@ -167,23 +203,23 @@ export function getEventDay(appData, event) {
     return getHighestEventCountByPlayer(appData, prevDoneEvents, model.gameId);
 }
 
-function getFitnessGainForOrangesEatenInSameDay(orangesEaten) {
+function getFitnessGainForEatEventsInSameDay(eatEvents) {
     var accum = 0;
-    for (var i = 0; i < _.size(orangesEaten); i++) {
+    for (var i = 0; i < _.size(eatEvents); i++) {
         accum += MAX_FITNESS_GAIN - i;
     }
     return accum;
 }
 
-function getFitnessGainForOrangesEaten(orangesEaten) {
+function getFitnessGainForEatEvents(appData, eatEvents) {
     return _.sum(_.map(_.range(1, DAYS_IN_GAME + 1), i =>
-            getFitnessGainForOrangesEatenInSameDay(_.filter(orangesEaten, o =>
-                getEventDay(o) === 1))));
+            getFitnessGainForEatEventsInSameDay(_.filter(eatEvents, e =>
+                getEventDay(appData, e) === i))));
 }
 
 export function getFitness(appData, gameId, authId) {
-    const orangesEaten = getOrangesDroppedInDish(appData, gameId, authId);
-    const fitnessGain = getFitnessGainForOrangesEaten(orangesEaten);
+    const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId);
+    const fitnessGain = getFitnessGainForEatEvents(appData, eatEvents);
     const day = getGameDay(appData, gameId);
     const fitnessLoss = day * DAILY_FITNESS_LOSS;
     return fitnessGain - fitnessLoss;
@@ -194,7 +230,9 @@ export function getMyFitness(appData) {
 }
 
 export function getFitnessChange(appData, gameId, authId) {
-    // TODO: Implement
+    const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId, true);
+    const fitnessGain = getFitnessGainForEatEvents(appData, eatEvents);
+    return fitnessGain - DAILY_FITNESS_LOSS;
 }
 
 export function getMyFitnessChange(appData) {

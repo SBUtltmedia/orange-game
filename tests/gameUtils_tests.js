@@ -242,8 +242,37 @@ describe('gameUtils', () => {
         model.authId = 'ABC';
         expect(GameUtils.getMyFitness(appData)).to.equal(0);
         appData.games.game1.events.push({
-            type: ORANGES_DEALT, authId: 'ABC', oranges: 8, time: 2
+            type: ORANGES_DEALT, authId: 'ABC', oranges: 8, time: 1
         });
         expect(GameUtils.getMyFitness(appData)).to.equal(-10);
+        expect(GameUtils.getMyFitnessChange(appData)).to.equal(-10);
+    });
+
+    it('increases fitness when orange is eaten', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' }
+                    },
+                    events: [
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 8, time: 1 }
+                    ]
+                }
+            }
+        };
+        model.gameId = 'game1';
+        model.authId = 'ABC';
+        expect(GameUtils.getMyFitness(appData)).to.equal(-10);
+        appData.games.game1.events.push({
+            type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 2
+        });
+        expect(GameUtils.getMyFitness(appData)).to.equal(0);
+        expect(GameUtils.getMyFitnessChange(appData)).to.equal(0);
+        appData.games.game1.events.push({
+            type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 3
+        });
+        expect(GameUtils.getMyFitness(appData)).to.equal(9);
+        expect(GameUtils.getMyFitnessChange(appData)).to.equal(9);
     });
 });
