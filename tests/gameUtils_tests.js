@@ -85,7 +85,7 @@ describe('gameUtils', () => {
                         DEF: { name: 'Jen' }
                     },
                     events: [
-                        { type: PLAYER_DONE, authId: 'ABC' }
+                        { type: PLAYER_DONE, authId: 'ABC', time: 1 }
                     ]
                 }
             }
@@ -102,11 +102,11 @@ describe('gameUtils', () => {
                         DEF: { name: 'Jen' }
                     },
                     events: [
-                        { type: PLAYER_DONE, authId: 'ABC' },
-                        { type: PLAYER_DONE, authId: 'DEF' },
-                        { type: PLAYER_DONE, authId: 'ABC' },
-                        { type: PLAYER_DONE, authId: 'DEF' },
-                        { type: PLAYER_DONE, authId: 'ABC' }
+                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        { type: PLAYER_DONE, authId: 'DEF', time: 2 },
+                        { type: PLAYER_DONE, authId: 'ABC', time: 3 },
+                        { type: PLAYER_DONE, authId: 'DEF', time: 4 },
+                        { type: PLAYER_DONE, authId: 'ABC', time: 5 }
                     ]
                 }
             }
@@ -123,9 +123,9 @@ describe('gameUtils', () => {
                         DEF: { name: 'Jen' }
                     },
                     events: [
-                        { type: PLAYER_DONE, authId: 'ABC' },
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1 },
-                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3 }
+                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 }
                     ]
                 }
             }
@@ -172,7 +172,7 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' }
                     },
                     events: [
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1 }
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 }
                     ]
                 }
             }
@@ -180,6 +180,26 @@ describe('gameUtils', () => {
         model.gameId = 'game1';
         model.authId = 'ABC';
         expect(GameUtils.getOrangesInMyBox(appData)).to.equal(1);
+    });
+
+    it('gets oranges in my dish', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' }
+                    },
+                    events: [
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 },
+                        { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 2 },
+                        { type: PLAYER_DONE, authId: 'ABC', time: 3 }
+                    ]
+                }
+            }
+        };
+        model.gameId = 'game1';
+        model.authId = 'ABC';
+        expect(GameUtils.getOrangesInMyDish(appData)).to.equal(0);
     });
 
     it('gets oranges dropped', () => {
@@ -190,7 +210,7 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' }
                     },
                     events: [
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1 }
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 }
                     ]
                 }
             }
@@ -200,7 +220,7 @@ describe('gameUtils', () => {
         expect(GameUtils.getOrangesDroppedInBox(appData, 'game1', 'ABC')).to.equal(0);
         expect(GameUtils.getOrangesDroppedInBasket(appData, 'game1', 'ABC')).to.equal(0);
         appData.games.game1.events.push({
-            type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket'
+            type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 2
         });
         expect(GameUtils.getOrangesDroppedInBox(appData, 'game1', 'ABC')).to.equal(0);
         expect(GameUtils.getOrangesDroppedInBasket(appData, 'game1', 'ABC')).to.equal(1);

@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { areaTheme } from '../styles/Themes';
 import Box from './Box';
-import { playerReady }from '../actions/GameActions';
+import { playerDone }from '../actions/GameActions';
 import { DAYS_IN_GAME } from '../constants/Settings';
 import { connect } from 'redux/react';
 import { canPlayerAdvanceDay } from '../gameUtils';
@@ -28,7 +28,7 @@ export default class Controls extends Component {
         const { firebase } = this.props;
         return <div style={styles.container}>
             <Box />
-            <button style={styles.button} onClick={() => playerReady(firebase)}
+            <button style={styles.button} onClick={() => playerDone(firebase)}
                     disabled={!canPlayerAdvanceDay(firebase)}>
                 I am done for today
             </button>

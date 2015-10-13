@@ -41,7 +41,7 @@ export function dealNewDayIfNeeded(appData) {
     }
 }
 
-export function playerReady(appData) {
+export function playerDone(appData) {
     const game = getThisGame(appData);
     const eventData = {
         type: PLAYER_DONE,
