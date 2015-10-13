@@ -119,6 +119,17 @@ export function getMyOranges(appData) {
     return getOranges(appData, model.gameId, model.authId);
 }
 
+function getHighestEventCountByPlayer(appData, events, gameId) {
+    const counts = _.map(_.groupBy(events, e => e.authId), _.size);
+    const game = getGame(appData, gameId);
+    if (_.isEmpty(counts)) {  // no players have any
+        return 0;
+    }
+    else {
+        return _.max(counts);
+    }
+}
+
 function getLowestEventCountByPlayer(appData, events, gameId) {
     const counts = _.map(_.groupBy(events, e => e.authId), _.size);
     const game = getGame(appData, gameId);
@@ -143,7 +154,7 @@ function getEventsAfterTime(events, time) {
 
 export function getGameDay(appData, gameId) {
     const doneEvents = getEventsInGame(appData, gameId, ORANGES_DEALT);
-    return getLowestEventCountByPlayer(appData, doneEvents, gameId);
+    return getHighestEventCountByPlayer(appData, doneEvents, gameId);
 }
 
 export function getThisGameDay(appData) {
@@ -151,9 +162,9 @@ export function getThisGameDay(appData) {
 }
 
 export function getEventDay(appData, event) {
-    const doneEvents = getEventsInThisGame(appData, PLAYER_DONE);
+    const doneEvents = getEventsInThisGame(appData, ORANGES_DEALT);
     const prevDoneEvents = getEventsBeforeTime(doneEvents, event.time);
-    return getLowestEventCountByPlayer(appData, prevDoneEvents, model.gameId) + 1;
+    return getHighestEventCountByPlayer(appData, prevDoneEvents, model.gameId);
 }
 
 function getFitnessGainForOrangesEatenInSameDay(orangesEaten) {

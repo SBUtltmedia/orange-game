@@ -85,7 +85,7 @@ describe('gameUtils', () => {
                         DEF: { name: 'Jen' }
                     },
                     events: [
-                        { type: PLAYER_DONE, authId: 'ABC', time: 1 }
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 },
                     ]
                 }
             }
@@ -102,11 +102,11 @@ describe('gameUtils', () => {
                         DEF: { name: 'Jen' }
                     },
                     events: [
-                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        { type: PLAYER_DONE, authId: 'DEF', time: 2 },
-                        { type: PLAYER_DONE, authId: 'ABC', time: 3 },
-                        { type: PLAYER_DONE, authId: 'DEF', time: 4 },
-                        { type: PLAYER_DONE, authId: 'ABC', time: 5 }
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 },
+                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 1, time: 2 },
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 3 },
+                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 1, time: 4 },
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 5 },
                     ]
                 }
             }
