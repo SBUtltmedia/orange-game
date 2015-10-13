@@ -29,7 +29,7 @@ export default class Controls extends Component {
         return <div style={styles.container}>
             <Box />
             <button style={styles.button} onClick={() => playerReady(firebase)}
-                    disabled={!canPlayerAdvanceDay()}>
+                    disabled={!canPlayerAdvanceDay(firebase)}>
                 I am done for today
             </button>
         </div>;
