@@ -20,18 +20,29 @@ export function getEventsInThisGame(appData, eventType) {
     return getEventsInGame(appData, model.gameId, eventType);
 }
 
-function getOrangesDroppedIn(appData, name, gameId, authId) {
-    const events = getEventsInGame(appData, gameId, ORANGE_MOVED);
-    return _.size(_.filter(events, e => e.dest === name));
+function getTodayStart(appData, gameId, authId) {
+    const doneEvents = getEventsInThisGame(appData, PLAYER_DONE);
+    const playerDoneEvents = _.filter(doneEvents, e => e.authId === authId);
+    return _.isEmpty(playerDoneEvents) ? 0 : _.last(playerDoneEvents).time;
 }
 
-function getOrangesDroppedFrom(appData, name, gameId, authId) {
-    const events = getEventsInGame(appData, gameId, ORANGE_MOVED);
-    return _.size(_.filter(events, e => e.src === name));
+function getOrangesDropped(prop, appData, name, gameId, authId, onlyToday) {
+    const events = getEventsAfterTime(
+                        getEventsInGame(appData, gameId, ORANGE_MOVED),
+                        onlyToday ? getTodayStart(appData, gameId, authId) : 0);
+    return _.size(_.filter(events, e => e[prop] === name && e.authId === authId));
+}
+
+function getOrangesDroppedIn(appData, name, gameId, authId, onlyToday) {
+    return getOrangesDropped('dest', appData, name, gameId, authId, onlyToday);
+}
+
+function getOrangesDroppedFrom(appData, name, gameId, authId, onlyToday) {
+    return getOrangesDropped('src', appData, name, gameId, authId, onlyToday);
 }
 
 export function getOrangesDroppedInDish(appData, gameId, authId) {
-    return getOrangesDroppedIn(appData, 'dish', gameId, authId);
+    return getOrangesDroppedIn(appData, 'dish', gameId, authId, true);
 }
 
 export function getOrangesDroppedInBasket(appData, gameId, authId) {
@@ -43,7 +54,7 @@ export function getOrangesDroppedInBox(appData, gameId, authId) {
 }
 
 export function getOrangesDroppedFromDish(appData, gameId, authId) {
-    return getOrangesDroppedFrom(appData, 'dish', gameId, authId);
+    return getOrangesDroppedFrom(appData, 'dish', gameId, authId, true);
 }
 
 export function getOrangesDroppedFromBasket(appData, gameId, authId) {
@@ -124,6 +135,10 @@ function getLowestEventCountByPlayer(appData, events, gameId) {
 
 function getEventsBeforeTime(events, time) {
     return _.filter(events, e => e.time < time);
+}
+
+function getEventsAfterTime(events, time) {
+    return _.filter(events, e => e.time > time);
 }
 
 export function getGameDay(appData, gameId) {
