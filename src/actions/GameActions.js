@@ -51,9 +51,9 @@ export function playerDone(appData) {
 }
 
 export function sendChat(text, appData) {
-    const playerData = getThisPlayer(appData);
+    const player = getThisPlayer(appData);
     const msg = {
-        name: playerData.name,
+        name: player.name,
         text: text
     };
     addToFbList(`/games/${model.gameId}/chat`, msg);
