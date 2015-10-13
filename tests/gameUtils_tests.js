@@ -140,6 +140,7 @@ describe('gameUtils', () => {
             },
             players: [
                 {
+                    authId: 'ABC',
                     name: 'Ken',
                     ready: false,
                     oranges: {
@@ -149,6 +150,7 @@ describe('gameUtils', () => {
                     }
                 },
                 {
+                    authId: 'DEF',
                     name: 'Jen',
                     ready: false,
                     oranges: {

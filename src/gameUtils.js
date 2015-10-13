@@ -354,6 +354,7 @@ export function derivePlayers(appData) {
             const playerDoneEvents = _.filter(doneEvents, e => e.authId === authId);
             const oranges = getOranges(appData, model.gameId, authId);
             return {
+                authId: _.findKey(game.players, p),
                 name: p.name,
                 ready: oranges.box === 0 && _.size(playerDoneEvents) >= getThisGameDay(appData),
                 oranges: oranges
