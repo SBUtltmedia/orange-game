@@ -13,7 +13,7 @@ export function payDebt(transaction) {
 }
 
 function createNegotation(givingPlayer, receivingPlayer, type) {
-    const transaction = {
+    const eventData = {
         type: type,
         lender: givingPlayer,
         borrower: receivingPlayer,
@@ -62,15 +62,23 @@ export function updateOffer(transaction, nowOranges, laterOranges) {
 }
 
 export function rejectOffer(transaction, callback) {
-    const url = `/games/${model.gameId}/transactions/${transaction.id}`;
-    const data = { state: REJECTED, lastToAct: model.authId };
-    updateFbObject(url, data, callback);
+    const eventData = {
+        type: LOAN_REJECTED,
+        lender: transaction.lender,
+        borrower: transaction.borrower,
+        authId: authId
+    };
+    saveEvent(model.gameId, eventData);
 }
 
 export function acceptOffer(transaction, callback) {
-    const url = `/games/${model.gameId}/transactions/${transaction.id}`;
-    const data = { state: ACCEPTED, lastToAct: model.authId };
-    updateFbObject(url, data, () => transferOrangesForLoan(transaction));
+    const eventData = {
+        type: LOAN_ACCEPTED,
+        lender: transaction.lender,
+        borrower: transaction.borrower,
+        authId: authId
+    };
+    saveEvent(model.gameId, eventData);
 }
 
 export function openAskNegotiation(withPlayer, appData) {
