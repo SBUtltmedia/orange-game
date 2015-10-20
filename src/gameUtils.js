@@ -1,7 +1,9 @@
 import model from './model';
 import _ from 'lodash';
 import { ACCEPTED } from './constants/NegotiationStates';
-import { ORANGE_MOVED, PLAYER_DONE, ORANGES_DEALT } from './constants/EventTypes';
+import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE,
+            LOAN_WINDOW_OPENED, LOAN_OFFERED, LOAN_ASKED, LOAN_COUNTER_OFFER,
+            LOAN_REJECTED, LOAN_ACCPTED } from '../src/constants/EventTypes';
 import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
 
 export function getEventsInGame(appData, gameId, eventType=null) {
@@ -364,6 +366,20 @@ export function derivePlayers(appData) {
     else {
         return [];
     }
+}
+
+export function deriveTransactions(appData, gameId, authId) {
+    const openEvents = _.filter(getEventsInGame(appData, gameId, LOAN_WINDOW_OPENED),
+                                    e => e.authId === authId);
+    const offeredEvents = _.filter(getEventsInGame(appData, gameId, LOAN_OFFERED),
+                                    e => e.borrower === authId);
+    const askedEvents = _.filter(getEventsInGame(appData, gameId, LOAN_ASKED),
+                                    e => e.lender === authId);
+    return _.union(openEvents, offeredEvents, askedEvents);
+}
+
+export function deriveMyTransactions(appData) {
+    return deriveTransactions(appData, model.gameId, model.authId);
 }
 
 export function deriveData(appData) {

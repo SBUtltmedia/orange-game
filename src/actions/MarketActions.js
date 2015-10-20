@@ -1,8 +1,10 @@
-import { addToFbList, updateFbObject } from '../firebaseUtils';
 import { getThisPlayer } from '../gameUtils';
 import _ from 'lodash';
 import model from '../model';
+import { LOAN_WINDOW_OPENED, LOAN_OFFERED, LOAN_ASKED, LOAN_COUNTER_OFFER,
+            LOAN_REJECTED, LOAN_ACCPTED } from '../constants/EventTypes';
 import { CREATING, OPEN, ACCEPTED, REJECTED, PAID } from '../constants/NegotiationStates';
+import { saveEvent } from '../firebaseUtils';
 
 export function payDebt(transaction) {
     transferOrangesForDebtPayment(transaction);
@@ -10,18 +12,18 @@ export function payDebt(transaction) {
     updateFbObject(url, { state: PAID });
 }
 
-function createNegotation(givingPlayer, receivingPlayer) {
+function createNegotation(givingPlayer, receivingPlayer, type) {
     const transaction = {
+        type: type,
         lender: givingPlayer,
         borrower: receivingPlayer,
-        state: CREATING,
-        createdBy: model.authId,
         oranges: {
             now: 1,
             later: 1
-        }
+        },
+        openedBy: model.authId
     };
-    addToFbList(`/games/${model.gameId}/transactions`, transaction);
+    saveEvent(model.gameId, eventData);
 }
 
 function update(transaction, nowOranges, laterOranges, extraData) {
@@ -72,9 +74,9 @@ export function acceptOffer(transaction, callback) {
 }
 
 export function openAskNegotiation(withPlayer, appData) {
-    createNegotation(withPlayer, getThisPlayer(appData));
+    createNegotation(withPlayer, getThisPlayer(appData), LOAN_ASKED);
 }
 
 export function openOfferNegotiation(withPlayer, appData) {
-    createNegotation(getThisPlayer(appData), withPlayer);
+    createNegotation(getThisPlayer(appData), withPlayer, LOAN_OFFERED);
 }

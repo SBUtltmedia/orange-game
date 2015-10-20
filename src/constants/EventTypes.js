@@ -1,3 +1,9 @@
 export const ORANGES_DEALT = "oranges-dealt";
 export const PLAYER_DONE = "player-done";
 export const ORANGE_MOVED = "orange-moved";
+export const LOAN_WINDOW_OPENED = "loan_window_opened";
+export const LOAN_OFFERED = "loan-offered";
+export const LOAN_ASKED = "loan-asked";
+export const LOAN_COUNTER_OFFER = "loan-counter-offer";
+export const LOAN_REJECTED = "loan-rejected";
+export const LOAN_ACCPTED = "loan-accepted";
