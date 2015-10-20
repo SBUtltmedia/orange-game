@@ -4,6 +4,7 @@ import { APP_ROOT_ELEMENT } from '../constants/Settings';
 import { verticalCenter } from '../styles/Themes';
 import _ from 'lodash';
 import model from '../model';
+import { deriveMyOpenTransactions } from '../gameUtils';
 import { NumberPicker } from 'react-widgets';
 import { openOffer, updateOffer, rejectOffer, acceptOffer } from '../actions/MarketActions';
 import { CREATING, OPEN, ACCEPTED, REJECTED, PAID } from '../constants/NegotiationStates';
@@ -55,8 +56,6 @@ export default class Negotiation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            transactions: [],
-            thisTransaction: null,
             modalIsOpen: false,
             nowOranges: 1,
             laterOranges: 1,
@@ -65,31 +64,26 @@ export default class Negotiation extends Component {
         }
     }
 
-    check(transactions) {
-        const f = _.bind(transactionIsOpenAndContainsPlayer, {}, model);
-        const transactionId = _.findKey(transactions, f);
-        const transaction = transactions[transactionId];
+    checkMyTransactions(firebase) {
+        const transactions = deriveMyOpenTransactions(firebase);
+        const hasTransactions = !_.isEmpty(transactions);
         this.setState({
-            modalIsOpen: !!transaction
+            modalIsOpen: hasTransactions
         });
-        if (transaction) {
+        if (hasTransactions) {
+            const transaction = _.first(transactions);
             this.setState({
-                thisTransaction: _.extend({id: transactionId}, transaction),
                 nowOranges: transaction.oranges.now,
                 laterOranges: transaction.oranges.later,
                 originalNowOranges: transaction.oranges.now,
                 originalLaterOranges: transaction.oranges.later
-            })
+            });
         }
     }
 
     componentWillReceiveProps(newProps) {
         const { firebase } = newProps;
-        const { games } = firebase;
-        if (games) {
-            const game = games[model.gameId];
-            this.check(game.transactions || {});
-        }
+        this.checkMyTransactions(firebase);
     }
 
     closeModal() {
@@ -102,13 +96,13 @@ export default class Negotiation extends Component {
     }
 
     reject() {
-        const { thisTransaction } = this.state;
-        rejectOffer(thisTransaction, () => this.check(this.state.transactions));
+        const { firebase } = this.props;
+        rejectOffer(thisTransaction, () => this.checkMyTransactions(transactions));
     }
 
     accept() {
-        const { thisTransaction } = this.state;
-        acceptOffer(thisTransaction, () => this.check(this.state.transactions));
+        const { firebase } = this.props;
+        acceptOffer(thisTransaction, () => this.checkMyTransactions(firebase));
     }
 
     counter() {
