@@ -7,7 +7,7 @@ import model from '../src/model';
 import { DAYS_IN_GAME } from '../src/constants/Settings';
 import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE,
             LOAN_WINDOW_OPENED, LOAN_OFFERED, LOAN_ASKED, LOAN_COUNTER_OFFER,
-            LOAN_REJECTED, LOAN_ACCPTED } from '../src/constants/EventTypes';
+            LOAN_REJECTED, LOAN_ACCEPTED } from '../src/constants/EventTypes';
 
 describe('gameUtils', () => {
 
@@ -275,6 +275,30 @@ describe('gameUtils', () => {
         };
         expect(_.size(GameUtils.deriveTransactions(appData, 'game1', 'ABC'))).to.equal(1);
         expect(_.size(GameUtils.deriveTransactions(appData, 'game1', 'DEF'))).to.equal(1);
+    });
+
+    it('derives open transactions 1', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: [
+                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
+                        { type: LOAN_WINDOW_OPENED, authId: 'ABC', time: 5 },
+                        { type: LOAN_OFFERED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 6 },
+                        { type: LOAN_REJECTED, lender: 'ABC', borrower: 'DEF', authId: 'DEF', time: 7 },
+                    ]
+                }
+            }
+        };
+        expect(_.size(GameUtils.deriveOpenTransactions(appData, 'game1', 'ABC'))).to.equal(0);
+        expect(_.size(GameUtils.deriveOpenTransactions(appData, 'game1', 'DEF'))).to.equal(0);
     });
 
     it('reduces fitness on a new day', () => {

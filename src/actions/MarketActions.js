@@ -2,7 +2,7 @@ import { getThisPlayer } from '../gameUtils';
 import _ from 'lodash';
 import model from '../model';
 import { LOAN_WINDOW_OPENED, LOAN_OFFERED, LOAN_ASKED, LOAN_COUNTER_OFFER,
-            LOAN_REJECTED, LOAN_ACCPTED } from '../constants/EventTypes';
+            LOAN_REJECTED, LOAN_ACCEPTED } from '../constants/EventTypes';
 import { CREATING, OPEN, ACCEPTED, REJECTED, PAID } from '../constants/NegotiationStates';
 import { saveEvent } from '../firebaseUtils';
 

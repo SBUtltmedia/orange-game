@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { ACCEPTED } from './constants/NegotiationStates';
 import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE,
             LOAN_WINDOW_OPENED, LOAN_OFFERED, LOAN_ASKED, LOAN_COUNTER_OFFER,
-            LOAN_REJECTED, LOAN_ACCPTED } from '../src/constants/EventTypes';
+            LOAN_REJECTED, LOAN_ACCEPTED } from '../src/constants/EventTypes';
 import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
 
 export function getEventsInGame(appData, gameId, eventType=null) {
@@ -368,6 +368,21 @@ export function derivePlayers(appData) {
     }
 }
 
+function getTransactionEvents(appData, gameId, authId, type) {
+    return _.filter(getEventsInGame(appData, gameId, type),
+                    e => e.borrower === authId || e.lender === authId);
+}
+
+function getTransactionAssociatedWithEvent(event) {
+
+}
+
+function getTransactions(appData, gameId, authId, type) {
+    const events = _.filter(getEventsInGame(appData, gameId, type),
+                    e => e.borrower === authId || e.lender === authId);
+    return _.map(events, getTransactionAssociatedWithEvent);
+}
+
 export function deriveTransactions(appData, gameId, authId) {
     const openEvents = _.filter(getEventsInGame(appData, gameId, LOAN_WINDOW_OPENED),
                                     e => e.authId === authId);
@@ -380,6 +395,34 @@ export function deriveTransactions(appData, gameId, authId) {
 
 export function deriveMyTransactions(appData) {
     return deriveTransactions(appData, model.gameId, model.authId);
+}
+
+export function deriveOpenTransactions(appData) {
+    const all = deriveTransactions(appData, model.gameId, model.authId);
+    const closed = deriveClosedTransactions(appData, model.gameId, model.authId);
+    return _.difference(all, closed);
+}
+
+export function deriveMyOpenTransactions(appData) {
+    return deriveOpenTransactions(appData, model.gameId, model.authId);
+}
+
+export function deriveCompletedTransactions(appData) {
+    return getTransactions(appData, gameId, authId, LOAN_ACCEPTED);
+}
+
+export function deriveMyCompletedTransactions(appData) {
+    return deriveCompletedTransactions(appData, model.gameId, model.authId);
+}
+
+export function deriveClosedTransactions(appData, gameId, authId) {
+    return _.union(
+        getTransactions(appData, gameId, authId, LOAN_ACCEPTED),
+        getTransactions(appData, gameId, authId, LOAN_REJECTED));
+}
+
+export function deriveMyClosedTransactions(appData) {
+    return deriveClosedTransactions(appData, model.gameId, model.authId);
 }
 
 export function deriveData(appData) {
