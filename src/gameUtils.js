@@ -405,7 +405,7 @@ export function deriveTransactions(appData, gameId, authId) {
 }
 
 function deepDifference(set1, set2) {
-    _.filter(set1, i1 => !_.some(set2, i2 => _.matches(i1, i2)));
+    return _.filter(set1, i1 => !_.some(set2, i2 => _.matches(i1, i2)));
 }
 
 export function deriveMyTransactions(appData) {
