@@ -404,6 +404,10 @@ export function deriveTransactions(appData, gameId, authId) {
                 e => getTransactionAssociatedWithEvent(appData, gameId, e));
 }
 
+function deepDifference(set1, set2) {
+    _.filter(set1, i1 => !_.some(set2, i2 => _.matches(i1, i2)));
+}
+
 export function deriveMyTransactions(appData) {
     return deriveTransactions(appData, model.gameId, model.authId);
 }
@@ -411,7 +415,7 @@ export function deriveMyTransactions(appData) {
 export function deriveOpenTransactions(appData, gameId, authId) {
     const all = deriveTransactions(appData, gameId, authId);
     const closed = deriveClosedTransactions(appData, gameId, authId);
-    return _.difference(all, closed);
+    return deepDifference(all, closed);
 }
 
 export function deriveMyOpenTransactions(appData) {
