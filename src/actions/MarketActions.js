@@ -1,7 +1,8 @@
 import { getThisPlayer } from '../gameUtils';
 import _ from 'lodash';
 import model from '../model';
-import { LOAN_WINDOW_OPENED, LOAN_OFFERED, LOAN_ASKED, LOAN_COUNTER_OFFER,
+import { LOAN_ASK_WINDOW_OPENED, LOAN_OFFER_WINDOW_OPENED,
+            LOAN_OFFERED, LOAN_ASKED, LOAN_COUNTER_OFFER,
             LOAN_REJECTED, LOAN_ACCEPTED } from '../constants/EventTypes';
 import { CREATING, OPEN, ACCEPTED, REJECTED, PAID } from '../constants/NegotiationStates';
 import { saveEvent } from '../firebaseUtils';
@@ -21,7 +22,7 @@ function createNegotation(givingPlayer, receivingPlayer, type) {
             now: 1,
             later: 1
         },
-        openedBy: model.authId
+        authId: model.authId
     };
     saveEvent(model.gameId, eventData);
 }
@@ -82,9 +83,9 @@ export function acceptOffer(transaction, callback) {
 }
 
 export function openAskNegotiation(withPlayer, appData) {
-    createNegotation(withPlayer, getThisPlayer(appData), LOAN_ASKED);
+    createNegotation(withPlayer, getThisPlayer(appData), LOAN_ASK_WINDOW_OPENED);
 }
 
 export function openOfferNegotiation(withPlayer, appData) {
-    createNegotation(getThisPlayer(appData), withPlayer, LOAN_OFFERED);
+    createNegotation(getThisPlayer(appData), withPlayer, LOAN_OFFER_WINDOW_OPENED);
 }

@@ -6,7 +6,8 @@ import _ from 'lodash';
 import model from '../src/model';
 import { DAYS_IN_GAME } from '../src/constants/Settings';
 import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE,
-            LOAN_WINDOW_OPENED, LOAN_OFFERED, LOAN_ASKED, LOAN_COUNTER_OFFER,
+            LOAN_ASK_WINDOW_OPENED, LOAN_OFFER_WINDOW_OPENED,
+            LOAN_OFFERED, LOAN_ASKED, LOAN_COUNTER_OFFER,
             LOAN_REJECTED, LOAN_ACCEPTED } from '../src/constants/EventTypes';
 
 describe('gameUtils', () => {
@@ -245,7 +246,7 @@ describe('gameUtils', () => {
                         { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
                         { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
                         { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
-                        { type: LOAN_WINDOW_OPENED, authId: 'ABC', time: 5 }
+                        { type: LOAN_OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 5 }
                     ]
                 }
             }
@@ -267,7 +268,7 @@ describe('gameUtils', () => {
                         { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
                         { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
                         { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
-                        { type: LOAN_WINDOW_OPENED, authId: 'ABC', time: 5 },
+                        { type: LOAN_OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 5 },
                         { type: LOAN_OFFERED, lender: 'ABC', borrower: 'DEF', time: 6 }
                     ]
                 }
@@ -290,7 +291,7 @@ describe('gameUtils', () => {
                         { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
                         { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
                         { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
-                        { type: LOAN_WINDOW_OPENED, authId: 'ABC', time: 5 },
+                        { type: LOAN_OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 5 },
                         { type: LOAN_OFFERED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 6 },
                         { type: LOAN_REJECTED, lender: 'ABC', borrower: 'DEF', authId: 'DEF', time: 7 },
                     ]

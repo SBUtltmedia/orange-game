@@ -2,7 +2,8 @@ import model from './model';
 import _ from 'lodash';
 import { ACCEPTED } from './constants/NegotiationStates';
 import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE,
-            LOAN_WINDOW_OPENED, LOAN_OFFERED, LOAN_ASKED, LOAN_COUNTER_OFFER,
+            LOAN_ASK_WINDOW_OPENED, LOAN_OFFER_WINDOW_OPENED,
+            LOAN_OFFERED, LOAN_ASKED, LOAN_COUNTER_OFFER,
             LOAN_REJECTED, LOAN_ACCEPTED } from '../src/constants/EventTypes';
 import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
 
@@ -347,21 +348,24 @@ export function shouldDealNewDayDerived(derivedData) {
            _.every(derivedData.players, p => p.ready);
 }
 
+function derivePlayer(appData, gameId, authId) {
+    const game = getGame(appData, gameId);
+    const playerDoneEvents = _.filter(doneEvents, e => e.authId === authId);
+    const oranges = getOranges(appData, model.gameId, authId);
+    const doneEvents = getEventsInThisGame(appData, PLAYER_DONE);
+    return {
+        authId: authId,
+        name: game.players[authId].name,
+        ready: oranges.box === 0 && _.size(playerDoneEvents) >= getThisGameDay(appData),
+        oranges: oranges
+    };
+}
+
 export function derivePlayers(appData) {
     const game = getThisGame(appData);
     if (game) {
-        const doneEvents = getEventsInThisGame(appData, PLAYER_DONE);
-        return _.map(game.players, p => {
-            const authId = _.findKey(game.players, p);
-            const playerDoneEvents = _.filter(doneEvents, e => e.authId === authId);
-            const oranges = getOranges(appData, model.gameId, authId);
-            return {
-                authId: _.findKey(game.players, p),
-                name: p.name,
-                ready: oranges.box === 0 && _.size(playerDoneEvents) >= getThisGameDay(appData),
-                oranges: oranges
-            };
-        });
+        return _.map(_.keys(game.players), authId =>
+                derivePlayer(appData, model.gameId, authId));
     }
     else {
         return [];
@@ -373,33 +377,40 @@ function getTransactionEvents(appData, gameId, authId, type) {
                     e => e.borrower === authId || e.lender === authId);
 }
 
-function getTransactionAssociatedWithEvent(event) {
-
+function getTransactionAssociatedWithEvent(appData, gameId, event) {
+    return {
+        lender: derivePlayer(appData, gameId, event.lender),
+        borrower: derivePlayer(appData, gameId, event.borrower)
+    }
 }
 
 function getTransactions(appData, gameId, authId, type) {
     const events = _.filter(getEventsInGame(appData, gameId, type),
                     e => e.borrower === authId || e.lender === authId);
-    return _.map(events, getTransactionAssociatedWithEvent);
+    return _.map(events,
+                e => getTransactionAssociatedWithEvent(appData, gameId, e));
 }
 
 export function deriveTransactions(appData, gameId, authId) {
-    const openEvents = _.filter(getEventsInGame(appData, gameId, LOAN_WINDOW_OPENED),
+    const openOfferEvents = _.filter(getEventsInGame(appData, gameId, LOAN_OFFER_WINDOW_OPENED),
+                                    e => e.authId === authId);
+    const openAskEvents = _.filter(getEventsInGame(appData, gameId, LOAN_ASK_WINDOW_OPENED),
                                     e => e.authId === authId);
     const offeredEvents = _.filter(getEventsInGame(appData, gameId, LOAN_OFFERED),
                                     e => e.borrower === authId);
     const askedEvents = _.filter(getEventsInGame(appData, gameId, LOAN_ASKED),
                                     e => e.lender === authId);
-    return _.union(openEvents, offeredEvents, askedEvents);
+    return _.map(_.union(openOfferEvents, openAskEvents, offeredEvents, askedEvents),
+                e => getTransactionAssociatedWithEvent(appData, gameId, e));
 }
 
 export function deriveMyTransactions(appData) {
     return deriveTransactions(appData, model.gameId, model.authId);
 }
 
-export function deriveOpenTransactions(appData) {
-    const all = deriveTransactions(appData, model.gameId, model.authId);
-    const closed = deriveClosedTransactions(appData, model.gameId, model.authId);
+export function deriveOpenTransactions(appData, gameId, authId) {
+    const all = deriveTransactions(appData, gameId, authId);
+    const closed = deriveClosedTransactions(appData, gameId, authId);
     return _.difference(all, closed);
 }
 

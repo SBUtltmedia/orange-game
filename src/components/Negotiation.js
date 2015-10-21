@@ -57,6 +57,7 @@ export default class Negotiation extends Component {
         super(props);
         this.state = {
             modalIsOpen: false,
+            thisTransaction: null,
             nowOranges: 1,
             laterOranges: 1,
             originalNowOranges: 1,
@@ -73,6 +74,7 @@ export default class Negotiation extends Component {
         if (hasTransactions) {
             const transaction = _.first(transactions);
             this.setState({
+                thisTransaction: transaction,
                 nowOranges: transaction.oranges.now,
                 laterOranges: transaction.oranges.later,
                 originalNowOranges: transaction.oranges.now,
