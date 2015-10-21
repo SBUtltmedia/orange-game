@@ -1,4 +1,3 @@
-import { getThisPlayer } from '../gameUtils';
 import _ from 'lodash';
 import model from '../model';
 import { LOAN_ASK_WINDOW_OPENED, LOAN_OFFER_WINDOW_OPENED,
@@ -83,9 +82,9 @@ export function acceptOffer(transaction, callback) {
 }
 
 export function openAskNegotiation(withPlayer, appData) {
-    createNegotation(withPlayer, getThisPlayer(appData), LOAN_ASK_WINDOW_OPENED);
+    createNegotation(withPlayer, model.authId, LOAN_ASK_WINDOW_OPENED);
 }
 
 export function openOfferNegotiation(withPlayer, appData) {
-    createNegotation(getThisPlayer(appData), withPlayer, LOAN_OFFER_WINDOW_OPENED);
+    createNegotation(model.authId, withPlayer, LOAN_OFFER_WINDOW_OPENED);
 }
