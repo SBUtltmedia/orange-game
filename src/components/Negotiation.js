@@ -73,6 +73,9 @@ export default class Negotiation extends Component {
         });
         if (hasTransactions) {
             const transaction = _.first(transactions);
+
+            console.log(transaction);
+
             this.setState({
                 thisTransaction: transaction,
                 nowOranges: transaction.oranges.now,

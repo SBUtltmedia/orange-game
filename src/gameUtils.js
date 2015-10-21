@@ -380,7 +380,8 @@ function getTransactionEvents(appData, gameId, authId, type) {
 function getTransactionAssociatedWithEvent(appData, gameId, event) {
     return {
         lender: derivePlayer(appData, gameId, event.lender),
-        borrower: derivePlayer(appData, gameId, event.borrower)
+        borrower: derivePlayer(appData, gameId, event.borrower),
+        oranges: event.oranges  // TODO: Get last transaction event's oranges
     }
 }
 
