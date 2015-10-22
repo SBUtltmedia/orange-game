@@ -102,11 +102,13 @@ export default class Negotiation extends Component {
 
     reject() {
         const { firebase } = this.props;
+        const { thisTransaction } = this.state;
         rejectOffer(thisTransaction, () => this.checkMyTransactions(transactions));
     }
 
     accept() {
         const { firebase } = this.props;
+        const { thisTransaction } = this.state;
         acceptOffer(thisTransaction, () => this.checkMyTransactions(firebase));
     }
 

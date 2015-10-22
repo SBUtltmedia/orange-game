@@ -6,6 +6,7 @@ import { LOAN_ASK_WINDOW_OPENED, LOAN_OFFER_WINDOW_OPENED,
 import { CREATING, OPEN, ACCEPTED, REJECTED, PAID } from '../constants/NegotiationStates';
 import { saveEvent } from '../firebaseUtils';
 
+// TODO: Update
 export function payDebt(transaction) {
     transferOrangesForDebtPayment(transaction);
     const url = `/games/${model.gameId}/transactions/${transaction.id}`;
@@ -26,6 +27,7 @@ function createNegotation(givingPlayer, receivingPlayer, type) {
     saveEvent(model.gameId, eventData);
 }
 
+// TODO: Update
 function update(transaction, nowOranges, laterOranges, extraData) {
     const url = `/games/${model.gameId}/transactions/${transaction.id}`;
     const data = _.extend({
@@ -38,6 +40,7 @@ function update(transaction, nowOranges, laterOranges, extraData) {
     updateFbObject(url, data);
 }
 
+// TODO: Update
 function transferOranges(fromPlayer, toPlayer, amount) {
     const fromUrl = `/games/${model.gameId}/players/${fromPlayer.authId}/oranges`;
     const toUrl = `/games/${model.gameId}/players/${toPlayer.authId}/oranges`;
@@ -66,7 +69,7 @@ export function rejectOffer(transaction, callback) {
         type: LOAN_REJECTED,
         lender: transaction.lender,
         borrower: transaction.borrower,
-        authId: authId
+        authId: model.authId
     };
     saveEvent(model.gameId, eventData);
 }
@@ -76,7 +79,7 @@ export function acceptOffer(transaction, callback) {
         type: LOAN_ACCEPTED,
         lender: transaction.lender,
         borrower: transaction.borrower,
-        authId: authId
+        authId: model.authId
     };
     saveEvent(model.gameId, eventData);
 }

@@ -440,6 +440,21 @@ export function deriveMyClosedTransactions(appData) {
     return deriveClosedTransactions(appData, model.gameId, model.authId);
 }
 
+export function deriveOpenTransactionsBetweenPlayers(appData, gameId, id1, id2) {
+    const ts = deriveOpenTransactions(appData, gameId, id1);
+    return _.filter(ts, t => (t.lender === id1 && t.borrower === id2) ||
+                             (t.lender === id2 && t.borrower === id1));
+}
+
+export function deriveOpenTransactionsWithPlayer(appData, authId) {
+    return deriveOpenTransactionsBetweenPlayers(
+                appData, model.gameId, model.authId, authId);
+}
+
+export function hasOpenTransactionWithPlayer(appData, authId) {
+    return !_.isEmpty(deriveOpenTransactionsWithPlayer(appData, authId));
+}
+
 export function deriveData(appData) {
     return {
         dailyOranges: getMyDailyOranges(appData),
