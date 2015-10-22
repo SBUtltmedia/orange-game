@@ -377,7 +377,7 @@ function getTransactionEvents(appData, gameId, authId, type) {
                     e => e.borrower === authId || e.lender === authId);
 }
 
-function getTransactionAssociatedWithEvent(appData, gameId, event) {
+function getTransactionForEvent(appData, gameId, event) {
     return {
         lender: derivePlayer(appData, gameId, event.lender),
         borrower: derivePlayer(appData, gameId, event.borrower),
@@ -388,8 +388,7 @@ function getTransactionAssociatedWithEvent(appData, gameId, event) {
 function getTransactions(appData, gameId, authId, type) {
     const events = _.filter(getEventsInGame(appData, gameId, type),
                     e => e.borrower === authId || e.lender === authId);
-    return _.map(events,
-                e => getTransactionAssociatedWithEvent(appData, gameId, e));
+    return _.map(events, e => getTransactionForEvent(appData, gameId, e));
 }
 
 export function deriveTransactions(appData, gameId, authId) {
@@ -402,7 +401,7 @@ export function deriveTransactions(appData, gameId, authId) {
     const askedEvents = _.filter(getEventsInGame(appData, gameId, LOAN_ASKED),
                                     e => e.lender === authId);
     return _.map(_.union(openOfferEvents, openAskEvents, offeredEvents, askedEvents),
-                e => getTransactionAssociatedWithEvent(appData, gameId, e));
+                    e => getTransactionForEvent(appData, gameId, e));
 }
 
 function deepDifference(set1, set2) {
