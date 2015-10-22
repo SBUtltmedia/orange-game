@@ -375,9 +375,10 @@ function getEventsInTransaction(appData, gameId, event) {
                     _.contains(_.values(LOAN), e.type) &&
                     e.borrower === event.borrower &&
                     e.lender === event.lender);
+
     const eventIndex = deepIndexOf(all, event);
     const startIndex = () => {
-        for (var i = eventIndex; i > 0; i--) {
+        for (var i = eventIndex; i >= 0; i--) {
             if (all[i].type === LOAN.OFFER_WINDOW_OPENED ||
                 all[i].type === LOAN.ASK_WINDOW_OPENED) {
                     return i;
@@ -391,12 +392,13 @@ function getEventsInTransaction(appData, gameId, event) {
                 return i;
             }
         }
+        return n;
     }();
     return all.slice(startIndex, endIndex + 1);
 }
 
 function getTransactionState(event) {
-    switch (lastEvent.type) {
+    switch (event.type) {
         case LOAN.OFFER_WINDOW_OPENED:
         case LOAN.ASK_WINDOW_OPENED: return CREATING;
         case LOAN.PAID_OFF: return PAID_OFF;
