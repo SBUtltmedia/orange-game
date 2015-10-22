@@ -1,10 +1,8 @@
 import model from './model';
 import _ from 'lodash';
-import { ACCEPTED } from './constants/NegotiationStates';
-import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE,
-            LOAN_ASK_WINDOW_OPENED, LOAN_OFFER_WINDOW_OPENED,
-            LOAN_OFFERED, LOAN_ASKED, LOAN_COUNTER_OFFER,
-            LOAN_REJECTED, LOAN_ACCEPTED } from '../src/constants/EventTypes';
+import { deepDifference, deepIndexOf } from './utils';
+import { CREATING, OPEN, ACCEPTED, REJECTED, PAID_OFF } from './constants/NegotiationStates';
+import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE, LOAN } from '../src/constants/EventTypes';
 import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
 
 export function getEventsInGame(appData, gameId, eventType=null) {
@@ -372,16 +370,49 @@ export function derivePlayers(appData) {
     }
 }
 
-function getTransactionEvents(appData, gameId, authId, type) {
-    return _.filter(getEventsInGame(appData, gameId, type),
-                    e => e.borrower === authId || e.lender === authId);
+function getEventsInTransaction(appData, gameId, event) {
+    const all = _.filter(getEventsInGame(appData, gameId), e =>
+                    _.contains(_.values(LOAN), e.type) &&
+                    e.borrower === event.borrower &&
+                    e.lender === event.lender);
+    const eventIndex = deepIndexOf(all, event);
+    const startIndex = () => {
+        for (var i = eventIndex; i > 0; i--) {
+            if (all[i].type === LOAN.OFFER_WINDOW_OPENED ||
+                all[i].type === LOAN.ASK_WINDOW_OPENED) {
+                    return i;
+            }
+        }
+    }();
+    const endIndex = () => {
+        const n = all.length;
+        for (var i = eventIndex; i < n; i++) {
+            if (all[i].type === LOAN.ACCEPTED || all[i].type === LOAN.REJECTED) {
+                return i;
+            }
+        }
+    }();
+    return all.slice(startIndex, endIndex + 1);
+}
+
+function getTransactionState(event) {
+    switch (lastEvent.type) {
+        case LOAN.OFFER_WINDOW_OPENED:
+        case LOAN.ASK_WINDOW_OPENED: return CREATING;
+        case LOAN.PAID_OFF: return PAID_OFF;
+        case LOAN.ACCEPTED: return ACCEPTED;
+        case LOAN.REJECTED: return REJECTED;
+        default: return OPEN;
+    }
 }
 
 function getTransactionForEvent(appData, gameId, event) {
+    const lastEvent = _.last(getEventsInTransaction(appData, gameId, event));
     return {
         lender: derivePlayer(appData, gameId, event.lender),
         borrower: derivePlayer(appData, gameId, event.borrower),
-        oranges: event.oranges  // TODO: Get last transaction event's oranges
+        oranges: lastEvent.oranges,
+        state: getTransactionState(lastEvent)
     }
 }
 
@@ -392,20 +423,16 @@ function getTransactions(appData, gameId, authId, type) {
 }
 
 export function deriveTransactions(appData, gameId, authId) {
-    const openOfferEvents = _.filter(getEventsInGame(appData, gameId, LOAN_OFFER_WINDOW_OPENED),
+    const openOfferEvents = _.filter(getEventsInGame(appData, gameId, LOAN.OFFER_WINDOW_OPENED),
                                     e => e.authId === authId);
-    const openAskEvents = _.filter(getEventsInGame(appData, gameId, LOAN_ASK_WINDOW_OPENED),
+    const openAskEvents = _.filter(getEventsInGame(appData, gameId, LOAN.ASK_WINDOW_OPENED),
                                     e => e.authId === authId);
-    const offeredEvents = _.filter(getEventsInGame(appData, gameId, LOAN_OFFERED),
+    const offeredEvents = _.filter(getEventsInGame(appData, gameId, LOAN.OFFERED),
                                     e => e.borrower === authId);
-    const askedEvents = _.filter(getEventsInGame(appData, gameId, LOAN_ASKED),
+    const askedEvents = _.filter(getEventsInGame(appData, gameId, LOAN.ASKED),
                                     e => e.lender === authId);
     return _.map(_.union(openOfferEvents, openAskEvents, offeredEvents, askedEvents),
                     e => getTransactionForEvent(appData, gameId, e));
-}
-
-function deepDifference(set1, set2) {
-    return _.filter(set1, i1 => !_.some(set2, i2 => _.matches(i1, i2)));
 }
 
 export function deriveMyTransactions(appData) {
@@ -423,7 +450,7 @@ export function deriveMyOpenTransactions(appData) {
 }
 
 export function deriveCompletedTransactions(appData) {
-    return getTransactions(appData, gameId, authId, LOAN_ACCEPTED);
+    return getTransactions(appData, gameId, authId, LOAN.ACCEPTED);
 }
 
 export function deriveMyCompletedTransactions(appData) {
@@ -432,8 +459,8 @@ export function deriveMyCompletedTransactions(appData) {
 
 export function deriveClosedTransactions(appData, gameId, authId) {
     return _.union(
-        getTransactions(appData, gameId, authId, LOAN_ACCEPTED),
-        getTransactions(appData, gameId, authId, LOAN_REJECTED));
+        getTransactions(appData, gameId, authId, LOAN.ACCEPTED),
+        getTransactions(appData, gameId, authId, LOAN.REJECTED));
 }
 
 export function deriveMyClosedTransactions(appData) {
