@@ -65,9 +65,6 @@ export default class Negotiation extends Component {
         this.setState({
             modalIsOpen: hasTransactions
         });
-
-        console.log(hasTransactions);
-
         if (hasTransactions) {
             const transaction = _.first(transactions);
             this.setState({
