@@ -15,13 +15,6 @@ const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
 Modal.injectCSS();
 
-function transactionIsOpenAndContainsPlayer(player, trans) {
-    return (trans.state === OPEN &&
-           (trans.lender.authId === player.authId ||
-           trans.borrower.authId === player.authId)) ||
-           (trans.state === CREATING && trans.lastToAct === player.authId);
-}
-
 const styles = {
     numberPicker: {
         width: 70
@@ -72,11 +65,11 @@ export default class Negotiation extends Component {
         this.setState({
             modalIsOpen: hasTransactions
         });
+
+        console.log(hasTransactions);
+
         if (hasTransactions) {
             const transaction = _.first(transactions);
-
-            console.log(transaction);
-
             this.setState({
                 thisTransaction: transaction,
                 nowOranges: transaction.oranges.now,
