@@ -90,6 +90,9 @@ export default class Negotiation extends Component {
         const { thisTransaction, nowOranges, laterOranges } = this.state;
         const type = thisTransaction.lastEvent ===
                      LOAN.OFFER_WINDOW_OPENED ? LOAN.OFFERED : LOAN.ASKED;
+
+        console.log("openOffer");
+
         openOffer(thisTransaction, nowOranges, laterOranges, type);
     }
 
@@ -106,19 +109,8 @@ export default class Negotiation extends Component {
     }
 
     counter() {
-        const form = React.findDOMNode(this.refs.form);
-        form.submit();
-    }
-
-    onFormSubmit(event) {
         const { thisTransaction, nowOranges, laterOranges } = this.state;
-        if(thisTransaction.state === CREATING) {
-            this.open();
-        }
-        else {
-            updateOffer(thisTransaction, nowOranges, laterOranges);
-        }
-        event.preventDefault();
+        updateOffer(thisTransaction, nowOranges, laterOranges);
     }
 
     onNowChange(value) {
@@ -194,7 +186,7 @@ export default class Negotiation extends Component {
                 <div>Lender: {thisTransaction.lender.name}</div>
                 <div>Borrower: {thisTransaction.borrower.name}</div>
                 <br />
-                <form ref="form" onSubmit={e => this.onFormSubmit(e)}>
+                <form ref="form" onSubmit={e => e.preventDefault()}>
                     <div style={styles.fl}>
                         <NumberPicker style={styles.numberPicker}
                             value={nowOranges} min={min} max={max} disabled={lastToAct}
