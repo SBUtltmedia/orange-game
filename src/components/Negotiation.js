@@ -90,9 +90,6 @@ export default class Negotiation extends Component {
         const { thisTransaction, nowOranges, laterOranges } = this.state;
         const type = thisTransaction.lastEvent ===
                      LOAN.OFFER_WINDOW_OPENED ? LOAN.OFFERED : LOAN.ASKED;
-
-        console.log("openOffer");
-
         openOffer(thisTransaction, nowOranges, laterOranges, type);
     }
 
@@ -177,7 +174,8 @@ export default class Negotiation extends Component {
     render() {
         const { modalIsOpen, thisTransaction, nowOranges, laterOranges } = this.state;
         if (thisTransaction) {
-            const lastToAct = thisTransaction.lastToAct === model.authId;
+            const lastToAct = thisTransaction.lastToAct === model.authId &&
+                                thisTransaction.state !== CREATING;
             const max = thisTransaction.lender.oranges.basket;
             const min = max >= 1 ? 1 : 0;
             return <Modal className="Modal__Bootstrap modal-dialog medium"
