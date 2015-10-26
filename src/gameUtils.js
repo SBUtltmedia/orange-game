@@ -414,7 +414,9 @@ function getTransactionForEvent(appData, gameId, event) {
         lender: derivePlayer(appData, gameId, event.lender),
         borrower: derivePlayer(appData, gameId, event.borrower),
         oranges: lastEvent.oranges,
-        state: getTransactionState(lastEvent)
+        state: getTransactionState(lastEvent),
+        lastToAct: lastEvent.authId,
+        lastEvent: lastEvent.type
     }
 }
 

@@ -29,9 +29,18 @@ function createNegotation(lender, borrower, type) {
     saveEvent(model.gameId, eventData);
 }
 
-//TODO: Implement
-export function openOffer(transaction, nowOranges, laterOranges) {
-
+export function openOffer(transaction, nowOranges, laterOranges, type) {
+    const eventData = {
+        type: type,
+        lender: transaction.lender,
+        borrower: transaction.borrower,
+        oranges: {
+            now: nowOranges,
+            later: laterOranges
+        },
+        authId: model.authId
+    };
+    saveEvent(model.gameId, eventData);
 }
 
 export function updateOffer(transaction, nowOranges, laterOranges) {

@@ -8,6 +8,7 @@ import { deriveMyOpenTransactions } from '../gameUtils';
 import { NumberPicker } from 'react-widgets';
 import { openOffer, updateOffer, rejectOffer, acceptOffer } from '../actions/MarketActions';
 import { CREATING, OPEN, ACCEPTED, REJECTED, PAID_OFF } from '../constants/NegotiationStates';
+import { LOAN } from '../constants/EventTypes';
 import { connect } from 'redux/react';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
@@ -18,7 +19,7 @@ function transactionIsOpenAndContainsPlayer(player, trans) {
     return (trans.state === OPEN &&
            (trans.lender.authId === player.authId ||
            trans.borrower.authId === player.authId)) ||
-           (trans.state === CREATING && trans.createdBy === player.authId);
+           (trans.state === CREATING && trans.lastToAct === player.authId);
 }
 
 const styles = {
@@ -97,7 +98,9 @@ export default class Negotiation extends Component {
 
     open() {
         const { thisTransaction, nowOranges, laterOranges } = this.state;
-        openOffer(thisTransaction, nowOranges, laterOranges);
+        const type = thisTransaction.lastEvent ===
+                     LOAN.OFFER_WINDOW_OPENED ? LOAN.OFFERED : LOAN.ASKED;
+        openOffer(thisTransaction, nowOranges, laterOranges, type);
     }
 
     reject() {
@@ -119,7 +122,12 @@ export default class Negotiation extends Component {
 
     onFormSubmit(event) {
         const { thisTransaction, nowOranges, laterOranges } = this.state;
-        updateOffer(thisTransaction, nowOranges, laterOranges);
+        if(thisTransaction.state === CREATING) {
+            this.open();
+        }
+        else {
+            updateOffer(thisTransaction, nowOranges, laterOranges);
+        }
         event.preventDefault();
     }
 
