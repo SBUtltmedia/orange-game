@@ -34,9 +34,6 @@ function dealNewDay(appData) {
 
 export function dealNewDayIfNeeded(appData) {
     if (shouldDealNewDay(appData)) {
-
-        console.log("DEALING");
-
         dealNewDay(appData);
     }
 }

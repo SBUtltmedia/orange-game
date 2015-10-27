@@ -2,9 +2,10 @@ require('source-map-support').install();
 import requireUncached from 'require-uncached';
 import * as GameUtils from '../src/gameUtils';
 import { expect } from 'chai';
+import _ from 'lodash';
 import model from '../src/model';
 import { DAYS_IN_GAME } from '../src/constants/Settings';
-import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE } from '../src/constants/EventTypes';
+import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE, LOAN } from '../src/constants/EventTypes';
 
 describe('gameUtils', () => {
 
@@ -227,6 +228,98 @@ describe('gameUtils', () => {
         expect(GameUtils.getOrangesDroppedInBox(appData, 'game1', 'ABC')).to.equal(0);
         expect(GameUtils.getOrangesDroppedInBasket(appData, 'game1', 'ABC')).to.equal(1);
         expect(GameUtils.getOrangesDroppedFromBox(appData, 'game1', 'ABC')).to.equal(1);
+    });
+
+    it('derives transactions 1', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: [
+                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
+                        { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 5 }
+                    ]
+                }
+            }
+        };
+        expect(_.size(GameUtils.deriveTransactions(appData, 'game1', 'ABC'))).to.equal(1);
+        expect(_.size(GameUtils.deriveTransactions(appData, 'game1', 'DEF'))).to.equal(0);
+    });
+
+    it('derives transactions 2', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: [
+                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
+                        { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 5 },
+                        { type: LOAN.OFFERED, lender: 'ABC', borrower: 'DEF', time: 6 }
+                    ]
+                }
+            }
+        };
+        expect(_.size(GameUtils.deriveTransactions(appData, 'game1', 'ABC'))).to.equal(1);
+        expect(_.size(GameUtils.deriveTransactions(appData, 'game1', 'DEF'))).to.equal(1);
+    });
+
+    it('derives open transactions 1', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: [
+                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
+                        { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 5 },
+                        { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 6 },
+                        { type: LOAN.REJECTED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', time: 7 },
+                    ]
+                }
+            }
+        };
+        expect(_.size(GameUtils.deriveOpenTransactions(appData, 'game1', 'ABC'))).to.equal(0);
+        expect(_.size(GameUtils.deriveOpenTransactions(appData, 'game1', 'DEF'))).to.equal(0);
+    });
+
+    it('gets oranges borrowed', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: [
+                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
+                        { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 5 },
+                        { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 6 },
+                        { type: LOAN.ACCEPTED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', time: 7 },
+                    ]
+                }
+            }
+        };
+        expect(GameUtils.getOrangesBorrowed(appData, 'game1', 'DEF')).to.equal(1);
     });
 
     it('reduces fitness on a new day', () => {

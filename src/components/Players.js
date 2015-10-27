@@ -59,12 +59,12 @@ class LoanComponent extends Component {
 
     createAskButton(player, canAsk, firebase) {
         return createButton('Ask', () =>
-                    openAskNegotiation(player, firebase), canAsk);
+                    openAskNegotiation(player.authId, firebase), canAsk);
     }
 
     createOfferButton(player, canOffer, firebase) {
         return createButton('Offer', () =>
-                    openOfferNegotiation(player, firebase), canOffer);
+                    openOfferNegotiation(player.authId, firebase), canOffer);
     }
 
     render() {

@@ -51,10 +51,17 @@ export default class Game extends Component {
         const { games } = firebase;
         if (games) {
             const game = games[params.gameId];
-            if (game.state === FINISHED) {
-                window.location.href = '/?#/gameOver/';
+            if (game) {
+                if (game.state === FINISHED) {
+                    window.location.href = '/?#/gameOver/';
+                    return;
+                }
+            }
+            else {
+                window.location.href = '/';
                 return;
             }
+
         }
         if (firebase) {
             dealNewDayIfNeeded(firebase);

@@ -4,21 +4,16 @@ import { APP_ROOT_ELEMENT } from '../constants/Settings';
 import { verticalCenter } from '../styles/Themes';
 import _ from 'lodash';
 import model from '../model';
+import { deriveMyOpenTransactions } from '../gameUtils';
 import { NumberPicker } from 'react-widgets';
 import { openOffer, updateOffer, rejectOffer, acceptOffer } from '../actions/MarketActions';
-import { CREATING, OPEN, ACCEPTED, REJECTED, PAID } from '../constants/NegotiationStates';
+import { CREATING, OPEN, ACCEPTED, REJECTED, PAID_OFF } from '../constants/NegotiationStates';
+import { LOAN } from '../constants/EventTypes';
 import { connect } from 'redux/react';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
 Modal.injectCSS();
-
-function transactionIsOpenAndContainsPlayer(player, trans) {
-    return (trans.state === OPEN &&
-           (trans.lender.authId === player.authId ||
-           trans.borrower.authId === player.authId)) ||
-           (trans.state === CREATING && trans.createdBy === player.authId);
-}
 
 const styles = {
     numberPicker: {
@@ -55,9 +50,8 @@ export default class Negotiation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            transactions: [],
-            thisTransaction: null,
             modalIsOpen: false,
+            thisTransaction: null,
             nowOranges: 1,
             laterOranges: 1,
             originalNowOranges: 1,
@@ -65,31 +59,27 @@ export default class Negotiation extends Component {
         }
     }
 
-    check(transactions) {
-        const f = _.bind(transactionIsOpenAndContainsPlayer, {}, model);
-        const transactionId = _.findKey(transactions, f);
-        const transaction = transactions[transactionId];
+    checkMyTransactions(firebase) {
+        const transactions = deriveMyOpenTransactions(firebase);
+        const hasTransactions = !_.isEmpty(transactions);
         this.setState({
-            modalIsOpen: !!transaction
+            modalIsOpen: hasTransactions
         });
-        if (transaction) {
+        if (hasTransactions) {
+            const transaction = _.first(transactions);
             this.setState({
-                thisTransaction: _.extend({id: transactionId}, transaction),
+                thisTransaction: transaction,
                 nowOranges: transaction.oranges.now,
                 laterOranges: transaction.oranges.later,
                 originalNowOranges: transaction.oranges.now,
                 originalLaterOranges: transaction.oranges.later
-            })
+            });
         }
     }
 
     componentWillReceiveProps(newProps) {
         const { firebase } = newProps;
-        const { games } = firebase;
-        if (games) {
-            const game = games[model.gameId];
-            this.check(game.transactions || {});
-        }
+        this.checkMyTransactions(firebase);
     }
 
     closeModal() {
@@ -98,28 +88,26 @@ export default class Negotiation extends Component {
 
     open() {
         const { thisTransaction, nowOranges, laterOranges } = this.state;
-        openOffer(thisTransaction, nowOranges, laterOranges);
+        const type = thisTransaction.lastEvent ===
+                     LOAN.OFFER_WINDOW_OPENED ? LOAN.OFFERED : LOAN.ASKED;
+        openOffer(thisTransaction, nowOranges, laterOranges, type);
     }
 
     reject() {
+        const { firebase } = this.props;
         const { thisTransaction } = this.state;
-        rejectOffer(thisTransaction, () => this.check(this.state.transactions));
+        rejectOffer(thisTransaction, () => this.checkMyTransactions(transactions));
     }
 
     accept() {
+        const { firebase } = this.props;
         const { thisTransaction } = this.state;
-        acceptOffer(thisTransaction, () => this.check(this.state.transactions));
+        acceptOffer(thisTransaction, () => this.checkMyTransactions(firebase));
     }
 
     counter() {
-        const form = React.findDOMNode(this.refs.form);
-        form.submit();
-    }
-
-    onFormSubmit(event) {
         const { thisTransaction, nowOranges, laterOranges } = this.state;
         updateOffer(thisTransaction, nowOranges, laterOranges);
-        event.preventDefault();
     }
 
     onNowChange(value) {
@@ -186,7 +174,8 @@ export default class Negotiation extends Component {
     render() {
         const { modalIsOpen, thisTransaction, nowOranges, laterOranges } = this.state;
         if (thisTransaction) {
-            const lastToAct = thisTransaction.lastToAct === model.authId;
+            const canChange = thisTransaction.lastToAct !== model.authId ||
+                                thisTransaction.state === CREATING;
             const max = thisTransaction.lender.oranges.basket;
             const min = max >= 1 ? 1 : 0;
             return <Modal className="Modal__Bootstrap modal-dialog medium"
@@ -195,14 +184,14 @@ export default class Negotiation extends Component {
                 <div>Lender: {thisTransaction.lender.name}</div>
                 <div>Borrower: {thisTransaction.borrower.name}</div>
                 <br />
-                <form ref="form" onSubmit={e => this.onFormSubmit(e)}>
+                <form ref="form" onSubmit={e => e.preventDefault()}>
                     <div style={styles.fl}>
                         <NumberPicker style={styles.numberPicker}
-                            value={nowOranges} min={min} max={max} disabled={lastToAct}
+                            value={nowOranges} min={min} max={max} disabled={!canChange}
                             onChange={this.onNowChange.bind(this)} />
                         <div style={styles.sentenceWords}>oranges now for</div>
                         <NumberPicker style={styles.numberPicker}
-                            value={laterOranges} min={min} disabled={lastToAct}
+                            value={laterOranges} min={min} disabled={!canChange}
                             onChange={this.onLaterChange.bind(this)} />
                         <div style={styles.sentenceWords}>oranges later</div>
                     </div>
