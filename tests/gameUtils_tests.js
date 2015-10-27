@@ -115,7 +115,7 @@ describe('gameUtils', () => {
         expect(GameUtils.getGameDay(appData, 'game1')).to.equal(3);
     });
 
-    it('derives appData', () => {
+    it('derives appData 1', () => {
         const appData = {
             games: {
                 game1: {
@@ -147,6 +147,59 @@ describe('gameUtils', () => {
                     oranges: {
                         basket: 0,
                         box: 1,
+                        dish: 0
+                    }
+                },
+                {
+                    authId: 'DEF',
+                    name: 'Jen',
+                    ready: false,
+                    oranges: {
+                        basket: 0,
+                        box: 3,
+                        dish: 0
+                    }
+                }
+            ]
+        };
+        model.gameId = 'game1';
+        model.authId = 'DEF';
+        expect(GameUtils.deriveData(appData)).to.deep.equal(derived);
+    });
+
+    it('derives appData 2', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: [
+                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 0, time: 2 },
+                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        { type: PLAYER_DONE, authId: 'ABC', time: 4 }
+                    ]
+                }
+            }
+        };
+        const derived = {
+            day: 1,
+            dailyOranges: [ 3 ],
+            oranges: {
+                basket: 0,
+                dish: 0,
+                box: 3
+            },
+            players: [
+                {
+                    authId: 'ABC',
+                    name: 'Ken',
+                    ready: true,
+                    oranges: {
+                        basket: 0,
+                        box: 0,
                         dish: 0
                     }
                 },

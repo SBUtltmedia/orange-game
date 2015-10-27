@@ -191,7 +191,6 @@ export function getMyOranges(appData) {
 
 function getHighestEventCountByPlayer(appData, events, gameId) {
     const counts = _.map(_.groupBy(events, e => e.authId), _.size);
-    const game = getGame(appData, gameId);
     if (_.isEmpty(counts)) {  // no players have any
         return 0;
     }
@@ -223,8 +222,8 @@ function getEventsAfterTime(events, time) {
 }
 
 export function getGameDay(appData, gameId) {
-    const doneEvents = getEventsInGame(appData, gameId, ORANGES_DEALT);
-    return getHighestEventCountByPlayer(appData, doneEvents, gameId);
+    const dealtEvents = getEventsInGame(appData, gameId, ORANGES_DEALT);
+    return getHighestEventCountByPlayer(appData, dealtEvents, gameId);
 }
 
 export function getThisGameDay(appData) {
@@ -381,13 +380,13 @@ export function shouldDealNewDayDerived(derivedData) {
 
 function derivePlayer(appData, gameId, authId) {
     const game = getGame(appData, gameId);
+    const doneEvents = getEventsInGame(appData, gameId, PLAYER_DONE);
     const playerDoneEvents = _.filter(doneEvents, e => e.authId === authId);
     const oranges = getOranges(appData, model.gameId, authId);
-    const doneEvents = getEventsInThisGame(appData, PLAYER_DONE);
     return {
         authId: authId,
         name: game.players[authId].name,
-        ready: oranges.box === 0 && _.size(playerDoneEvents) >= getThisGameDay(appData),
+        ready: oranges.box === 0 && _.size(playerDoneEvents) >= getGameDay(appData, gameId),
         oranges: oranges
     };
 }
