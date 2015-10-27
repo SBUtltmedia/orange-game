@@ -60,6 +60,9 @@ export default class Negotiation extends Component {
     }
 
     checkMyTransactions(firebase) {
+
+        console.log("firebase", firebase);
+
         const transactions = deriveMyOpenTransactions(firebase);
         const hasTransactions = !_.isEmpty(transactions);
         this.setState({

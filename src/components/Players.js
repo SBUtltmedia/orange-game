@@ -7,7 +7,7 @@ import Griddle from 'griddle-react';
 import Negotiation from '../components/Negotiation';
 import { connect } from 'redux/react';
 import { getThisGame, getOrangesInMyBasket, getPlayerTransactions,
-        derivePlayers, hasOpenTransactionWithPlayer } from '../gameUtils';
+        derivePlayers } from '../gameUtils';
 
 const styles = {
     container: {
@@ -73,7 +73,6 @@ class LoanComponent extends Component {
             if (player && player.oranges) {
                 const myBasketOranges = getOrangesInMyBasket(firebase);
                 const isSelf = player.authId === model.authId;
-                const already = hasOpenTransactionWithPlayer();
                 const canOffer = !isSelf && !already && myBasketOranges > 0;
                 const canAsk = !isSelf && !already && player.oranges.basket > 0;
                 return <div>
