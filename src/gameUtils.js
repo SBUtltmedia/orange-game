@@ -1,9 +1,12 @@
 import model from './model';
 import _ from 'lodash';
 import { deepDifference, deepIndexOf } from './utils';
-import { CREATING, OPEN, ACCEPTED, REJECTED, PAID_OFF } from './constants/NegotiationStates';
-import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE, LOAN } from '../src/constants/EventTypes';
-import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME } from './constants/Settings';
+import { CREATING, OPEN, ACCEPTED, REJECTED,
+            PAID_OFF } from './constants/NegotiationStates';
+import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE,
+            LOAN } from '../src/constants/EventTypes';
+import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME,
+            DEFAULT_LOAN_ORANGES } from './constants/Settings';
 
 export function getEventsInGame(appData, gameId, eventType=null) {
     const game = getGame(appData, gameId);
@@ -25,6 +28,34 @@ function getTodayStart(appData, gameId, authId) {
     const doneEvents = getEventsInThisGame(appData, PLAYER_DONE);
     const playerDoneEvents = _.filter(doneEvents, e => e.authId === authId);
     return _.isEmpty(playerDoneEvents) ? 0 : _.last(playerDoneEvents).time;
+}
+
+export function getLoansBorrowed(appData, gameId, authId) {
+    return _.filter(getEventsInGame(appData, gameId, LOAN.ACCEPTED),
+                                e => e.borrower === authId);
+}
+
+export function getLoansLended(appData, gameId, authId) {
+    return _.filter(getEventsInGame(appData, gameId, LOAN.ACCEPTED),
+                                e => e.lender === authId);
+}
+
+export function getMyLoansBorrowed(appData) {
+    return getMyLoansBorrowed(appData, model.gameId, model.authId);
+}
+
+export function getMyLoansLended(appData) {
+    return getMyLoansLended(appData, model.gameId, model.authId);
+}
+
+export function getOrangesBorrowed(appData, gameId, authId) {
+    const loans = getLoansBorrowed(appData, gameId, authId);
+    return _.sum(_.map(loans, loan => loan.oranges.now));
+}
+
+export function getOrangesLended(appData, gameId, authId) {
+    const loans = getLoansLended(appData, gameId, authId);
+    return _.sum(_.map(loans, loan => loan.oranges.now));
 }
 
 function getOrangeDropEvents(prop, appData, name, gameId, authId, onlyToday) {
@@ -113,7 +144,8 @@ export function getOrangesInMyDish(appData) {
 
 export function getOrangesInBasket(appData, gameId, authId) {
     return getOrangesDroppedInBasket(appData, gameId, authId) -
-           getOrangesDroppedFromBasket(appData, gameId, authId);
+           getOrangesDroppedFromBasket(appData, gameId, authId) -
+           getOrangesLended(appData, gameId, authId);
 }
 
 export function getOrangesInMyBasket(appData) {
@@ -137,7 +169,8 @@ function getOrangesDealt(appData, gameId, authId) {
 export function getOrangesInBox(appData, gameId, authId) {
     return getOrangesDealt(appData, gameId, authId) +
            getOrangesDroppedInBox(appData, gameId, authId) -
-           getOrangesDroppedFromBox(appData, gameId, authId);
+           getOrangesDroppedFromBox(appData, gameId, authId) +
+           getOrangesBorrowed(appData, gameId, authId);
 }
 
 export function getOrangesInMyBox(appData) {
@@ -413,7 +446,7 @@ function getTransactionForEvent(appData, gameId, event) {
     return {
         lender: derivePlayer(appData, gameId, event.lender),
         borrower: derivePlayer(appData, gameId, event.borrower),
-        oranges: lastEvent.oranges,
+        oranges: lastEvent.oranges || DEFAULT_LOAN_ORANGES,
         state: getTransactionState(lastEvent),
         lastToAct: lastEvent.authId,
         lastEvent: lastEvent.type
@@ -445,9 +478,6 @@ export function deriveMyTransactions(appData) {
 
 export function deriveOpenTransactions(appData, gameId, authId) {
     const all = deriveTransactions(appData, gameId, authId);
-
-    console.log(all);
-
     const closed = deriveClosedTransactions(appData, gameId, authId);
     return deepDifference(all, closed);
 }

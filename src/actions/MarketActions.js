@@ -1,8 +1,10 @@
 import _ from 'lodash';
 import model from '../model';
 import { LOAN } from '../constants/EventTypes';
-import { CREATING, OPEN, ACCEPTED, REJECTED, PAID_OFF } from '../constants/NegotiationStates';
+import { CREATING, OPEN, ACCEPTED, REJECTED,
+            PAID_OFF } from '../constants/NegotiationStates';
 import { saveEvent } from '../firebaseUtils';
+import { DEFAULT_LOAN_ORANGES } from '../constants/Settings';
 
 export function payDebt(transaction) {
     const eventData = {
@@ -20,10 +22,7 @@ function createNegotation(lender, borrower, type) {
         type: type,
         lender: lender,
         borrower: borrower,
-        oranges: {
-            now: 1,
-            later: 1
-        },
+        oranges: DEFAULT_LOAN_ORANGES,
         authId: model.authId
     };
     saveEvent(model.gameId, eventData);
@@ -62,7 +61,8 @@ export function rejectOffer(transaction, callback) {
         type: LOAN.REJECTED,
         lender: transaction.lender.authId,
         borrower: transaction.borrower.authId,
-        authId: model.authId
+        authId: model.authId,
+        oranges: transaction.oranges
     };
     saveEvent(model.gameId, eventData);
 }
@@ -72,7 +72,8 @@ export function acceptOffer(transaction, callback) {
         type: LOAN.ACCEPTED,
         lender: transaction.lender.authId,
         borrower: transaction.borrower.authId,
-        authId: model.authId
+        authId: model.authId,
+        oranges: transaction.oranges
     };
     saveEvent(model.gameId, eventData);
 }
