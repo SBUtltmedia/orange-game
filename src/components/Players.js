@@ -73,8 +73,8 @@ class LoanComponent extends Component {
             if (player && player.oranges) {
                 const myBasketOranges = getOrangesInMyBasket(firebase);
                 const isSelf = player.authId === model.authId;
-                const canOffer = !isSelf && !already && myBasketOranges > 0;
-                const canAsk = !isSelf && !already && player.oranges.basket > 0;
+                const canOffer = !isSelf && myBasketOranges > 0;
+                const canAsk = !isSelf && player.oranges.basket > 0;
                 return <div>
                     { this.createAskButton(player, canAsk, firebase) }
                     { this.createOfferButton(player, canOffer, firebase) }

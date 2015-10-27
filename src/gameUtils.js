@@ -444,13 +444,6 @@ export function deriveMyTransactions(appData) {
 }
 
 export function deriveOpenTransactions(appData, gameId, authId) {
-
-
-    if (!appData) {
-        throw new Error("PARTY TIME!");
-    }
-
-
     const all = deriveTransactions(appData, gameId, authId);
     const closed = deriveClosedTransactions(appData, gameId, authId);
     return deepDifference(all, closed);
