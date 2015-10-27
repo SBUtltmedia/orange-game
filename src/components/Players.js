@@ -88,9 +88,8 @@ class LoanComponent extends Component {
 class ReadyComponent extends Component {
     render() {
         if (this.props.data) {
-            const { player, firebase } = this.props.data;
-            const game = getThisGame(firebase);
-            if (player && player.day > game.day) {
+            const { player } = this.props.data;
+            if (player.ready) {
                 return <img style={styles.checkmark}
                         src={require("../../images/checkmark.png")} />;
             }
@@ -153,7 +152,7 @@ export default class Players extends Component {
                     Credit: this.calculateCredit(player),
                     Reputation: player.reputation,
                     Loan: { player: player, firebase: firebase },
-                    Ready: { player: player, firebase: firebase }
+                    Ready: { player: player }
                 };
             }
             else {
