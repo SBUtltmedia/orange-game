@@ -445,6 +445,9 @@ export function deriveMyTransactions(appData) {
 
 export function deriveOpenTransactions(appData, gameId, authId) {
     const all = deriveTransactions(appData, gameId, authId);
+
+    console.log(all);
+
     const closed = deriveClosedTransactions(appData, gameId, authId);
     return deepDifference(all, closed);
 }
