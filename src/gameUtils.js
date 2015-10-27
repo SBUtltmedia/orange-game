@@ -355,19 +355,23 @@ export function getThisPlayerCredits(appData) {
     return getPlayerCredits(appData, model.authId);
 }
 
-export function canPlayerAdvanceDay(appData) {
-    return canPlayerAdvanceDayDerived(deriveData(appData));
+export function canPlayerAdvanceDay(appData, gameId, authId) {
+    return canPlayerAdvanceDayDerived(derivePlayer(appData, gameId, authId));
+}
+
+export function canIAdvanceDay(appData) {
+    return canPlayerAdvanceDay(appData, model.gameId, model.authId);
 }
 
 export function shouldDealNewDay(appData) {
     return shouldDealNewDayDerived(deriveData(appData));
 }
 
-export function canPlayerAdvanceDayDerived(derivedData) {
-    if (!derivedData) {
+export function canPlayerAdvanceDayDerived(derivedPlayer) {
+    if (!derivedPlayer) {
         return false;
     }
-    return derivedData.oranges.box === 0 && derivedData.day < DAYS_IN_GAME;
+    return derivedPlayer.oranges.box === 0 && !derivedPlayer.ready;
 }
 
 export function shouldDealNewDayDerived(derivedData) {
@@ -380,15 +384,17 @@ export function shouldDealNewDayDerived(derivedData) {
 
 function derivePlayer(appData, gameId, authId) {
     const game = getGame(appData, gameId);
-    const doneEvents = getEventsInGame(appData, gameId, PLAYER_DONE);
-    const playerDoneEvents = _.filter(doneEvents, e => e.authId === authId);
-    const oranges = getOranges(appData, model.gameId, authId);
-    return {
-        authId: authId,
-        name: game.players[authId].name,
-        ready: oranges.box === 0 && _.size(playerDoneEvents) >= getGameDay(appData, gameId),
-        oranges: oranges
-    };
+    if (game) {
+        const doneEvents = getEventsInGame(appData, gameId, PLAYER_DONE);
+        const playerDoneEvents = _.filter(doneEvents, e => e.authId === authId);
+        const oranges = getOranges(appData, model.gameId, authId);
+        return {
+            authId: authId,
+            name: game.players[authId].name,
+            ready: oranges.box === 0 && _.size(playerDoneEvents) >= getGameDay(appData, gameId),
+            oranges: oranges
+        };
+    }
 }
 
 export function derivePlayers(appData) {
