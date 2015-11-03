@@ -145,7 +145,8 @@ export function getOrangesInMyDish(appData) {
 export function getOrangesInBasket(appData, gameId, authId) {
     return getOrangesDroppedInBasket(appData, gameId, authId) -
            getOrangesDroppedFromBasket(appData, gameId, authId) -
-           getOrangesLended(appData, gameId, authId);
+           getOrangesLended(appData, gameId, authId) -
+           getLoanPaymentsPaid(appData, gameId, authId);
 }
 
 export function getOrangesInMyBasket(appData) {
@@ -170,7 +171,8 @@ export function getOrangesInBox(appData, gameId, authId) {
     return getOrangesDealt(appData, gameId, authId) +
            getOrangesDroppedInBox(appData, gameId, authId) -
            getOrangesDroppedFromBox(appData, gameId, authId) +
-           getOrangesBorrowed(appData, gameId, authId);
+           getOrangesBorrowed(appData, gameId, authId) +
+           getLoanPayementsReceived(appData, gameId, authId);
 }
 
 export function getOrangesInMyBox(appData) {
@@ -317,57 +319,73 @@ export function updateThisPlayer(appData, playerData) {
     return newAppData;
 }
 
-export function getPlayerTransactions(appData, authId) {
-    const game = getThisGame(appData);
-    if (game) {
-        const transactions = _.filter(game.transactions, t => {
-            return t.state === ACCEPTED &&
-                (t.lender.authId === authId || t.borrower.authId === authId);
-        });
-        return _.map(transactions, t => {
-            return _.extend({ id: _.findKey(game.transactions, t) }, t);
-        });
-    }
-    return [];
+export function getPlayerOutstandingTransactions(appData, gameId, authId) {
+    const ts = deriveTransactions(appData, gameId, authId);
+    const completed = _.filter(ts, t => t.state === ACCEPTED);
+    return _.map(completed, t => _.extend({ id: _.findKey(ts, t) }, t));
 }
 
-export function getThisPlayerTransactions(appData) {
-    return getThisPlayerTransactions(appData, model.authId);
+export function getThisPlayerOutstandingTransactions(appData) {
+    return getThisPlayerOutstandingTransactions(appData, model.authId);
 }
 
-export function getPlayerDebts(appData, authId) {
-    return _.filter(getPlayerTransactions(appData, authId), t => {
+export function getPlayerPaidOffTransactions(appData, gameId, authId) {
+    const ts = deriveTransactions(appData, gameId, authId);
+    const completed = _.filter(ts, t => t.state === PAID_OFF);
+    return _.map(completed, t => _.extend({ id: _.findKey(ts, t) }, t));
+}
+
+export function getThisPlayerPaidOffTransactions(appData) {
+    return getPlayerPaidOffTransactions(appData, model.authId);
+}
+
+export function getPlayerDebts(appData, gameId, authId) {
+    return _.filter(getPlayerOutstandingTransactions(appData, gameId, authId), t => {
         return t.borrower.authId === authId;
     });
 }
 
 export function getThisPlayerDebts(appData) {
-    return getPlayerDebts(appData, model.authId);
+    return getPlayerDebts(appData, model.gameId, model.authId);
 }
 
-export function getPlayerCredits(appData, authId) {
-    return _.filter(getPlayerTransactions(appData, authId), t => {
+export function getPlayerCredits(appData, gameId, authId) {
+    return _.filter(getPlayerOutstandingTransactions(appData, gameId, authId), t => {
         return t.lender.authId === authId;
     });
 }
 
 export function getThisPlayerCredits(appData) {
-    return getPlayerCredits(appData, model.authId);
+    return getPlayerCredits(appData, model.gameId, model.authId);
 }
 
-export function canPlayerAdvanceDay(appData) {
-    return canPlayerAdvanceDayDerived(deriveData(appData));
+export function getLoanPaymentsPaid(appData, gameId, authId) {
+    const ts = getThisPlayerPaidOffTransactions(appData, gameId, authId);
+    return _.sum(_.pluck(_.filter(ts, t => t.borrower === authId), 'oranges'));
+}
+
+export function getLoanPayementsReceived(appData, gameId, authId) {
+    const ts = getThisPlayerPaidOffTransactions(appData, gameId, authId);
+    return _.sum(_.pluck(_.filter(ts, t => t.lender === authId), 'oranges'));
+}
+
+export function canPlayerAdvanceDay(appData, gameId, authId) {
+    return canPlayerAdvanceDayDerived(derivePlayer(appData, gameId, authId));
+}
+
+export function canIAdvanceDay(appData) {
+    return canPlayerAdvanceDay(appData, model.gameId, model.authId);
 }
 
 export function shouldDealNewDay(appData) {
     return shouldDealNewDayDerived(deriveData(appData));
 }
 
-export function canPlayerAdvanceDayDerived(derivedData) {
-    if (!derivedData) {
+export function canPlayerAdvanceDayDerived(derivedPlayer) {
+    if (!derivedPlayer) {
         return false;
     }
-    return derivedData.oranges.box === 0 && derivedData.day < DAYS_IN_GAME;
+    return derivedPlayer.oranges.box === 0 && !derivedPlayer.ready;
 }
 
 export function shouldDealNewDayDerived(derivedData) {
@@ -380,15 +398,17 @@ export function shouldDealNewDayDerived(derivedData) {
 
 function derivePlayer(appData, gameId, authId) {
     const game = getGame(appData, gameId);
-    const doneEvents = getEventsInGame(appData, gameId, PLAYER_DONE);
-    const playerDoneEvents = _.filter(doneEvents, e => e.authId === authId);
-    const oranges = getOranges(appData, model.gameId, authId);
-    return {
-        authId: authId,
-        name: game.players[authId].name,
-        ready: oranges.box === 0 && _.size(playerDoneEvents) >= getGameDay(appData, gameId),
-        oranges: oranges
-    };
+    if (game) {
+        const doneEvents = getEventsInGame(appData, gameId, PLAYER_DONE);
+        const playerDoneEvents = _.filter(doneEvents, e => e.authId === authId);
+        const oranges = getOranges(appData, model.gameId, authId);
+        return {
+            authId: authId,
+            name: game.players[authId].name,
+            ready: oranges.box === 0 && _.size(playerDoneEvents) >= getGameDay(appData, gameId),
+            oranges: oranges
+        };
+    }
 }
 
 export function derivePlayers(appData) {

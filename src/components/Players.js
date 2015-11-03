@@ -6,7 +6,7 @@ import model from '../model';
 import Griddle from 'griddle-react';
 import Negotiation from '../components/Negotiation';
 import { connect } from 'redux/react';
-import { getThisGame, getOrangesInMyBasket, getPlayerTransactions,
+import { getThisGame, getOrangesInMyBasket, getPlayerOutstandingTransactions,
         derivePlayers } from '../gameUtils';
 
 const styles = {
@@ -126,7 +126,7 @@ export default class Players extends Component {
         const { firebase } = this.props;
         const game = getThisGame(firebase);
         if (game) {
-            const transactions = getPlayerTransactions(firebase, player.authId);
+            const transactions = getPlayerOutstandingTransactions(firebase, player.authId);
             return _.reduce(transactions, (total, t) => {
                 if (t.lender.authId === player.authId) {
                     return total + t.oranges.later;
