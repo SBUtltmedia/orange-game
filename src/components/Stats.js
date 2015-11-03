@@ -54,21 +54,6 @@ function formatChange(change) {
     }
 }
 
-function renderDebt(transaction) {
-    return <li>
-        {transaction.lender.name}: &nbsp;
-        <span style={styles.debt}>{transaction.oranges.later}</span>
-        { this.renderPayButton(transaction) }
-    </li>;
-}
-
-function renderCredit(transaction) {
-    return <li>
-        {transaction.borrower.name}: &nbsp;
-        <span style={styles.credit}>{transaction.oranges.later}</span>
-    </li>;
-}
-
 @connect(state => ({
     firebase: state.firebase
 }))
@@ -91,6 +76,21 @@ export default class Stats extends Component {
         }
     }
 
+    renderDebt(transaction) {
+        return <li>
+            {transaction.lender.name}: &nbsp;
+            <span style={styles.debt}>{transaction.oranges.later}</span>
+            { this.renderPayButton(transaction) }
+        </li>;
+    }
+
+    renderCredit(transaction) {
+        return <li>
+            {transaction.borrower.name}: &nbsp;
+            <span style={styles.credit}>{transaction.oranges.later}</span>
+        </li>;
+    }
+
     renderDebtsOrCredits(fetchFn, renderFn) {
         const { firebase } = this.props;
         const items = fetchFn(firebase);
@@ -103,11 +103,11 @@ export default class Stats extends Component {
     }
 
     renderDebts() {
-        return this.renderDebtsOrCredits(getThisPlayerDebts, renderDebt);
+        return this.renderDebtsOrCredits(getThisPlayerDebts, t => this.renderDebt(t));
     }
 
     renderCredits() {
-        return this.renderDebtsOrCredits(getThisPlayerCredits, renderCredit);
+        return this.renderDebtsOrCredits(getThisPlayerCredits, t => this.renderCredit(t));
     }
 
     render() {
