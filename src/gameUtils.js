@@ -145,7 +145,8 @@ export function getOrangesInMyDish(appData) {
 export function getOrangesInBasket(appData, gameId, authId) {
     return getOrangesDroppedInBasket(appData, gameId, authId) -
            getOrangesDroppedFromBasket(appData, gameId, authId) -
-           getOrangesLended(appData, gameId, authId);
+           getOrangesLended(appData, gameId, authId) -
+           getLoanPaymentsPaid(appData, gameId, authId);
 }
 
 export function getOrangesInMyBasket(appData) {
@@ -170,7 +171,8 @@ export function getOrangesInBox(appData, gameId, authId) {
     return getOrangesDealt(appData, gameId, authId) +
            getOrangesDroppedInBox(appData, gameId, authId) -
            getOrangesDroppedFromBox(appData, gameId, authId) +
-           getOrangesBorrowed(appData, gameId, authId);
+           getOrangesBorrowed(appData, gameId, authId) +
+           getLoanPayementsReceived(appData, gameId, authId);
 }
 
 export function getOrangesInMyBox(appData) {
@@ -317,18 +319,28 @@ export function updateThisPlayer(appData, playerData) {
     return newAppData;
 }
 
-export function getPlayerCompletedTransactions(appData, gameId, authId) {
+export function getPlayerOutstandingTransactions(appData, gameId, authId) {
     const ts = deriveTransactions(appData, gameId, authId);
     const completed = _.filter(ts, t => t.state === ACCEPTED);
     return _.map(completed, t => _.extend({ id: _.findKey(ts, t) }, t));
 }
 
-export function getThisPlayerCompletedTransactions(appData) {
-    return getThisPlayerCompletedTransactions(appData, model.authId);
+export function getThisPlayerOutstandingTransactions(appData) {
+    return getThisPlayerOutstandingTransactions(appData, model.authId);
+}
+
+export function getPlayerPaidOffTransactions(appData, gameId, authId) {
+    const ts = deriveTransactions(appData, gameId, authId);
+    const completed = _.filter(ts, t => t.state === PAID_OFF);
+    return _.map(completed, t => _.extend({ id: _.findKey(ts, t) }, t));
+}
+
+export function getThisPlayerPaidOffTransactions(appData) {
+    return getPlayerPaidOffTransactions(appData, model.authId);
 }
 
 export function getPlayerDebts(appData, gameId, authId) {
-    return _.filter(getPlayerCompletedTransactions(appData, gameId, authId), t => {
+    return _.filter(getPlayerOutstandingTransactions(appData, gameId, authId), t => {
         return t.borrower.authId === authId;
     });
 }
@@ -338,13 +350,23 @@ export function getThisPlayerDebts(appData) {
 }
 
 export function getPlayerCredits(appData, gameId, authId) {
-    return _.filter(getPlayerCompletedTransactions(appData, gameId, authId), t => {
+    return _.filter(getPlayerOutstandingTransactions(appData, gameId, authId), t => {
         return t.lender.authId === authId;
     });
 }
 
 export function getThisPlayerCredits(appData) {
     return getPlayerCredits(appData, model.gameId, model.authId);
+}
+
+export function getLoanPaymentsPaid(appData, gameId, authId) {
+    const ts = getThisPlayerPaidOffTransactions(appData, gameId, authId);
+    return _.sum(_.pluck(_.filter(ts, t => t.borrower === authId), 'oranges'));
+}
+
+export function getLoanPayementsReceived(appData, gameId, authId) {
+    const ts = getThisPlayerPaidOffTransactions(appData, gameId, authId);
+    return _.sum(_.pluck(_.filter(ts, t => t.lender === authId), 'oranges'));
 }
 
 export function canPlayerAdvanceDay(appData, gameId, authId) {
