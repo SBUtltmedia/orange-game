@@ -367,12 +367,16 @@ describe('gameUtils', () => {
                         { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
                         { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 5 },
                         { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 6 },
-                        { type: LOAN.ACCEPTED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', time: 7 },
+                        { type: LOAN.ACCEPTED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', time: 7 }
                     ]
                 }
             }
         };
         expect(GameUtils.getOrangesBorrowed(appData, 'game1', 'DEF')).to.equal(1);
+        expect(_.size(GameUtils.getPlayerCompletedTransactions(appData, 'game1', 'ABC'))).to.equal(1);
+        expect(_.size(GameUtils.getPlayerCompletedTransactions(appData, 'game1', 'DEF'))).to.equal(1);
+        expect(_.size(GameUtils.getPlayerDebts(appData, 'game1', 'ABC'))).to.equal(0);
+        expect(_.size(GameUtils.getPlayerDebts(appData, 'game1', 'DEF'))).to.equal(1);
     });
 
     it('reduces fitness on a new day', () => {

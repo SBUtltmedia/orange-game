@@ -317,42 +317,34 @@ export function updateThisPlayer(appData, playerData) {
     return newAppData;
 }
 
-export function getPlayerTransactions(appData, authId) {
-    const game = getThisGame(appData);
-    if (game) {
-        const transactions = _.filter(game.transactions, t => {
-            return t.state === ACCEPTED &&
-                (t.lender.authId === authId || t.borrower.authId === authId);
-        });
-        return _.map(transactions, t => {
-            return _.extend({ id: _.findKey(game.transactions, t) }, t);
-        });
-    }
-    return [];
+export function getPlayerCompletedTransactions(appData, gameId, authId) {
+    const ts = deriveTransactions(appData, gameId, authId);
+    const completed = _.filter(ts, t => t.state === ACCEPTED);
+    return _.map(completed, t => _.extend({ id: _.findKey(ts, t) }, t));
 }
 
-export function getThisPlayerTransactions(appData) {
-    return getThisPlayerTransactions(appData, model.authId);
+export function getThisPlayerCompletedTransactions(appData) {
+    return getThisPlayerCompletedTransactions(appData, model.authId);
 }
 
-export function getPlayerDebts(appData, authId) {
-    return _.filter(getPlayerTransactions(appData, authId), t => {
+export function getPlayerDebts(appData, gameId, authId) {
+    return _.filter(getPlayerCompletedTransactions(appData, gameId, authId), t => {
         return t.borrower.authId === authId;
     });
 }
 
 export function getThisPlayerDebts(appData) {
-    return getPlayerDebts(appData, model.authId);
+    return getPlayerDebts(appData, model.gameId, model.authId);
 }
 
-export function getPlayerCredits(appData, authId) {
-    return _.filter(getPlayerTransactions(appData, authId), t => {
+export function getPlayerCredits(appData, gameId, authId) {
+    return _.filter(getPlayerCompletedTransactions(appData, gameId, authId), t => {
         return t.lender.authId === authId;
     });
 }
 
 export function getThisPlayerCredits(appData) {
-    return getPlayerCredits(appData, model.authId);
+    return getPlayerCredits(appData, model.gameId, model.authId);
 }
 
 export function canPlayerAdvanceDay(appData, gameId, authId) {
