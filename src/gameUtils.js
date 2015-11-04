@@ -422,6 +422,36 @@ export function derivePlayers(appData) {
     }
 }
 
+function areLoansSimilar(transaction1, transaction2) {
+    return transaction1.lender === transaction2.lender &&
+           transaction1.borrower === transaction2.borrower &&
+           transaction1.oranges.now === transaction2.oranges.now &&
+           transaction1.oranges.later === transaction2.oranges.later;
+}
+
+function getLoanPaymentEvent(appData, transaction) {
+    const ts = deriveTransactions(appData, transaction.gameId, transaction.lender);
+    const similar = _.filter(ts, t => areLoansSimilar(transaction, t));
+    const payments = _.filter(getEventsInGame(appData, gameId, LOAN.PAID),
+                                 e => areLoansSimilar(transaction, e));
+    const index = () => {
+        const n = _.size(similar);
+        for (var i = 0; i < n; i++) {
+            if (transaction.lastEventTime === similar[i].lastEventTime) {
+                return i;
+            }
+        }
+        throw new Error('Index not found');
+    }();
+    if (_.size(payments) > index) {
+        return payments[index];
+    }
+}
+
+function isLoanPaidOff(appData, transaction) {
+    return !!getLoanPaymentEvent(appData, transaction);
+}
+
 function getEventsInTransaction(appData, gameId, event) {
     const all = _.filter(getEventsInGame(appData, gameId), e =>
                     _.contains(_.values(LOAN), e.type) &&
@@ -446,7 +476,15 @@ function getEventsInTransaction(appData, gameId, event) {
         }
         return n;
     }();
-    return all.slice(startIndex, endIndex + 1);
+    const section = all.slice(startIndex, endIndex + 1);
+    const transaction = getTransactionForEvent(appData, gameId, event);
+    const paymentEvent = getLoanPaymentEvent(appData, transaction);
+    if (paymentEvent) {
+        return _.union(section, [paymentEvent]);
+    }
+    else {
+        return section;
+    }
 }
 
 function getTransactionState(event) {
@@ -468,8 +506,10 @@ function getTransactionForEvent(appData, gameId, event) {
         oranges: lastEvent.oranges || DEFAULT_LOAN_ORANGES,
         state: getTransactionState(lastEvent),
         lastToAct: lastEvent.authId,
-        lastEvent: lastEvent.type
-    }
+        lastEventType: lastEvent.type,
+        lastEventTime: lastEvent.time,
+        gameId: gameId
+    };
 }
 
 function getTransactions(appData, gameId, authId, type) {

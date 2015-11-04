@@ -88,7 +88,7 @@ export default class Negotiation extends Component {
 
     open() {
         const { thisTransaction, nowOranges, laterOranges } = this.state;
-        const type = thisTransaction.lastEvent ===
+        const type = thisTransaction.lastEventType ===
                      LOAN.OFFER_WINDOW_OPENED ? LOAN.OFFERED : LOAN.ASKED;
         openOffer(thisTransaction, nowOranges, laterOranges, type);
     }
