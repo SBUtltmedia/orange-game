@@ -86,9 +86,9 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' },
                         DEF: { name: 'Jen' }
                     },
-                    events: [
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 },
-                    ]
+                    events: {
+                        evt1: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 }
+                    }
                 }
             }
         };
@@ -103,13 +103,13 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' },
                         DEF: { name: 'Jen' }
                     },
-                    events: [
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 },
-                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 1, time: 2 },
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 3 },
-                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 1, time: 4 },
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 5 },
-                    ]
+                    events: {
+                        evt1: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 },
+                        evt2: { type: ORANGES_DEALT, authId: 'DEF', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 3 },
+                        evt4: { type: ORANGES_DEALT, authId: 'DEF', oranges: 1, time: 4 },
+                        evt5: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 5 },
+                    }
                 }
             }
         };
@@ -124,11 +124,11 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' },
                         DEF: { name: 'Jen' }
                     },
-                    events: [
-                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
-                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 }
-                    ]
+                    events: {
+                        evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 }
+                    }
                 }
             }
         };
@@ -176,12 +176,12 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' },
                         DEF: { name: 'Jen' }
                     },
-                    events: [
-                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 0, time: 2 },
-                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
-                        { type: PLAYER_DONE, authId: 'ABC', time: 4 }
-                    ]
+                    events: {
+                        evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 0, time: 2 },
+                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        evt4: { type: PLAYER_DONE, authId: 'ABC', time: 4 }
+                    }
                 }
             }
         };
@@ -228,9 +228,9 @@ describe('gameUtils', () => {
                     players: {
                         ABC: { name: 'Ken' }
                     },
-                    events: [
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 }
-                    ]
+                    events: {
+                        evt1: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 }
+                    }
                 }
             }
         };
@@ -246,11 +246,11 @@ describe('gameUtils', () => {
                     players: {
                         ABC: { name: 'Ken' }
                     },
-                    events: [
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 },
-                        { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 2 },
-                        { type: PLAYER_DONE, authId: 'ABC', time: 3 }
-                    ]
+                    events: {
+                        evt1: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 },
+                        evt2: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 2 },
+                        evt3: { type: PLAYER_DONE, authId: 'ABC', time: 3 },
+                    }
                 }
             }
         };
@@ -292,13 +292,13 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' },
                         DEF: { name: 'Jen' }
                     },
-                    events: [
-                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
-                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
-                        { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
-                        { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 5 }
-                    ]
+                    events: {
+                        evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        evt4: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
+                        evt5: { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 5 }
+                    }
                 }
             }
         };
@@ -314,14 +314,14 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' },
                         DEF: { name: 'Jen' }
                     },
-                    events: [
-                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
-                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
-                        { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
-                        { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 5 },
-                        { type: LOAN.OFFERED, lender: 'ABC', borrower: 'DEF', time: 6 }
-                    ]
+                    events: {
+                        evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        evt4: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
+                        evt5: { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 5 },
+                        evt6: { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 6 }
+                    }
                 }
             }
         };
@@ -337,15 +337,15 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' },
                         DEF: { name: 'Jen' }
                     },
-                    events: [
-                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
-                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
-                        { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
-                        { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 5 },
-                        { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 6 },
-                        { type: LOAN.REJECTED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', time: 7 },
-                    ]
+                    events: {
+                        evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        evt4: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
+                        evt5: { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 5 },
+                        evt6: { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 6 },
+                        evt7: { type: LOAN.REJECTED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', transactionId: 'ts1', time: 7 }
+                    }
                 }
             }
         };
@@ -361,15 +361,15 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' },
                         DEF: { name: 'Jen' }
                     },
-                    events: [
-                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
-                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
-                        { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
-                        { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 5 },
-                        { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 6 },
-                        { type: LOAN.ACCEPTED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', time: 7 }
-                    ]
+                    events: {
+                        evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        evt4: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
+                        evt5: { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 5 },
+                        evt6: { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 6 },
+                        evt7: { type: LOAN.ACCEPTED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', transactionId: 'ts1', time: 7 }
+                    }
                 }
             }
         };
@@ -388,16 +388,16 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' },
                         DEF: { name: 'Jen' }
                     },
-                    events: [
-                        { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
-                        { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
-                        { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
-                        { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 5 },
-                        { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', time: 6 },
-                        { type: LOAN.ACCEPTED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', time: 7 },
-                        { type: LOAN.PAID, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', time: 8 }
-                    ]
+                    events: {
+                        evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        evt4: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
+                        evt5: { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 5 },
+                        evt6: { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 6 },
+                        evt7: { type: LOAN.ACCEPTED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', transactionId: 'ts1', time: 7 },
+                        evt8: { type: LOAN.PAID_OFF, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', transactionId: 'ts1', time: 8 }
+                    }
                 }
             }
         };

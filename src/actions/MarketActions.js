@@ -3,7 +3,7 @@ import model from '../model';
 import { LOAN } from '../constants/EventTypes';
 import { CREATING, OPEN, ACCEPTED, REJECTED,
             PAID_OFF } from '../constants/NegotiationStates';
-import { saveEvent } from '../firebaseUtils';
+import { saveEvent, updateFbObject } from '../firebaseUtils';
 import { DEFAULT_LOAN_ORANGES } from '../constants/Settings';
 
 export function payDebt(transaction) {
@@ -12,7 +12,8 @@ export function payDebt(transaction) {
         lender: transaction.lender,
         borrower: transaction.borrower,
         oranges: transaction.oranges,
-        authId: model.authId
+        authId: model.authId,
+        transactionId: transaction.id,
     };
     saveEvent(model.gameId, eventData);
 }
@@ -25,7 +26,9 @@ function createNegotation(lender, borrower, type) {
         oranges: DEFAULT_LOAN_ORANGES,
         authId: model.authId
     };
-    saveEvent(model.gameId, eventData);
+    const id = saveEvent(model.gameId, eventData);
+    const data = { transactionId: id };
+    updateFbObject(`/games/${model.gameId}/events/${id}`, data);
 }
 
 export function openOffer(transaction, nowOranges, laterOranges, type) {
@@ -37,7 +40,8 @@ export function openOffer(transaction, nowOranges, laterOranges, type) {
             now: nowOranges,
             later: laterOranges
         },
-        authId: model.authId
+        authId: model.authId,
+        transactionId: transaction.id,
     };
     saveEvent(model.gameId, eventData);
 }
@@ -51,7 +55,8 @@ export function updateOffer(transaction, nowOranges, laterOranges) {
             now: nowOranges,
             later: laterOranges
         },
-        authId: model.authId
+        authId: model.authId,
+        transactionId: transaction.id,
     };
     saveEvent(model.gameId, eventData);
 }
@@ -62,7 +67,8 @@ export function rejectOffer(transaction, callback) {
         lender: transaction.lender.authId,
         borrower: transaction.borrower.authId,
         authId: model.authId,
-        oranges: transaction.oranges
+        oranges: transaction.oranges,
+        transactionId: transaction.id,
     };
     saveEvent(model.gameId, eventData);
 }
@@ -73,7 +79,8 @@ export function acceptOffer(transaction, callback) {
         lender: transaction.lender.authId,
         borrower: transaction.borrower.authId,
         authId: model.authId,
-        oranges: transaction.oranges
+        oranges: transaction.oranges,
+        transactionId: transaction.id,
     };
     saveEvent(model.gameId, eventData);
 }

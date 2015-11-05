@@ -1,6 +1,6 @@
 import model from './model';
 import _ from 'lodash';
-import { deepDifference, deepIndexOf } from './utils';
+import { deepDifference, deepIndexOf, addObjectKey, addObjectKeys } from './utils';
 import { CREATING, OPEN, ACCEPTED, REJECTED,
             PAID_OFF } from './constants/NegotiationStates';
 import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE,
@@ -298,7 +298,7 @@ export function getThisPlayer(appData) {
     const game = getThisGame(appData);
     if (game) {
         const player = game.players[model.authId];
-        return _.extend({ authId: _.findKey(game.players, player) }, player);
+        return addObjectKey(game.players, player);
     }
 }
 
@@ -319,10 +319,14 @@ export function updateThisPlayer(appData, playerData) {
     return newAppData;
 }
 
-export function getPlayerOutstandingTransactions(appData, gameId, authId) {
+function getPlayerTransactionsForState(appData, gameId, authId, state) {
     const ts = deriveTransactions(appData, gameId, authId);
-    const completed = _.filter(ts, t => t.state === ACCEPTED);
-    return _.map(completed, t => _.extend({ id: _.findKey(ts, t) }, t));
+    const completed = _.filter(ts, t => t.state === state);
+    return addObjectKeys(ts, completed);
+}
+
+export function getPlayerOutstandingTransactions(appData, gameId, authId) {
+    return getPlayerTransactionsForState(appData, gameId, authId, ACCEPTED);
 }
 
 export function getThisPlayerOutstandingTransactions(appData) {
@@ -330,9 +334,7 @@ export function getThisPlayerOutstandingTransactions(appData) {
 }
 
 export function getPlayerPaidOffTransactions(appData, gameId, authId) {
-    const ts = deriveTransactions(appData, gameId, authId);
-    const completed = _.filter(ts, t => t.state === PAID_OFF);
-    return _.map(completed, t => _.extend({ id: _.findKey(ts, t) }, t));
+    return getPlayerTransactionsForState(appData, gameId, authId, PAID_OFF);
 }
 
 export function getThisPlayerPaidOffTransactions(appData) {
@@ -432,7 +434,7 @@ function areLoansSimilar(transaction1, transaction2) {
 function getLoanPaymentEvent(appData, transaction) {
     const ts = deriveTransactions(appData, transaction.gameId, transaction.lender);
     const similar = _.filter(ts, t => areLoansSimilar(transaction, t));
-    const payments = _.filter(getEventsInGame(appData, gameId, LOAN.PAID),
+    const payments = _.filter(getEventsInGame(appData, gameId, LOAN.PAID_OFF),
                                  e => areLoansSimilar(transaction, e));
     const index = () => {
         const n = _.size(similar);
@@ -453,38 +455,8 @@ function isLoanPaidOff(appData, transaction) {
 }
 
 function getEventsInTransaction(appData, gameId, event) {
-    const all = _.filter(getEventsInGame(appData, gameId), e =>
-                    _.contains(_.values(LOAN), e.type) &&
-                    e.borrower === event.borrower &&
-                    e.lender === event.lender);
-
-    const eventIndex = deepIndexOf(all, event);
-    const startIndex = () => {
-        for (var i = eventIndex; i >= 0; i--) {
-            if (all[i].type === LOAN.OFFER_WINDOW_OPENED ||
-                all[i].type === LOAN.ASK_WINDOW_OPENED) {
-                    return i;
-            }
-        }
-    }();
-    const endIndex = () => {
-        const n = all.length;
-        for (var i = eventIndex; i < n; i++) {
-            if (all[i].type === LOAN.ACCEPTED || all[i].type === LOAN.REJECTED) {
-                return i;
-            }
-        }
-        return n;
-    }();
-    const section = all.slice(startIndex, endIndex + 1);
-    const transaction = getTransactionForEvent(appData, gameId, event);
-    const paymentEvent = getLoanPaymentEvent(appData, transaction);
-    if (paymentEvent) {
-        return _.union(section, [paymentEvent]);
-    }
-    else {
-        return section;
-    }
+    return _.filter(getEventsInGame(appData, gameId), e =>
+                                    e.transactionId === event.transactionId);
 }
 
 function getTransactionState(event) {
@@ -508,6 +480,7 @@ function getTransactionForEvent(appData, gameId, event) {
         lastToAct: lastEvent.authId,
         lastEventType: lastEvent.type,
         lastEventTime: lastEvent.time,
+        id: lastEvent.transactionId,
         gameId: gameId
     };
 }

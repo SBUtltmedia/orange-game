@@ -19,3 +19,11 @@ export function deepIndexOf(array, item) {
        return index;
    }
 }
+
+export function addObjectKey(obj, item) {
+    return _.extend({ authId: _.findKey(obj, item) }, item);
+}
+
+export function addObjectKeys(origObj, newObj) {
+    return _.map(newObj, item => addObjectKey(origObj, item));
+}
