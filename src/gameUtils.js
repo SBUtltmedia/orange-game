@@ -454,6 +454,10 @@ function isLoanPaidOff(appData, transaction) {
     return !!getLoanPaymentEvent(appData, transaction);
 }
 
+export function canPayOffLoan(appData, transaction) {
+    return transaction.borrower.oranges.basket >= transaction.oranges.later;
+}
+
 function getEventsInTransaction(appData, gameId, event) {
     return _.filter(getEventsInGame(appData, gameId), e =>
                                     e.transactionId === event.transactionId);
