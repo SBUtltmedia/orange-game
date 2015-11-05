@@ -27,7 +27,7 @@ function createNegotation(lender, borrower, type) {
         authId: model.authId
     };
     const newRef = saveEvent(model.gameId, eventData);
-    const id = newRef.name();
+    const id = newRef.key();
     const data = { transactionId: id };
     updateFbObject(`/games/${model.gameId}/events/${id}`, data);
 }
