@@ -491,7 +491,8 @@ describe('gameUtils', () => {
                         evt5: { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 5 },
                         evt6: { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 6 },
                         evt7: { type: LOAN.ACCEPTED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', transactionId: 'ts1', time: 7 },
-                        evt8: { type: LOAN.PAID_OFF, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', transactionId: 'ts1', time: 8 }
+                        evt8: { type: ORANGE_MOVED, authId: 'DEF', src: 'box', dest: 'basket', time: 8 },
+                        evt9: { type: LOAN.PAID_OFF, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', transactionId: 'ts1', time: 9 }
                     }
                 }
             }
@@ -502,6 +503,10 @@ describe('gameUtils', () => {
         expect(_.size(GameUtils.getPlayerOutstandingTransactions(appData, 'game1', 'DEF'))).to.equal(0);
         expect(_.size(GameUtils.getPlayerDebts(appData, 'game1', 'ABC'))).to.equal(0);
         expect(_.size(GameUtils.getPlayerDebts(appData, 'game1', 'DEF'))).to.equal(0);
+        expect(GameUtils.getOrangesInBasket(appData, 'game1', 'ABC')).to.equal(0);
+        expect(GameUtils.getOrangesInBox(appData, 'game1', 'ABC')).to.equal(1);
+        expect(GameUtils.getOrangesInBasket(appData, 'game1', 'DEF')).to.equal(0);
+        expect(GameUtils.getOrangesInBox(appData, 'game1', 'DEF')).to.equal(3);
     });
 
     it('reduces fitness on a new day', () => {

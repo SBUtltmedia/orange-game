@@ -366,12 +366,12 @@ export function getThisPlayerCredits(appData) {
 
 export function getLoanPaymentsPaid(appData, gameId, authId) {
     const ts = getPlayerPaidOffTransactions(appData, gameId, authId);
-    return _.sum(_.pluck(_.filter(ts, t => t.borrower === authId), 'oranges'));
+    return _.sum(_.map(_.filter(ts, t => t.borrower === authId), t => t.oranges.later));
 }
 
 export function getLoanPayementsReceived(appData, gameId, authId) {
     const ts = getPlayerPaidOffTransactions(appData, gameId, authId);
-    return _.sum(_.pluck(_.filter(ts, t => t.lender === authId), 'oranges'));
+    return _.sum(_.map(_.filter(ts, t => t.lender === authId), t => t.oranges.later));
 }
 
 export function canPlayerAdvanceDay(appData, gameId, authId) {
