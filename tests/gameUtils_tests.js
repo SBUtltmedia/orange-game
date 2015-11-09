@@ -116,6 +116,22 @@ describe('gameUtils', () => {
         expect(GameUtils.getGameDay(appData, 'game1')).to.equal(3);
     });
 
+    it('derives players', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    }
+                }
+            }
+        };
+        model.gameId = 'game1';
+        model.authId = 'DEF';
+        expect(GameUtils.derivePlayers(appData).length).to.equal(2);
+    });
+
     it('derives appData 1', () => {
         const appData = {
             games: {
@@ -282,6 +298,26 @@ describe('gameUtils', () => {
         expect(GameUtils.getOrangesDroppedInBox(appData, 'game1', 'ABC')).to.equal(0);
         expect(GameUtils.getOrangesDroppedInBasket(appData, 'game1', 'ABC')).to.equal(1);
         expect(GameUtils.getOrangesDroppedFromBox(appData, 'game1', 'ABC')).to.equal(1);
+    });
+
+    it('gets events in game', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: {
+                        evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
+                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 }
+                    }
+                }
+            }
+        };
+        expect(GameUtils.getEventsInGame(appData, 'game1', ORANGE_MOVED).length).to.equal(0);
+        expect(GameUtils.getEventsInGame(appData, 'game1', ORANGES_DEALT).length).to.equal(1);
+        expect(GameUtils.getEventsInGame(appData, 'game1').length).to.equal(2);
     });
 
     it('derives transactions 1', () => {

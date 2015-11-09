@@ -8,6 +8,9 @@ import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE,
 import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME,
             DEFAULT_LOAN_ORANGES } from './constants/Settings';
 
+/**
+ * Gets events in a given name with a given type, or any type if eventType null
+ */
 export function getEventsInGame(appData, gameId, eventType=null) {
     const game = getGame(appData, gameId);
     if (game) {
@@ -15,7 +18,7 @@ export function getEventsInGame(appData, gameId, eventType=null) {
             return _.filter(game.events, e => e.type === eventType);
         }
         else {
-            return game.events;
+            return _.values(game.events);
         }
     }
 }
