@@ -346,7 +346,7 @@ export function getThisPlayerPaidOffTransactions(appData) {
 
 export function getPlayerDebts(appData, gameId, authId) {
     return _.filter(getPlayerOutstandingTransactions(appData, gameId, authId), t => {
-        return t.borrower.authId === authId;
+        return t.borrower === authId;
     });
 }
 
@@ -356,7 +356,7 @@ export function getThisPlayerDebts(appData) {
 
 export function getPlayerCredits(appData, gameId, authId) {
     return _.filter(getPlayerOutstandingTransactions(appData, gameId, authId), t => {
-        return t.lender.authId === authId;
+        return t.lender === authId;
     });
 }
 
@@ -483,8 +483,8 @@ function getTransactionState(event) {
 export function getTransactionForEvent(appData, gameId, event) {
     const lastEvent = _.last(getEventsInTransaction(appData, gameId, event));
     return {
-        lender: derivePlayer(appData, gameId, event.lender),
-        borrower: derivePlayer(appData, gameId, event.borrower),
+        lender: event.lender,
+        borrower: event.borrower,
         oranges: lastEvent.oranges || DEFAULT_LOAN_ORANGES,
         state: getTransactionState(lastEvent),
         lastToAct: lastEvent.authId,

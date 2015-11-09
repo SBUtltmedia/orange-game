@@ -408,7 +408,7 @@ describe('gameUtils', () => {
         expect(_.size(GameUtils.deriveOpenTransactions(appData, 'game1', 'DEF'))).to.equal(0);
     });
 
-    it.only('gets transaction from event', () => {
+    it('gets transaction from event', () => {
         const event = {
             type: LOAN.OFFER_WINDOW_OPENED,
             lender: 'ABC',
@@ -433,27 +433,9 @@ describe('gameUtils', () => {
                 }
             }
         };
-        expect(GameUtils.getTransactionForEvent(appData, 'game1', event)).to.equal({
-            lender: {
-                authId: 'ABC',
-                name: 'Ken',
-                oranges: {
-                    basket: 1,
-                    box: 0,
-                    dish: 0
-                },
-                ready: false
-            },
-            borrower: {
-                authId: 'DEF',
-                name: 'Jen',
-                oranges: {
-                    basket: 0,
-                    box: 3,
-                    dish: 0
-                },
-                ready: false
-            },
+        expect(GameUtils.getTransactionForEvent(appData, 'game1', event)).to.deep.equal({
+            lender: 'ABC',
+            borrower: 'DEF',
             oranges: { now: 1, later: 1 },
             state: CREATING,
             lastToAct: 'ABC',
@@ -489,6 +471,8 @@ describe('gameUtils', () => {
         expect(_.size(GameUtils.getPlayerOutstandingTransactions(appData, 'game1', 'DEF'))).to.equal(1);
         expect(_.size(GameUtils.getPlayerDebts(appData, 'game1', 'ABC'))).to.equal(0);
         expect(_.size(GameUtils.getPlayerDebts(appData, 'game1', 'DEF'))).to.equal(1);
+        expect(_.size(GameUtils.getPlayerCredits(appData, 'game1', 'ABC'))).to.equal(1);
+        expect(_.size(GameUtils.getPlayerCredits(appData, 'game1', 'DEF'))).to.equal(0);
     });
 
     it('gets oranges borrowed 2', () => {
