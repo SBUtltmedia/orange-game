@@ -275,6 +275,23 @@ describe('gameUtils', () => {
         expect(GameUtils.getOrangesInMyDish(appData)).to.equal(0);
     });
 
+    it('gets oranges in a basket', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' }
+                    },
+                    events: {
+                        evt1: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 },
+                        evt2: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 2 }
+                    }
+                }
+            }
+        };
+        expect(GameUtils.getOrangesInBasket(appData, 'game1', 'ABC')).to.equal(1);
+    });
+
     it('gets oranges dropped', () => {
         const appData = {
             games: {
