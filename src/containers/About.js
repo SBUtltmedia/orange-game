@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import StyleSheet from'react-style';
-import { Link } from 'react-router';
 
 const styles = StyleSheet.create({
     page: {

@@ -3,7 +3,7 @@ import { areaTheme, verticalCenter } from '../styles/Themes';
 import model from '../model';
 import { connect } from 'redux/react';
 import { getThisPlayerDebts, getThisPlayerCredits, getThisGameDay, getMyFitness,
-        getMyFitnessChange } from '../gameUtils';
+        getMyFitnessChange, canPayOffLoan, derivePlayer } from '../gameUtils';
 import _ from 'lodash';
 import { payDebt } from '../actions/MarketActions';
 
@@ -59,16 +59,9 @@ function formatChange(change) {
 }))
 export default class Stats extends Component {
 
-    canPay(transaction) {
-        const { firebase } = this.props;
-
-        // TODO: Implement
-
-        return true;
-    }
-
     renderPayButton(transaction) {
-        if (this.canPay(transaction)) {
+        const { firebase } = this.props;
+        if (canPayOffLoan(firebase, transaction)) {
             return <a onClick={() => payDebt(transaction)}>pay</a>;
         }
         else {
@@ -77,16 +70,20 @@ export default class Stats extends Component {
     }
 
     renderDebt(transaction) {
+        const { firebase } = this.props;
+        const lender = derivePlayer(firebase, model.gameId, transaction.lender);
         return <li>
-            {transaction.lender.name}: &nbsp;
+            {lender.name}: &nbsp;
             <span style={styles.debt}>{transaction.oranges.later}</span>
             { this.renderPayButton(transaction) }
         </li>;
     }
 
     renderCredit(transaction) {
+        const { firebase } = this.props;
+        const borrower = derivePlayer(firebase, model.gameId, transaction.borrower);
         return <li>
-            {transaction.borrower.name}: &nbsp;
+            {borrower.name}: &nbsp;
             <span style={styles.credit}>{transaction.oranges.later}</span>
         </li>;
     }

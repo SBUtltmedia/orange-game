@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import _ from 'lodash';
 import { MAX_PLAYERS } from '../constants/Settings';
 import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
-import { Link } from 'react-router';
 import { joinGame, leaveGame } from '../actions/LobbyActions';
 import { startGame, deleteGame } from '../actions/AdminActions';
 import { authId } from '../model';

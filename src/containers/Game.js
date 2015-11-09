@@ -10,9 +10,9 @@ import Players from '../components/Players';
 import Chat from '../components/Chat';
 import { areaTheme } from '../styles/Themes';
 import { dealNewDayIfNeeded } from '../actions/GameActions';
-import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
 import * as FluxActions from '../actions/FluxActions';
 import { bindActionCreators } from 'redux';
+import { isThisGameFinished } from '../gameUtils';
 import model from '../model';
 import _ from 'lodash';
 import { connect } from 'redux/react';
@@ -52,8 +52,8 @@ export default class Game extends Component {
         if (games) {
             const game = games[params.gameId];
             if (game) {
-                if (game.state === FINISHED) {
-                    window.location.href = '/?#/gameOver/';
+                if (isThisGameFinished(firebase)) {
+                    window.location.href = '/?#/game-over';
                     return;
                 }
             }

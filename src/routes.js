@@ -10,11 +10,10 @@ import NotFound from "./containers/NotFound";
 export default (
     <Route name="app" handler={Application} path="/">
         <DefaultRoute name="lobby" handler={Lobby} />
-        <Redirect from="home" to="lobby" />
         <Route name="game" path="game/:gameId" handler={Game} />
         <Route name="admin" handler={Admin} />
         <Route name="about" handler={About} />
-        <Route name="gameOver" handler={GameOver} />
+        <Route name="game-over" handler={GameOver} />
         <NotFoundRoute name="not-found" handler={NotFound} />
     </Route>
 );

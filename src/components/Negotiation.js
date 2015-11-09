@@ -4,7 +4,7 @@ import { APP_ROOT_ELEMENT } from '../constants/Settings';
 import { verticalCenter } from '../styles/Themes';
 import _ from 'lodash';
 import model from '../model';
-import { deriveMyOpenTransactions } from '../gameUtils';
+import { deriveMyOpenTransactions, derivePlayer } from '../gameUtils';
 import { NumberPicker } from 'react-widgets';
 import { openOffer, updateOffer, rejectOffer, acceptOffer } from '../actions/MarketActions';
 import { CREATING, OPEN, ACCEPTED, REJECTED, PAID_OFF } from '../constants/NegotiationStates';
@@ -88,7 +88,7 @@ export default class Negotiation extends Component {
 
     open() {
         const { thisTransaction, nowOranges, laterOranges } = this.state;
-        const type = thisTransaction.lastEvent ===
+        const type = thisTransaction.lastEventType ===
                      LOAN.OFFER_WINDOW_OPENED ? LOAN.OFFERED : LOAN.ASKED;
         openOffer(thisTransaction, nowOranges, laterOranges, type);
     }
@@ -173,16 +173,19 @@ export default class Negotiation extends Component {
 
     render() {
         const { modalIsOpen, thisTransaction, nowOranges, laterOranges } = this.state;
+        const { firebase } = this.props;
         if (thisTransaction) {
             const canChange = thisTransaction.lastToAct !== model.authId ||
                                 thisTransaction.state === CREATING;
-            const max = thisTransaction.lender.oranges.basket;
+            const lender = derivePlayer(firebase, model.gameId, thisTransaction.lender);
+            const borrower = derivePlayer(firebase, model.gameId, thisTransaction.borrower);
+            const max = lender.oranges.basket;
             const min = max >= 1 ? 1 : 0;
             return <Modal className="Modal__Bootstrap modal-dialog medium"
                             isOpen={modalIsOpen} onRequestClose={() => {}}>
                 <h2>Negotiate a loan</h2>
-                <div>Lender: {thisTransaction.lender.name}</div>
-                <div>Borrower: {thisTransaction.borrower.name}</div>
+                <div>Lender: {lender.name}</div>
+                <div>Borrower: {borrower.name}</div>
                 <br />
                 <form ref="form" onSubmit={e => e.preventDefault()}>
                     <div style={styles.fl}>

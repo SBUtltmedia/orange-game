@@ -3,7 +3,7 @@ import { FIREBASE_APP_URL } from './constants/Settings';
 
 export function saveEvent(gameId, data) {
     const url = `/games/${gameId}/events`;
-    addToFbList(url, _.extend({ time: new Date().getTime() }, data));
+    return addToFbList(url, _.extend({ time: new Date().getTime() }, data));
 }
 
 export function getFbObject(path, callback=() => {}) {
@@ -15,7 +15,7 @@ export function updateFbObject(path, data, callback=() => {}) {
 }
 
 export function addToFbList(path, data, callback=function() {}) {
-    getFbRef(path).push(data, callback);
+    return getFbRef(path).push(data, callback);
 }
 
 export function getFbRef(url) {
