@@ -386,6 +386,14 @@ export function shouldDealNewDay(appData) {
     return shouldDealNewDayDerived(deriveData(appData));
 }
 
+export function isGameFinished(appData, gameId) {
+    return getGameDay(appData, gameId) > DAYS_IN_GAME;
+}
+
+export function isThisGameFinished(appData) {
+    return isGameFinished(appData, model.gameId);
+}
+
 export function canPlayerAdvanceDayDerived(derivedPlayer) {
     if (!derivedPlayer) {
         return false;
