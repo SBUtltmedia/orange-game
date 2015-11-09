@@ -128,10 +128,10 @@ export default class Players extends Component {
         if (game) {
             const transactions = getPlayerOutstandingTransactions(firebase, player.authId);
             return _.reduce(transactions, (total, t) => {
-                if (t.lender.authId === player.authId) {
+                if (t.lender === player.authId) {
                     return total + t.oranges.later;
                 }
-                else if (t.borrower.authId === player.authId) {
+                else if (t.borrower === player.authId) {
                     return total - t.oranges.later;
                 }
             }, 0);

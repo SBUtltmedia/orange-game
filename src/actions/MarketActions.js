@@ -35,8 +35,8 @@ function createNegotation(lender, borrower, type) {
 export function openOffer(transaction, nowOranges, laterOranges, type) {
     const eventData = {
         type: type,
-        lender: transaction.lender.authId,
-        borrower: transaction.borrower.authId,
+        lender: transaction.lender,
+        borrower: transaction.borrower,
         oranges: {
             now: nowOranges,
             later: laterOranges
@@ -50,8 +50,8 @@ export function openOffer(transaction, nowOranges, laterOranges, type) {
 export function updateOffer(transaction, nowOranges, laterOranges) {
     const eventData = {
         type: LOAN.COUNTER_OFFER,
-        lender: transaction.lender.authId,
-        borrower: transaction.borrower.authId,
+        lender: transaction.lender,
+        borrower: transaction.borrower,
         oranges: {
             now: nowOranges,
             later: laterOranges
@@ -65,8 +65,8 @@ export function updateOffer(transaction, nowOranges, laterOranges) {
 export function rejectOffer(transaction, callback) {
     const eventData = {
         type: LOAN.REJECTED,
-        lender: transaction.lender.authId,
-        borrower: transaction.borrower.authId,
+        lender: transaction.lender,
+        borrower: transaction.borrower,
         authId: model.authId,
         oranges: transaction.oranges,
         transactionId: transaction.id,
@@ -77,8 +77,8 @@ export function rejectOffer(transaction, callback) {
 export function acceptOffer(transaction, callback) {
     const eventData = {
         type: LOAN.ACCEPTED,
-        lender: transaction.lender.authId,
-        borrower: transaction.borrower.authId,
+        lender: transaction.lender,
+        borrower: transaction.borrower,
         authId: model.authId,
         oranges: transaction.oranges,
         transactionId: transaction.id,

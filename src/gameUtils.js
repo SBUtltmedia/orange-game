@@ -401,7 +401,7 @@ export function shouldDealNewDayDerived(derivedData) {
            _.every(derivedData.players, p => p.ready);
 }
 
-function derivePlayer(appData, gameId, authId) {
+export function derivePlayer(appData, gameId, authId) {
     const game = getGame(appData, gameId);
     if (game) {
         const doneEvents = getEventsInGame(appData, gameId, PLAYER_DONE);
@@ -458,7 +458,8 @@ function isLoanPaidOff(appData, transaction) {
 }
 
 export function canPayOffLoan(appData, transaction) {
-    return transaction.borrower.oranges.basket >= transaction.oranges.later;
+    const borrower = derivePlayer(appData, transaction.gameId, transaction.borrower);
+    return borrower.oranges.basket >= transaction.oranges.later;
 }
 
 function getEventsInTransaction(appData, gameId, event) {
