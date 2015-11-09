@@ -6,7 +6,7 @@ import _ from 'lodash';
 import model from '../src/model';
 import { DAYS_IN_GAME } from '../src/constants/Settings';
 import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE, LOAN } from '../src/constants/EventTypes';
-import { PAID_OFF } from '../src/constants/NegotiationStates';
+import { CREATING, OPEN, ACCEPTED, REJECTED, PAID_OFF } from '../src/constants/NegotiationStates';
 
 describe('gameUtils', () => {
 
@@ -327,14 +327,16 @@ describe('gameUtils', () => {
                     },
                     events: {
                         evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 }
+                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 3 }
                     }
                 }
             }
         };
-        expect(GameUtils.getEventsInGame(appData, 'game1', ORANGE_MOVED).length).to.equal(0);
+        expect(GameUtils.getEventsInGame(appData, 'game1', ORANGE_MOVED).length).to.equal(1);
         expect(GameUtils.getEventsInGame(appData, 'game1', ORANGES_DEALT).length).to.equal(1);
-        expect(GameUtils.getEventsInGame(appData, 'game1').length).to.equal(2);
+        expect(GameUtils.getEventsInGame(appData, 'game1').length).to.equal(3);
+        expect(GameUtils.getEventsInGame(appData, 'game1', LOAN.OFFER_WINDOW_OPENED).length).to.equal(0);
     });
 
     it('derives transactions 1', () => {
@@ -404,6 +406,62 @@ describe('gameUtils', () => {
         };
         expect(_.size(GameUtils.deriveOpenTransactions(appData, 'game1', 'ABC'))).to.equal(0);
         expect(_.size(GameUtils.deriveOpenTransactions(appData, 'game1', 'DEF'))).to.equal(0);
+    });
+
+    it.only('gets transaction from event', () => {
+        const event = {
+            type: LOAN.OFFER_WINDOW_OPENED,
+            lender: 'ABC',
+            borrower: 'DEF',
+            authId: 'ABC',
+            transactionId: 'ts1',
+            time: 5
+        };
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: {
+                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        evt4: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
+                        evt5: event
+                    }
+                }
+            }
+        };
+        expect(GameUtils.getTransactionForEvent(appData, 'game1', event)).to.equal({
+            lender: {
+                authId: 'ABC',
+                name: 'Ken',
+                oranges: {
+                    basket: 1,
+                    box: 0,
+                    dish: 0
+                },
+                ready: false
+            },
+            borrower: {
+                authId: 'DEF',
+                name: 'Jen',
+                oranges: {
+                    basket: 0,
+                    box: 3,
+                    dish: 0
+                },
+                ready: false
+            },
+            oranges: { now: 1, later: 1 },
+            state: CREATING,
+            lastToAct: 'ABC',
+            lastEventType: LOAN.OFFER_WINDOW_OPENED,
+            lastEventTime: 5,
+            id: 'ts1',
+            gameId: 'game1'
+        });
     });
 
     it('gets oranges borrowed 1', () => {

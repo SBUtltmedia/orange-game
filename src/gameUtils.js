@@ -406,7 +406,7 @@ function derivePlayer(appData, gameId, authId) {
     if (game) {
         const doneEvents = getEventsInGame(appData, gameId, PLAYER_DONE);
         const playerDoneEvents = _.filter(doneEvents, e => e.authId === authId);
-        const oranges = getOranges(appData, model.gameId, authId);
+        const oranges = getOranges(appData, gameId, authId);
         return {
             authId: authId,
             name: game.players[authId].name,
@@ -477,7 +477,10 @@ function getTransactionState(event) {
     }
 }
 
-function getTransactionForEvent(appData, gameId, event) {
+/**
+ * Gets the transaction data from a single event in that transaction
+ */
+export function getTransactionForEvent(appData, gameId, event) {
     const lastEvent = _.last(getEventsInTransaction(appData, gameId, event));
     return {
         lender: derivePlayer(appData, gameId, event.lender),
