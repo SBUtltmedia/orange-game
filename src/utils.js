@@ -20,10 +20,16 @@ export function deepIndexOf(array, item) {
    }
 }
 
-export function addObjectKey(obj, item) {
-    return _.extend({ authId: _.findKey(obj, item) }, item);
+export function addObjectKey(obj, item, keyName='id') {
+    const newObj = {};
+    newObj[keyName] = _.findKey(obj, item);
+    return _.extend(newObj, item);
 }
 
-export function addObjectKeys(origObj, newObj) {
+export function addObjectKeys(obj) {
+    return _.map(obj, item => addObjectKey(obj, item));
+}
+
+export function addOriginalObjectKeys(origObj, newObj) {
     return _.map(newObj, item => addObjectKey(origObj, item));
 }
