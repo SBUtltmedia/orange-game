@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { deepDifference, deepIndexOf, addObjectKey, addObjectKeys } from './utils';
 import { CREATING, OPEN, ACCEPTED, REJECTED,
             PAID_OFF } from './constants/NegotiationStates';
-import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE,
+import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE, GAME_STARTED,
             LOAN } from '../src/constants/EventTypes';
 import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME,
             DEFAULT_LOAN_ORANGES } from './constants/Settings';
@@ -386,12 +386,33 @@ export function shouldDealNewDay(appData) {
     return shouldDealNewDayDerived(deriveData(appData));
 }
 
+export function isGameStarted(appData, gameId) {
+
+    if (!gameId) {
+        throw new Error("OO");
+    }
+
+    return !_.isEmpty(getEventsInGame(appData, gameId, GAME_STARTED));
+}
+
+export function isThisGameStarted(appData) {
+    return isGameStarted(appData, model.gameId);
+}
+
 export function isGameFinished(appData, gameId) {
     return getGameDay(appData, gameId) > DAYS_IN_GAME;
 }
 
 export function isThisGameFinished(appData) {
     return isGameFinished(appData, model.gameId);
+}
+
+export function isGameRunning(appData, gameId) {
+    return isGameStarted(appData, gameId) && !isGameFinished(appData, gameId);
+}
+
+export function isThisGameRunning(appData) {
+    return isGameRunning(appData, model.gameId);
 }
 
 export function canPlayerAdvanceDayDerived(derivedPlayer) {

@@ -1,9 +1,9 @@
 import React, { PropTypes, Component } from 'react';
 import _ from 'lodash';
 import { MAX_PLAYERS } from '../constants/Settings';
-import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
 import { joinGame, leaveGame } from '../actions/LobbyActions';
 import { startGame, deleteGame } from '../actions/AdminActions';
+import { isGameStarted } from '../gameUtils';
 import { authId } from '../model';
 import Griddle from 'griddle-react';
 import { connect } from 'redux/react';
@@ -21,8 +21,8 @@ function renderAction(text, f) {
 
 class AdminActionsComponent extends Component {
     render() {
-        const { game } = this.props.data;
-        if (game.state === STARTED) {
+        const { game, firebase } = this.props.data;
+        if (isGameStarted(firebase, game.gameId)) {
             return <div>
                 { renderAction('End game', () => console.log('Not implemented')) },&nbsp;
                 { renderAction('View stats', () => console.log('Not implemented')) },&nbsp;
@@ -41,7 +41,7 @@ class AdminActionsComponent extends Component {
 class PlayerActionsComponent extends Component {
     render() {
         const { game, firebase } = this.props.data;
-        if (game.state === STARTED) {
+        if (isGameStarted(firebase, game.gameId)) {
             return <div></div>;
         }
         else {

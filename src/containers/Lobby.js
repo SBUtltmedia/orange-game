@@ -3,11 +3,11 @@ import StyleSheet from'react-style';
 import LobbyGames from '../components/LobbyGames';
 import LobbyUserName from '../components/LobbyUserName';
 import EnterName from '../components/EnterName';
-import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
 import model from '../model';
 import * as FluxActions from '../actions/FluxActions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'redux/react';
+import { isGameRunning } from '../gameUtils';
 
 const styles = StyleSheet.create({
     page: {
@@ -26,7 +26,7 @@ export default class Lobby extends Component {
         if (!isAdmin) {
             const joinedGameId = _.findKey(games, g => {
                 return _.contains(_.keys(g.players), model.authId) &&
-                            g.state === STARTED;
+                            isGameRunning(g.gameId);
             });
             if (joinedGameId) {
                 window.location.href = `/?#/game/${joinedGameId}`;
