@@ -15,6 +15,20 @@ const styles = {
     },
 };
 
+function getGameState(appData, game) {
+    if (isGameStarted(appData, game.id)) {
+        if (isGameFinished(appData, game.id)) {
+            return "Finished";
+        }
+        else {
+            return "Running";
+        }
+    }
+    else {
+        return "Not Started";
+    }
+}
+
 function renderAction(text, f) {
     return <a onClick={f}>{text}</a>;
 }
@@ -22,16 +36,23 @@ function renderAction(text, f) {
 class AdminActionsComponent extends Component {
     render() {
         const { game, firebase } = this.props.data;
-        if (isGameStarted(firebase, game.id)) {
+        const state = getGameState(firebase, game);
+        if (state === 'Running') {
             return <div>
                 { renderAction('End game', () => console.log('Not implemented')) },&nbsp;
                 { renderAction('View stats', () => console.log('Not implemented')) },&nbsp;
                 { renderAction('Delete game', () => deleteGame(game.id)) }
             </div>;
         }
-        else {
+        else if (state === 'Not Started') {
             return <div>
                 { renderAction('Start game', () => startGame(game.id)) },&nbsp;
+                { renderAction('Delete game', () => deleteGame(game.id)) }
+            </div>;
+        }
+        else if (state === 'Finished') {
+            return <div>
+                { renderAction('View stats', () => console.log('Not implemented')) },&nbsp;
                 { renderAction('Delete game', () => deleteGame(game.id)) }
             </div>;
         }
@@ -62,20 +83,6 @@ const PLAYER_COL_META = [{
     "columnName": "Actions",
     "customComponent": PlayerActionsComponent
 }];
-
-function getGameState(appData, game) {
-    if (isGameStarted(appData, game.id)) {
-        if (isGameFinished(appData, game.id)) {
-            return "Finished";
-        }
-        else {
-            return "Running";
-        }
-    }
-    else {
-        return "Not Started";
-    }
-}
 
 @connect(state => ({
     firebase: state.firebase
