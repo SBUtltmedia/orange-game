@@ -17,6 +17,13 @@ export function getAllGames(appData) {
 }
 
 /**
+ * Returns all users in the system, with their IDs
+ */
+export function getAllUsers(appData) {
+    return addObjectKeys(appData.users);
+}
+
+/**
  * Gets events in a given name with a given type, or any type if eventType null
  */
 export function getEventsInGame(appData, gameId, eventType=null) {
