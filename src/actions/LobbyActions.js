@@ -4,14 +4,14 @@ import _ from 'lodash';
 import model from '../model';
 
 function hasAlreadyJoinedSomeGame(appData) {
-    const games = getAllGames();
+    const games = getAllGames(appData);
     return _.some(games, game => {
         return _.some(_.keys(game.players), key => key === model.authId);
     });
 }
 
 export function checkIfNameTaken(name, appData) {
-    const users = getAllUsers();
+    const users = getAllUsers(appData);
     return _.some(users, u => u.name === name);
 }
 
