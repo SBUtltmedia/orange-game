@@ -1,20 +1,20 @@
-import { MAX_PLAYERS } from '../constants/Settings';
-import { NOT_STARTED, STARTED, FINISHED } from '../constants/GameStates';
-import { getFbRef } from '../firebaseUtils';
+import { GAME_STARTED } from '../constants/EventTypes';
+import { saveEvent, getFbRef } from '../firebaseUtils';
+import model from '../model';
 
 export function createGame() {
     const ref = getFbRef('/games');
     const game = {
-        state: NOT_STARTED
+        timeCreated: new Date().getTime()
     };
     ref.push(game);
 }
 
 export function startGame(gameId) {
-    const ref = getFbRef(`/games/${gameId}`);
-    ref.update({
-        state: STARTED
-    });
+    const eventData = {
+        type: GAME_STARTED
+    };
+    saveEvent(gameId, eventData);
 }
 
 export function deleteGame(gameId) {

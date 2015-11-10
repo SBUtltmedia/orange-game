@@ -1,12 +1,27 @@
 import model from './model';
 import _ from 'lodash';
-import { deepDifference, deepIndexOf, addObjectKey, addObjectKeys } from './utils';
+import { deepDifference, deepIndexOf, addObjectKey, addObjectKeys,
+            addOriginalObjectKeys } from './utils';
 import { CREATING, OPEN, ACCEPTED, REJECTED,
             PAID_OFF } from './constants/NegotiationStates';
-import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE,
+import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE, GAME_STARTED,
             LOAN } from '../src/constants/EventTypes';
 import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME,
             DEFAULT_LOAN_ORANGES } from './constants/Settings';
+
+/**
+ * Returns all games in the system, with their IDs
+ */
+export function getAllGames(appData) {
+    return addObjectKeys(appData.games);
+}
+
+/**
+ * Returns all users in the system, with their IDs
+ */
+export function getAllUsers(appData) {
+    return addObjectKeys(appData.users);
+}
 
 /**
  * Gets events in a given name with a given type, or any type if eventType null
@@ -301,7 +316,7 @@ export function getThisPlayer(appData) {
     const game = getThisGame(appData);
     if (game) {
         const player = game.players[model.authId];
-        return addObjectKey(game.players, player);
+        return addObjectKey(game.players, player, 'authId');
     }
 }
 
@@ -325,7 +340,7 @@ export function updateThisPlayer(appData, playerData) {
 function getPlayerTransactionsForState(appData, gameId, authId, state) {
     const ts = deriveTransactions(appData, gameId, authId);
     const completed = _.filter(ts, t => t.state === state);
-    return addObjectKeys(ts, completed);
+    return addOriginalObjectKeys(ts, completed);
 }
 
 export function getPlayerOutstandingTransactions(appData, gameId, authId) {
@@ -386,12 +401,33 @@ export function shouldDealNewDay(appData) {
     return shouldDealNewDayDerived(deriveData(appData));
 }
 
+export function isGameStarted(appData, gameId) {
+
+    if (!gameId) {
+        throw new Error("OO");
+    }
+
+    return !_.isEmpty(getEventsInGame(appData, gameId, GAME_STARTED));
+}
+
+export function isThisGameStarted(appData) {
+    return isGameStarted(appData, model.gameId);
+}
+
 export function isGameFinished(appData, gameId) {
     return getGameDay(appData, gameId) > DAYS_IN_GAME;
 }
 
 export function isThisGameFinished(appData) {
     return isGameFinished(appData, model.gameId);
+}
+
+export function isGameRunning(appData, gameId) {
+    return isGameStarted(appData, gameId) && !isGameFinished(appData, gameId);
+}
+
+export function isThisGameRunning(appData) {
+    return isGameRunning(appData, model.gameId);
 }
 
 export function canPlayerAdvanceDayDerived(derivedPlayer) {
