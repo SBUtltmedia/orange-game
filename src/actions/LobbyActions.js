@@ -1,10 +1,11 @@
 import { getFbRef, updateFbObject } from '../firebaseUtils';
-import { getThisUser } from '../gameUtils';
+import { getThisUser, getAllGames } from '../gameUtils';
 import _ from 'lodash';
 import model from '../model';
 
 function hasAlreadyJoinedSomeGame(appData) {
-    return _.some(appData.games, game => {
+    const games = getAllGames();
+    return _.some(games, game => {
         return _.some(_.keys(game.players), key => key === model.authId);
     });
 }
