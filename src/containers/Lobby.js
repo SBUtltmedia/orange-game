@@ -24,13 +24,17 @@ export default class Lobby extends Component {
         const { isAdmin } = this.props;
         const { games } = firebase;
         if (!isAdmin) {
-            const joinedGameId = _.findKey(games, g => {
-                return _.contains(_.keys(g.players), model.authId) &&
-                            isGameRunning(g.gameId);
+            const joinedGames = _.filter(games, g => {
+                return _.contains(_.keys(g.players), model.authId);
             });
-            if (joinedGameId) {
-                window.location.href = `/?#/game/${joinedGameId}`;
-            }
+            const joinedGameIds = _.map(joinedGames, joinedGame => {
+                return _.findKey(games, g => _.isEqual(g, joinedGame));
+            });
+            _.each(joinedGameIds, id => {
+                if (isGameRunning(firebase, id)) {
+                    window.location.href = `/?#/game/${id}`;
+                }
+            });
         }
     }
 
