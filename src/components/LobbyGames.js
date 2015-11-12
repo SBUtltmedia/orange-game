@@ -39,8 +39,6 @@ class AdminActionsComponent extends Component {
         const state = getGameState(firebase, game);
         if (state === 'Running') {
             return <div>
-                { renderAction('End game', () => console.log('Not implemented')) },&nbsp;
-                { renderAction('View stats', () => console.log('Not implemented')) },&nbsp;
                 { renderAction('Delete game', () => deleteGame(game.id)) }
             </div>;
         }
@@ -52,7 +50,6 @@ class AdminActionsComponent extends Component {
         }
         else if (state === 'Finished') {
             return <div>
-                { renderAction('View stats', () => console.log('Not implemented')) },&nbsp;
                 { renderAction('Delete game', () => deleteGame(game.id)) }
             </div>;
         }

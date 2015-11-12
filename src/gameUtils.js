@@ -425,6 +425,9 @@ export function canIAdvanceDay(appData) {
 }
 
 export function shouldDealNewDay(appData) {
+
+    console.log("appData", appData);
+
     return shouldDealNewDayDerived(deriveData(appData));
 }
 
@@ -463,6 +466,11 @@ export function shouldDealNewDayDerived(derivedData) {
     if (!derivedData) {
         return false;
     }
+
+    console.log(derivedData);
+    console.log("isEmpty", _.isEmpty(derivedData.dailyOranges));
+    console.log("all ready", _.every(derivedData.players, p => p.ready));
+
     return _.isEmpty(derivedData.dailyOranges) ||
            _.every(derivedData.players, p => p.ready);
 }
