@@ -6,7 +6,7 @@ html, body {
 }
 
 html {
-  overflow-y: scroll;
+  overflowY: scroll;
 }
 
 body {

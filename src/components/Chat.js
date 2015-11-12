@@ -17,7 +17,7 @@ const styles = {
   },
   output: {
       padding: 10,
-      "overflow-y": 'scroll',
+      overflowY: 'scroll',
       height: 288
   },
   input: {
