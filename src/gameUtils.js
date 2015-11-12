@@ -429,11 +429,6 @@ export function shouldDealNewDay(appData) {
 }
 
 export function isGameStarted(appData, gameId) {
-
-    if (!gameId) {
-        throw new Error("OO");
-    }
-
     return !_.isEmpty(getEventsInGame(appData, gameId, GAME_STARTED));
 }
 
