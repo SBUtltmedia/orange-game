@@ -39,7 +39,7 @@ export function getChatInThisGame(appData) {
 }
 
 /**
- * Gets events in a given name with a given type, or any type if eventType null
+ * Gets events in a given game with a given type, or any type if eventType null
  */
 export function getEventsInGame(appData, gameId, eventType=null) {
     const game = getGame(appData, gameId);
@@ -53,6 +53,9 @@ export function getEventsInGame(appData, gameId, eventType=null) {
     }
 }
 
+/**
+ * Gets events in the current game with a given type, or any type if eventType null
+ */
 export function getEventsInThisGame(appData, eventType) {
     return getEventsInGame(appData, model.gameId, eventType);
 }
