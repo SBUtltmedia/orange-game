@@ -133,7 +133,7 @@ export default class Players extends Component {
                     Box: player.oranges.box,
                     Basket: player.oranges.basket,
                     Dish: player.oranges.dish,
-                    Credit: getPlayerLoanBalance(player),
+                    Credit: getPlayerLoanBalance(firebase, model.gameId, player.authId),
                     Reputation: player.reputation,
                     Loan: { player: player, firebase: firebase },
                     Ready: { player: player }
