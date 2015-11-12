@@ -15,8 +15,8 @@ export const verticalCenter = {
 };
 
 export const orangeStyle = {
-    width: 75,
-    height: 73,
+    width: 37,  // 75
+    height: 36,  // 73
     margin: 5
 }
 
