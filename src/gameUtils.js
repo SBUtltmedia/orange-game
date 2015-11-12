@@ -379,6 +379,15 @@ export function getThisPlayerCredits(appData) {
     return getPlayerCredits(appData, model.gameId, model.authId);
 }
 
+export function getPlayerLoanBalance(appData, gameId, authId) {
+    return getOrangesLended(appData, gameId, authId) -
+           getOrangesBorrowed(appData, gameId, authId);
+}
+
+export function getThisPlayerLoanBalance(appData) {
+    return getPlayerTotalCreditsAndDebits(appData, model.gameId, model.authId);
+}
+
 export function getLoanPaymentsPaid(appData, gameId, authId) {
     const ts = getPlayerPaidOffTransactions(appData, gameId, authId);
     return _.sum(_.map(_.filter(ts, t => t.borrower === authId), t => t.oranges.later));

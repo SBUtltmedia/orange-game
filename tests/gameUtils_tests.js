@@ -467,6 +467,8 @@ describe('gameUtils', () => {
             }
         };
         expect(GameUtils.getOrangesBorrowed(appData, 'game1', 'DEF')).to.equal(1);
+        expect(GameUtils.getPlayerLoanBalance(appData, 'game1', 'ABC')).to.equal(1);
+        expect(GameUtils.getPlayerLoanBalance(appData, 'game1', 'DEF')).to.equal(-1);
         expect(_.size(GameUtils.getPlayerOutstandingTransactions(appData, 'game1', 'ABC'))).to.equal(1);
         expect(_.size(GameUtils.getPlayerOutstandingTransactions(appData, 'game1', 'DEF'))).to.equal(1);
         expect(_.size(GameUtils.getPlayerDebts(appData, 'game1', 'ABC'))).to.equal(0);

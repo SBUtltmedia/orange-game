@@ -7,7 +7,7 @@ import Griddle from 'griddle-react';
 import Negotiation from '../components/Negotiation';
 import { connect } from 'redux/react';
 import { getThisGame, getOrangesInMyBasket, getPlayerOutstandingTransactions,
-        derivePlayers } from '../gameUtils';
+        derivePlayers, getPlayerLoanBalance } from '../gameUtils';
 
 const styles = {
     container: {
@@ -122,22 +122,6 @@ const COL_META = [
 }))
 export default class Players extends Component {
 
-    calculateCredit(player) {
-        const { firebase } = this.props;
-        const game = getThisGame(firebase);
-        if (game) {
-            const transactions = getPlayerOutstandingTransactions(firebase, player.authId);
-            return _.reduce(transactions, (total, t) => {
-                if (t.lender === player.authId) {
-                    return total + t.oranges.later;
-                }
-                else if (t.borrower === player.authId) {
-                    return total - t.oranges.later;
-                }
-            }, 0);
-        }
-    }
-
     render() {
         const { firebase } = this.props;
         const players = derivePlayers(firebase);
@@ -149,7 +133,7 @@ export default class Players extends Component {
                     Box: player.oranges.box,
                     Basket: player.oranges.basket,
                     Dish: player.oranges.dish,
-                    Credit: this.calculateCredit(player),
+                    Credit: getPlayerLoanBalance(player),
                     Reputation: player.reputation,
                     Loan: { player: player, firebase: firebase },
                     Ready: { player: player }
