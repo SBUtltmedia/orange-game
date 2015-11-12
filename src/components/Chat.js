@@ -6,7 +6,7 @@ import ChatMessage from '../components/ChatMessage';
 import _ from 'lodash';
 import model from '../model';
 import { connect } from 'redux/react';
-import { getThisGame } from '../gameUtils';
+import { getChatInThisGame } from '../gameUtils';
 
 const styles = {
   container: {
@@ -76,29 +76,25 @@ export default class Chat extends Component {
         this.scrollToBottom();
         const { authId } = model;
         const { firebase } = this.props;
-        const game = getThisGame(firebase);
-        if (game) {
-            const chat = game.chat;
-            return <div style={styles.container}>
-                <div ref="output" style={styles.output}>
-                    {_.map(chat, (msg, i) => <ChatMessage message={msg} key={i} />)}
+        const chat = getChatInThisGame(firebase);
+        return <div style={styles.container}>
+            <div ref="output" style={styles.output}>
+                {_.map(chat, (msg, i) => <ChatMessage message={msg} key={i} />)}
+            </div>
+            <form ref="form" style={styles.input} onSubmit={e => this.onFormSubmit(e)}>
+                <input ref="textBox" style={styles.textBox} />
+                <input type="submit" value="Send" />
+                <div style={styles.presets}>
+                    <button style={styles.preset}
+                    onClick={() => this.onPresetClick(ASK_PRESET_TEXT)}>
+                        {ASK_PRESET_TEXT}
+                    </button>
+                    <button style={styles.preset}
+                    onClick={() => this.onPresetClick(OFFER_PRESET_TEXT)}>
+                        {OFFER_PRESET_TEXT}
+                    </button>
                 </div>
-                <form ref="form" style={styles.input} onSubmit={e => this.onFormSubmit(e)}>
-                    <input ref="textBox" style={styles.textBox} />
-                    <input type="submit" value="Send" />
-                    <div style={styles.presets}>
-                        <button style={styles.preset}
-                        onClick={() => this.onPresetClick(ASK_PRESET_TEXT)}>
-                            {ASK_PRESET_TEXT}
-                        </button>
-                        <button style={styles.preset}
-                        onClick={() => this.onPresetClick(OFFER_PRESET_TEXT)}>
-                            {OFFER_PRESET_TEXT}
-                        </button>
-                    </div>
-                </form>
-            </div>;
-        }
-        return <div style={styles.container}></div>;  // fallback
+            </form>
+        </div>;
     }
 }

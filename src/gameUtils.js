@@ -5,7 +5,7 @@ import { deepDifference, deepIndexOf, addObjectKey, addObjectKeys,
 import { CREATING, OPEN, ACCEPTED, REJECTED,
             PAID_OFF } from './constants/NegotiationStates';
 import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE, GAME_STARTED,
-            LOAN } from '../src/constants/EventTypes';
+            CHAT, LOAN } from '../src/constants/EventTypes';
 import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME,
             DEFAULT_LOAN_ORANGES } from './constants/Settings';
 
@@ -21,6 +21,21 @@ export function getAllGames(appData) {
  */
 export function getAllUsers(appData) {
     return addObjectKeys(appData.users);
+}
+
+/**
+ * Get chat messages in a game
+ */
+export function getChat(appData, gameId) {
+    const chatEvents = getEventsInGame(appData, gameId, CHAT);
+    return _.omit(chatEvents, 'type');
+}
+
+/**
+ * Get chat messages in the current game
+ */
+export function getChatInThisGame(appData) {
+    return getChat(appData, model.gameId);
 }
 
 /**

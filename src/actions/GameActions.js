@@ -1,10 +1,10 @@
-import { updateFbObject, addToFbList } from '../firebaseUtils';
 import _ from 'lodash';
 import model from '../model';
 import { getThisPlayer, getThisGame, updateThisPlayer, getEventsInThisGame,
             getThisGameDay, getEventDay, shouldDealNewDay } from '../gameUtils';
 import { saveEvent } from '../firebaseUtils';
-import { ORANGES_DEALT, PLAYER_DONE, ORANGE_MOVED } from '../constants/EventTypes';
+import { ORANGES_DEALT, PLAYER_DONE, ORANGE_MOVED,
+            CHAT } from '../constants/EventTypes';
 import { MAX_ORANGES } from '../constants/Settings';
 
 function getRandomNumberOfOranges() {
@@ -49,9 +49,10 @@ export function playerDone(appData) {
 
 export function sendChat(text, appData) {
     const player = getThisPlayer(appData);
-    const msg = {
+    const eventData = {
+        type: CHAT,
         name: player.name,
         text: text
     };
-    addToFbList(`/games/${model.gameId}/chat`, msg);
+    saveEvent(model.gameId, eventData);
 }
