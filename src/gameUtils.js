@@ -399,7 +399,9 @@ export function getThisPlayerCredits(appData) {
 
 export function getPlayerLoanBalance(appData, gameId, authId) {
     return getOrangesLended(appData, gameId, authId) -
-           getOrangesBorrowed(appData, gameId, authId);
+           getOrangesBorrowed(appData, gameId, authId) +
+           getLoanPaymentsPaid(appData, gameId, authId) -
+           getLoanPayementsReceived(appData, gameId, authId);
 }
 
 export function getThisPlayerLoanBalance(appData) {
