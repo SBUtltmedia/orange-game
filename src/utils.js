@@ -20,6 +20,10 @@ export function deepIndexOf(array, item) {
    }
 }
 
+export function average(array) {
+    return _.sum(array) / _.size(array);
+}
+
 export function addObjectKey(obj, item, keyName='id') {
     const newObj = {};
     newObj[keyName] = _.findKey(obj, item);

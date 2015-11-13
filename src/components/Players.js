@@ -7,7 +7,7 @@ import Griddle from 'griddle-react';
 import Negotiation from '../components/Negotiation';
 import { connect } from 'redux/react';
 import { getThisGame, getOrangesInMyBasket, getPlayerOutstandingTransactions,
-        derivePlayers, getPlayerLoanBalance } from '../gameUtils';
+        derivePlayers, getPlayerLoanBalance, getReputation } from '../gameUtils';
 
 const styles = {
     container: {
@@ -42,7 +42,8 @@ class CreditComponent extends Component {
 
 class ReputationComponent extends Component {
     render() {
-        return <img src={require("../../images/emoticons/dont_care.png")} />;
+        const reputation = this.props.data;
+        return <img src={require(`../../images/emoticons/${reputation}.png`)} />;
     }
 }
 
@@ -134,7 +135,7 @@ export default class Players extends Component {
                     Basket: player.oranges.basket,
                     Dish: player.oranges.dish,
                     Credit: getPlayerLoanBalance(firebase, model.gameId, player.authId),
-                    Reputation: player.reputation,
+                    Reputation: getReputation(firebase, model.gameId, player.authId),
                     Loan: { player: player, firebase: firebase },
                     Ready: { player: player }
                 };

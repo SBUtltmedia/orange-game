@@ -1,7 +1,7 @@
 import model from './model';
 import _ from 'lodash';
 import { deepDifference, deepIndexOf, addObjectKey, addObjectKeys,
-            addOriginalObjectKeys } from './utils';
+            addOriginalObjectKeys, average } from './utils';
 import { CREATING, OPEN, ACCEPTED, REJECTED,
             PAID_OFF } from './constants/NegotiationStates';
 import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE, GAME_STARTED,
@@ -58,6 +58,40 @@ export function getEventsInGame(appData, gameId, eventType=null) {
  */
 export function getEventsInThisGame(appData, eventType) {
     return getEventsInGame(appData, model.gameId, eventType);
+}
+
+/**
+ * Gets a player's reputation value
+ */
+export function getReputation(appData, gameId, authId) {
+    const thisPlayerLoanBalance = getPlayerLoanBalance(appData, gameId, authId);
+    const game = getGame(appData, gameId);
+    const avgLoanBalance = average(_.map(game.players, p =>
+                            getPlayerLoanBalance(appData, gameId, p.authId)));
+    if (avgLoanBalance === 0) {
+        return "good";
+    }
+    const x = thisPlayerLoanBalance / avgLoanBalance;
+    if (x >= 3) {
+        return "very_bad";
+    }
+    if (x >= 2) {
+        return "bad";
+    }
+    if (x > 1) {
+        return "ehh";
+    }
+    if (x > 0) {
+        return "good";
+    }
+    return "very_good";
+}
+
+/**
+ * Gets the current player's reputation value
+ */
+export function getMyReputation(appData) {
+    return getReputation(appData, model.gameId, model.authId);
 }
 
 function getTodayStart(appData, gameId, authId) {
