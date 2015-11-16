@@ -14,7 +14,7 @@ const styles = {
     container: {
         ...areaTheme,
         backgroundColor: 'lightblue',
-        //overflowY: 'scroll',
+        overflowY: 'scroll',
         width: 600
     },
     checkmark: {
