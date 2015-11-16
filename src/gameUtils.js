@@ -568,7 +568,7 @@ function getLoanPaymentEvent(appData, transaction) {
 }
 
 export function isPlayerDead(appData, gameId, authId) {
-    getFitness(appData, gameId, authId) <= 0;
+    return getFitness(appData, gameId, authId) <= 0;
 }
 
 export function isThisPlayerDead(appData) {
