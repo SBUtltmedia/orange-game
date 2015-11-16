@@ -128,6 +128,16 @@ export function getOrangesLended(appData, gameId, authId) {
     return _.sum(_.map(loans, loan => loan.oranges.now));
 }
 
+export function getOrangesOwedToPlayer(appData, gameId, authId) {
+    const loans = getLoansBorrowed(appData, gameId, authId);
+    return _.sum(_.map(loans, loan => loan.oranges.later));
+}
+
+export function getOrangesOwedFromPlayer(appData, gameId, authId) {
+    const loans = getLoansLended(appData, gameId, authId);
+    return _.sum(_.map(loans, loan => loan.oranges.later));
+}
+
 function getOrangeDropEvents(prop, appData, name, gameId, authId, onlyToday) {
     const events = getEventsAfterTime(
                         getEventsInGame(appData, gameId, ORANGE_MOVED),
@@ -433,8 +443,8 @@ export function getThisPlayerCredits(appData) {
 }
 
 export function getPlayerLoanBalance(appData, gameId, authId) {
-    return getOrangesLended(appData, gameId, authId) -
-           getOrangesBorrowed(appData, gameId, authId) +
+    return getOrangesOwedToPlayer(appData, gameId, authId) -
+           getOrangesOwedFromPlayer(appData, gameId, authId) +
            getLoanPaymentsPaid(appData, gameId, authId) -
            getLoanPayementsReceived(appData, gameId, authId);
 }
