@@ -13,7 +13,7 @@ export default (
         <Route name="game" path="game/:gameId" handler={Game} />
         <Route name="admin" handler={Admin} />
         <Route name="about" handler={About} />
-        <Route name="game-over" handler={GameOver} />
+        <Route name="game-over" path="game-over/:gameId" handler={GameOver} />
         <NotFoundRoute name="not-found" handler={NotFound} />
     </Route>
 );
