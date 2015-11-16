@@ -41,6 +41,21 @@ class CreditComponent extends Component {
     }
 }
 
+class FitnessComponent extends Component {
+    render() {
+        const value = this.props.data;
+        const color = () => {
+            if (value > 0) {
+                return 'black';
+            }
+            else {
+                return 'red';
+            }
+        }();
+        return <div style={{color: color}}>{value < 0 ? 0 : value}</div>;
+    }
+}
+
 class ReputationComponent extends Component {
     render() {
         const reputation = this.props.data;
@@ -101,6 +116,10 @@ class ReadyComponent extends Component {
 }
 
 const COL_META = [
+    {
+        "columnName": "Fitness",
+        "customComponent": FitnessComponent
+    },
     {
         "columnName": "Credit",
         "customComponent": CreditComponent

@@ -567,6 +567,14 @@ function getLoanPaymentEvent(appData, transaction) {
     }
 }
 
+export function isPlayerDead(appData, gameId, authId) {
+    getFitness(appData, gameId, authId) <= 0;
+}
+
+export function isThisPlayerDead(appData) {
+    return isPlayerDead(appData, model.gameId, model.authId);
+}
+
 function isLoanPaidOff(appData, transaction) {
     return !!getLoanPaymentEvent(appData, transaction);
 }

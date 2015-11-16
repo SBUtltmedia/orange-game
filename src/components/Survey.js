@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import Modal from 'react-modal';
 import model from '../model';
 import { connect } from 'redux/react';
 import { trimString } from '../utils';
@@ -17,10 +16,6 @@ const styles = StyleSheet.create({
         width: '100%'
     }
 });
-
-const appElement = document.getElementById(APP_ROOT_ELEMENT);
-Modal.setAppElement(appElement);
-Modal.injectCSS();
 
 @connect(state => ({
     firebase: state.firebase

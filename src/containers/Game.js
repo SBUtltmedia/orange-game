@@ -8,6 +8,7 @@ import Dish from '../components/Dish';
 import Stats from '../components/Stats';
 import Players from '../components/Players';
 import Chat from '../components/Chat';
+import Death from '../components/Death';
 import { areaTheme } from '../styles/Themes';
 import { dealNewDayIfNeeded } from '../actions/GameActions';
 import * as FluxActions from '../actions/FluxActions';
@@ -80,6 +81,7 @@ export default class Game extends Component {
                 <Players />
                 <Chat />
             </div>
+            <Death />
         </div>;
     }
 }
