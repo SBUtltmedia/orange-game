@@ -7,7 +7,8 @@ import Griddle from 'griddle-react';
 import Negotiation from '../components/Negotiation';
 import { connect } from 'redux/react';
 import { getThisGame, getOrangesInMyBasket, getPlayerOutstandingTransactions,
-        derivePlayers, getPlayerLoanBalance, getReputation } from '../gameUtils';
+        derivePlayers, getPlayerLoanBalance, getReputation,
+        getFitness } from '../gameUtils';
 
 const styles = {
     container: {
@@ -130,7 +131,7 @@ export default class Players extends Component {
             if (player.oranges) {
                 return {
                     Name: player.name,
-                    Fitness: player.fitness,
+                    Fitness: getFitness(firebase, model.gameId, player.authId),
                     Box: player.oranges.box,
                     Basket: player.oranges.basket,
                     Dish: player.oranges.dish,
