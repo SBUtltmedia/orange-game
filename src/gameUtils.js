@@ -65,14 +65,9 @@ export function getEventsInThisGame(appData, eventType) {
  */
 export function getReputation(appData, gameId, authId) {
     const thisPlayerLoanBalance = getPlayerLoanBalance(appData, gameId, authId);
-
-
     const game = getGame(appData, gameId);
     const avgLoanBalance = average(_.map(_.keys(game.players), authId =>
                     Math.abs(getPlayerLoanBalance(appData, gameId, authId))));
-
-    console.log(avgLoanBalance);
-
     if (avgLoanBalance === 0) {
         return "good";
     }
@@ -457,16 +452,17 @@ export function getLoanPayementsReceived(appData, gameId, authId) {
     return _.sum(_.map(_.filter(ts, t => t.lender === authId), t => t.oranges.later));
 }
 
-export function canPlayerAdvanceDay(appData, gameId, authId) {
-    return canPlayerAdvanceDayDerived(derivePlayer(appData, gameId, authId));
+export function canPlayerFinishDay(appData, gameId, authId) {
+    return canPlayerFinishDayDerived(derivePlayer(appData, gameId, authId));
 }
 
-export function canIAdvanceDay(appData) {
-    return canPlayerAdvanceDay(appData, model.gameId, model.authId);
+export function canIFinishDay(appData) {
+    return canPlayerFinishDay(appData, model.gameId, model.authId);
 }
 
 export function shouldDealNewDay(appData) {
-    return shouldDealNewDayDerived(deriveData(appData));
+    const b = shouldDealNewDayDerived(deriveData(appData));
+    return b;
 }
 
 export function isGameStarted(appData, gameId) {
@@ -493,7 +489,7 @@ export function isThisGameRunning(appData) {
     return isGameRunning(appData, model.gameId);
 }
 
-export function canPlayerAdvanceDayDerived(derivedPlayer) {
+export function canPlayerFinishDayDerived(derivedPlayer) {
     if (!derivedPlayer) {
         return false;
     }
@@ -501,7 +497,7 @@ export function canPlayerAdvanceDayDerived(derivedPlayer) {
 }
 
 export function shouldDealNewDayDerived(derivedData) {
-    if (!derivedData || _.isEmpty(derivedData)) {
+    if (!derivedData || _.isEmpty(derivedData) || _.isEmpty(derivedData.players)) {
         return false;
     }
     return _.isEmpty(derivedData.dailyOranges) ||

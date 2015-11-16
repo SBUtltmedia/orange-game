@@ -21,7 +21,7 @@ describe('gameUtils', () => {
                 box: 1
             }
         };
-        expect(GameUtils.canPlayerAdvanceDayDerived(data)).to.be.false;
+        expect(GameUtils.canPlayerFinishDayDerived(data)).to.be.false;
     });
 
     it('cannot advance day (derived) if the game day is >= days in game', () => {
@@ -31,7 +31,7 @@ describe('gameUtils', () => {
                 box: 1
             }
         };
-        expect(GameUtils.canPlayerAdvanceDayDerived(data)).to.be.false;
+        expect(GameUtils.canPlayerFinishDayDerived(data)).to.be.false;
     });
 
     it('can advance day (derived) if conditions are met', () => {
@@ -41,7 +41,7 @@ describe('gameUtils', () => {
                 box: 0
             }
         };
-        expect(GameUtils.canPlayerAdvanceDayDerived(data)).to.be.true;
+        expect(GameUtils.canPlayerFinishDayDerived(data)).to.be.true;
     });
 
     it('cannot deal new day (derived) if all players are not done', () => {

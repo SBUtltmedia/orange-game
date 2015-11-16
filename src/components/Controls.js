@@ -4,7 +4,7 @@ import Box from './Box';
 import { playerDone }from '../actions/GameActions';
 import { DAYS_IN_GAME } from '../constants/Settings';
 import { connect } from 'redux/react';
-import { canIAdvanceDay } from '../gameUtils';
+import { canIFinishDay } from '../gameUtils';
 
 const styles = {
   container: {
@@ -29,7 +29,7 @@ export default class Controls extends Component {
         return <div style={styles.container}>
             <Box />
             <button style={styles.button} onClick={() => playerDone(firebase)}
-                    disabled={!canIAdvanceDay(firebase)}>
+                    disabled={!canIFinishDay(firebase)}>
                 I am done for today
             </button>
         </div>;
