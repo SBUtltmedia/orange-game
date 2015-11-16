@@ -6,7 +6,7 @@ import { CREATING, OPEN, ACCEPTED, REJECTED,
             PAID_OFF } from './constants/NegotiationStates';
 import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE, GAME_STARTED,
             CHAT, LOAN } from '../src/constants/EventTypes';
-import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME,
+import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME, STARTING_FITNESS,
             DEFAULT_LOAN_ORANGES } from './constants/Settings';
 
 /**
@@ -326,8 +326,8 @@ export function getFitness(appData, gameId, authId) {
     const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId);
     const fitnessGain = getFitnessGainForEatEvents(appData, eatEvents);
     const day = getGameDay(appData, gameId);
-    const fitnessLoss = day * DAILY_FITNESS_LOSS;
-    return fitnessGain - fitnessLoss;
+    const fitnessLoss = (day - 1) * DAILY_FITNESS_LOSS;
+    return STARTING_FITNESS + fitnessGain - fitnessLoss;
 }
 
 export function getMyFitness(appData) {
@@ -337,7 +337,8 @@ export function getMyFitness(appData) {
 export function getFitnessChange(appData, gameId, authId) {
     const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId, true);
     const fitnessGain = getFitnessGainForEatEvents(appData, eatEvents);
-    return fitnessGain - DAILY_FITNESS_LOSS;
+    const day = getGameDay(appData, gameId);
+    return fitnessGain - (day > 1 ? DAILY_FITNESS_LOSS : 0);
 }
 
 export function getMyFitnessChange(appData) {
