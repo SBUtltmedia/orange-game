@@ -5,7 +5,6 @@ import { APP_ROOT_ELEMENT } from '../constants/Settings';
 import StyleSheet from'react-style';
 import { isThisPlayerDead } from '../gameUtils';
 import { connect } from 'redux/react';
-import { Link } from 'react-router';
 
 const appElement = document.getElementById(APP_ROOT_ELEMENT);
 Modal.setAppElement(appElement);
@@ -28,7 +27,7 @@ export default class Death extends Component {
                         onRequestClose={() => this.closeModal()}>
             <h2>You are dead!</h2>
             Please visit the
-            <a style={styles.link} href="/?#/game-over/{model.gameId}">game over</a>
+            <a style={styles.link} href={`/?#/game-over/${model.gameId}`}>game over</a>
             page.
         </Modal>;
     }
