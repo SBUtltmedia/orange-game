@@ -65,26 +65,31 @@ export function getEventsInThisGame(appData, eventType) {
  */
 export function getReputation(appData, gameId, authId) {
     const thisPlayerLoanBalance = getPlayerLoanBalance(appData, gameId, authId);
+
+
     const game = getGame(appData, gameId);
-    const avgLoanBalance = average(_.map(game.players, p =>
-                            getPlayerLoanBalance(appData, gameId, p.authId)));
+    const avgLoanBalance = average(_.map(_.keys(game.players), authId =>
+                    Math.abs(getPlayerLoanBalance(appData, gameId, authId))));
+
+    console.log(avgLoanBalance);
+
     if (avgLoanBalance === 0) {
         return "good";
     }
     const x = thisPlayerLoanBalance / avgLoanBalance;
-    if (x >= 3) {
+    if (x >= 0) {
+        return "very_good";
+    }
+    if (x <= -3) {
         return "very_bad";
     }
-    if (x >= 2) {
+    if (x <= -2) {
         return "bad";
     }
-    if (x > 1) {
+    if (x <= -1) {
         return "ehh";
     }
-    if (x > 0) {
-        return "good";
-    }
-    return "very_good";
+    return "good";
 }
 
 /**
