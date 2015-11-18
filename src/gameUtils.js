@@ -129,12 +129,12 @@ export function getOrangesLended(appData, gameId, authId) {
 }
 
 export function getOrangesOwedToPlayer(appData, gameId, authId) {
-    const loans = getLoansBorrowed(appData, gameId, authId);
+    const loans = getLoansLended(appData, gameId, authId);
     return _.sum(_.map(loans, loan => loan.oranges.later));
 }
 
 export function getOrangesOwedFromPlayer(appData, gameId, authId) {
-    const loans = getLoansLended(appData, gameId, authId);
+    const loans = getLoansBorrowed(appData, gameId, authId);
     return _.sum(_.map(loans, loan => loan.oranges.later));
 }
 
