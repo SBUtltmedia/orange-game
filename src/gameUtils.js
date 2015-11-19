@@ -573,6 +573,17 @@ function getLoanPaymentEvent(appData, transaction) {
     }
 }
 
+export function shouldDisableOranges(appData, gameId, authId) {
+    const f = e => e.authId === authId;
+    const doneEvents = _.filter(getEventsInGame(appData, gameId, PLAYER_DONE), f);
+    const dealEvents = _.filter(getEventsInGame(appData, gameId, ORANGES_DEALT), f);
+    return _.size(doneEvents) >= _.size(dealEvents);
+}
+
+export function shouldDisableMyOranges(appData) {
+    return shouldDisableOranges(appData, model.gameId, model.authId);
+}
+
 export function isPlayerDead(appData, gameId, authId) {
     return getFitness(appData, gameId, authId) <= 0;
 }

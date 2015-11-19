@@ -10,7 +10,7 @@ npm install
 npm start
 ```
 
--Use `gulp tests` to run tests
+-Use `gulp tests` to run tests, and `gulp watch` to repeatedly run the tests.
 
 ### Production build
 

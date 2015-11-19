@@ -8,7 +8,8 @@ import Negotiation from '../components/Negotiation';
 import { connect } from 'redux/react';
 import { getThisGame, getOrangesInMyBasket, getPlayerOutstandingTransactions,
         derivePlayers, getPlayerLoanBalance, getReputation,
-        getFitness, isPlayerDead } from '../gameUtils';
+        getFitness, isPlayerDead, shouldDisableOranges,
+        shouldDisableMyOranges } from '../gameUtils';
 
 const styles = {
     container: {
@@ -106,8 +107,10 @@ class LoanComponent extends Component {
                 const myBasketOranges = getOrangesInMyBasket(firebase);
                 const isDead = isPlayerDead(firebase, model.gameId, player.authId);
                 const isSelf = player.authId === model.authId;
-                const canOffer = !isDead && !isSelf && myBasketOranges > 0;
-                const canAsk = !isDead && !isSelf && player.oranges.basket > 0;
+                const isDisabled = shouldDisableOranges(firebase, model.gameId, player.authId);
+                const iAmDisabled = shouldDisableMyOranges(firebase);
+                const canOffer = !isDead && !isSelf && !isDisabled && myBasketOranges > 0;
+                const canAsk = !iAmDisabled && !isDead && !isSelf && player.oranges.basket > 0;
                 return <div>
                     { this.createAskButton(player, canAsk, firebase) }
                     { this.createOfferButton(player, canOffer, firebase) }
