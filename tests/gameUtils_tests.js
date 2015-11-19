@@ -560,5 +560,12 @@ describe('gameUtils', () => {
         });
         expect(GameUtils.getMyFitness(appData)).to.equal(STARTING_FITNESS + MAX_FITNESS_GAIN * 2 - 1);
         expect(GameUtils.getMyFitnessChange(appData)).to.equal(MAX_FITNESS_GAIN * 2 - 1);
+        appData.games.game1.events.push({
+            type: PLAYER_DONE, authId: 'ABC', time: 4
+        });
+        appData.games.game1.events.push({
+            type: ORANGES_DEALT, authId: 'ABC', oranges: 8, time: 5
+        });
+        expect(GameUtils.getMyFitnessChange(appData)).to.equal(0 - DAILY_FITNESS_LOSS);
     });
 });

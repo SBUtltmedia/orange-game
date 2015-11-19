@@ -165,28 +165,28 @@ function getOrangesDroppedFrom(appData, name, gameId, authId, onlyToday) {
     return getOrangesDropped('src', appData, name, gameId, authId, onlyToday);
 }
 
-export function getOrangeDropInDishEvents(appData, gameId, authId) {
-    return getOrangeDropInEvents(appData, 'dish', gameId, authId);
+export function getOrangeDropInDishEvents(appData, gameId, authId, onlyToday) {
+    return getOrangeDropInEvents(appData, 'dish', gameId, authId, onlyToday);
 }
 
-export function getOrangeDropInBasketEvents(appData, gameId, authId) {
-    return getOrangeDropInEvents(appData, 'basket', gameId, authId);
+export function getOrangeDropInBasketEvents(appData, gameId, authId, onlyToday) {
+    return getOrangeDropInEvents(appData, 'basket', gameId, authId, onlyToday);
 }
 
-export function getOrangeDropInBoxEvents(appData, gameId, authId) {
-    return getOrangeDropInEvents(appData, 'box', gameId, authId);
+export function getOrangeDropInBoxEvents(appData, gameId, authId, onlyToday) {
+    return getOrangeDropInEvents(appData, 'box', gameId, authId, onlyToday);
 }
 
-export function getOrangeDropFromDishEvents(appData, gameId, authId) {
-    return getOrangeDropFromEvents(appData, 'dish', gameId, authId);
+export function getOrangeDropFromDishEvents(appData, gameId, authId, onlyToday) {
+    return getOrangeDropFromEvents(appData, 'dish', gameId, authId, onlyToday);
 }
 
-export function getOrangeDropFromBasketEvents(appData, gameId, authId) {
-    return getOrangeDropFromEvents(appData, 'basket', gameId, authId);
+export function getOrangeDropFromBasketEvents(appData, gameId, authId, onlyToday) {
+    return getOrangeDropFromEvents(appData, 'basket', gameId, authId, onlyToday);
 }
 
-export function getOrangeDropFromBoxEvents(appData, gameId, authId) {
-    return getOrangeDropFromEvents(appData, 'box', gameId, authId);
+export function getOrangeDropFromBoxEvents(appData, gameId, authId, onlyToday) {
+    return getOrangeDropFromEvents(appData, 'box', gameId, authId, onlyToday);
 }
 
 export function getOrangesDroppedInDish(appData, gameId, authId) {
