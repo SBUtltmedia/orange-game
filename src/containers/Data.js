@@ -12,11 +12,10 @@ const styles = StyleSheet.create({
 export default class Data extends Component {
 
     render() {
-        var obj = {a: 123, b: "4 5 6"};
-        const data = encodeURIComponent(JSON.stringify(obj));
+        const data = '1,2,3';
         return <div styles={[styles.page]}>
-            <a download="orange-game_data.json"
-                href={"data:text/json;charset=utf-8,"+ data}>Download</a>
+            <a download="orange-game_data.csv"
+                href={"data:text/csv;charset=utf-8,"+ data}>Download</a>
         </div>;
     }
 }
