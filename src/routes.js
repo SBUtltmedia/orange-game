@@ -5,6 +5,7 @@ import Lobby from "./containers/Lobby";
 import Game from "./containers/Game";
 import Admin from "./containers/Admin";
 import About from "./containers/About";
+import Data from "./containers/Data";
 import GameOver from "./containers/GameOver";
 import NotFound from "./containers/NotFound";
 export default (
@@ -13,6 +14,7 @@ export default (
         <Route name="game" path="game/:gameId" handler={Game} />
         <Route name="admin" handler={Admin} />
         <Route name="about" handler={About} />
+        <Route name="data" handler={Data} />
         <Route name="game-over" path="game-over/:gameId" handler={GameOver} />
         <NotFoundRoute name="not-found" handler={NotFound} />
     </Route>
