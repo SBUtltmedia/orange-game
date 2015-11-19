@@ -1,6 +1,5 @@
 var path = require('path');
 var webpack = require('webpack');
-var StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
@@ -10,14 +9,12 @@ module.exports = {
     './src/index'
   ],
   output: {
-    path: 'dist',
+    path: path.join(__dirname, 'static'),
     filename: 'bundle.js',
-    publicPath: '/static/',
-    libraryTarget: 'commonjs'
+    publicPath: '/static/'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new StaticSiteGeneratorPlugin('main', ['src']),
     new webpack.NoErrorsPlugin()
   ],
   resolve: {
