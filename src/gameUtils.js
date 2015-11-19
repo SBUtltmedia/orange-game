@@ -318,23 +318,28 @@ export function getEventDay(appData, event) {
     return getHighestEventCountByPlayer(appData, prevDoneEvents, model.gameId);
 }
 
-function getFitnessGainForEatEventsInSameDay(eatEvents) {
+function getFitnessGainForEatEventsInSameDay(numEatEvents) {
     var accum = 0;
-    for (var i = 0; i < _.size(eatEvents); i++) {
+    for (var i = 0; i < numEatEvents; i++) {
         accum += MAX_FITNESS_GAIN - i;
     }
     return accum;
 }
 
-function getFitnessGainForEatEvents(appData, eatEvents) {
-    return _.sum(_.map(_.range(1, DAYS_IN_GAME + 1), i =>
-            getFitnessGainForEatEventsInSameDay(_.filter(eatEvents, e =>
-                getEventDay(appData, e) === i))));
+function getFitnessGainForEatEvents(appData, eatEvents, uneatEvents) {
+    return _.sum(_.map(_.range(1, DAYS_IN_GAME + 1), i => {
+        const f = e => getEventDay(appData, e) === i;
+        const numDailyEatEvents = _.size(_.filter(eatEvents, f));
+        const numDailyUneatEvents = _.size(_.filter(uneatEvents, f));
+        const n = numDailyEatEvents - numDailyUneatEvents;
+        return getFitnessGainForEatEventsInSameDay(n);
+    }));
 }
 
 export function getFitness(appData, gameId, authId) {
     const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId);
-    const fitnessGain = getFitnessGainForEatEvents(appData, eatEvents);
+    const uneatEvents = getOrangeDropFromDishEvents(appData, gameId, authId);
+    const fitnessGain = getFitnessGainForEatEvents(appData, eatEvents, uneatEvents);
     const day = getGameDay(appData, gameId);
     const fitnessLoss = (day - 1) * DAILY_FITNESS_LOSS;
     return STARTING_FITNESS + fitnessGain - fitnessLoss;
@@ -346,7 +351,8 @@ export function getMyFitness(appData) {
 
 export function getFitnessChange(appData, gameId, authId) {
     const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId, true);
-    const fitnessGain = getFitnessGainForEatEvents(appData, eatEvents);
+    const uneatEvents = getOrangeDropFromDishEvents(appData, gameId, authId, true);
+    const fitnessGain = getFitnessGainForEatEvents(appData, eatEvents, uneatEvents);
     const day = getGameDay(appData, gameId);
     return fitnessGain - (day > 1 ? DAILY_FITNESS_LOSS : 0);
 }
