@@ -23,8 +23,7 @@ export default class Death extends Component {
     render() {
         const { firebase } = this.props;
         return <Modal className="Modal__Bootstrap modal-dialog short"
-                        isOpen={isThisPlayerDead(firebase)}
-                        onRequestClose={() => this.closeModal()}>
+                        isOpen={isThisPlayerDead(firebase)}>
             <h2>You are dead!</h2>
             Please visit the
             <a style={styles.link} href={`/?#/game-over/${model.gameId}`}>game over</a>

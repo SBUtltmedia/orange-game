@@ -23,21 +23,18 @@ const styles = {
     }
 };
 
-class CreditComponent extends Component {
+class NameComponent extends Component {
     render() {
-        const value = this.props.data;
+        const { name, isAlive } = this.props.data;
         const color = () => {
-            if (value > 0) {
-                return 'darkgreen';
-            }
-            else if (value < 0) {
-                return 'red';
+            if (isAlive) {
+                return 'black';
             }
             else {
-                return 'transparent';  // if zero just show nothing
+                return 'red';
             }
         }();
-        return <div style={{color: color}}>{value}</div>;
+        return <div style={{color: color}}>{name}</div>;
     }
 }
 
@@ -53,6 +50,24 @@ class FitnessComponent extends Component {
             }
         }();
         return <div style={{color: color}}>{value < 0 ? 0 : value}</div>;
+    }
+}
+
+class CreditComponent extends Component {
+    render() {
+        const value = this.props.data;
+        const color = () => {
+            if (value > 0) {
+                return 'darkgreen';
+            }
+            else if (value < 0) {
+                return 'red';
+            }
+            else {
+                return 'transparent';  // if zero just show nothing
+            }
+        }();
+        return <div style={{color: color}}>{value}</div>;
     }
 }
 
@@ -118,6 +133,10 @@ class ReadyComponent extends Component {
 
 const COL_META = [
     {
+        "columnName": "Name",
+        "customComponent": NameComponent
+    },
+    {
         "columnName": "Fitness",
         "customComponent": FitnessComponent
     },
@@ -150,7 +169,10 @@ export default class Players extends Component {
         const tableData = _.map(players, player => {
             if (player.oranges) {
                 return {
-                    Name: player.name,
+                    Name: {
+                        name: player.name,
+                        isAlive: !isPlayerDead(firebase, model.gameId, player.authId)
+                    },
                     Fitness: getFitness(firebase, model.gameId, player.authId),
                     Box: player.oranges.box,
                     Basket: player.oranges.basket,
