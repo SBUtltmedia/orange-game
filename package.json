@@ -2,6 +2,7 @@
   "name": "node-authentication",
   "scripts": {
     "start": "node server.js",
+    "postinstall": "node deploy",
     "lint": "eslint src"
   },
   "dependencies": {
