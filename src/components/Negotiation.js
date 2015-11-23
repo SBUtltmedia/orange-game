@@ -118,17 +118,16 @@ export default class Negotiation extends Component {
         this.setState({ laterOranges: value });
     }
 
+    renderSendButton(enabled=true) {
+        return renderButton('Send', () => this.open(), 'btn-success', enabled);
+    }
+
     renderAcceptButton(enabled=true) {
-        const { thisTransaction } = this.state;
-        const fn = () => {
-            if (thisTransaction.state === CREATING) {
-                return () => this.open();
-            }
-            else {
-                return () => this.accept();
-            }
-        }();
-        return renderButton('Accept', fn, 'btn-success', enabled);
+        return renderButton('Accept', () => this.accept(), 'btn-success', enabled);
+    }
+
+    renderCancelButton(enabled=true) {
+        return renderButton('Cancel', () => this.reject(), 'btn-danger', enabled);
     }
 
     renderRejectButton(enabled=true) {
@@ -145,14 +144,14 @@ export default class Negotiation extends Component {
         if (thisTransaction) {
             if (thisTransaction.state === CREATING) {
                 return <div style={styles.buttons}>
-                    { this.renderAcceptButton() }
-                    { this.renderRejectButton() }
+                    { this.renderSendButton() }
+                    { this.renderCancelButton() }
                 </div>;
             }
             else {
                 if (thisTransaction.lastToAct === model.authId) {
                     return <div style={styles.buttons}>
-                        { this.renderRejectButton() }
+                        { this.renderCancelButton() }
                     </div>;
                 }
                 else {
