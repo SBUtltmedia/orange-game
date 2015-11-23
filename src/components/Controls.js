@@ -12,10 +12,9 @@ const styles = {
         backgroundColor: '#F7EAC8',
     },
     button: {
-        margin: '1%',
         position: 'relative',
         top: 50,
-        width: '48%'
+        width: 200
     }
 };
 
