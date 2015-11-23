@@ -14,9 +14,13 @@ const styles = StyleSheet.create({
     }
 });
 
+function getPlayersData(firebase, gameId) {
+
+}
+
 function getGamesData(firebase) {
     const games = getAllGames(firebase);
-    return _.map(games, (g, i) => `${i + 1},${_.size(g.players)}`).join('\n');
+    return _.map(games, (g, i) => `${i + 1},${getPlayersData(firebase, g.id)}`).join('\n');
 }
 
 function getData(firebase) {
