@@ -16,8 +16,7 @@ const styles = StyleSheet.create({
 
 function getGamesData(firebase) {
     const games = getAllGames(firebase);
-    console.log(games);
-    return _.map(games, g => `${'A'},${_.size(g.players)}`).join('\n');
+    return _.map(games, (g, i) => `${i + 1},${_.size(g.players)}`).join('\n');
 }
 
 function getData(firebase) {
