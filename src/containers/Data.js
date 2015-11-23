@@ -6,6 +6,7 @@ import * as FluxActions from '../actions/FluxActions';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
 import { getAllGames } from '../gameUtils';
+import converter from 'json-2-csv';
 
 const styles = StyleSheet.create({
     page: {
@@ -14,17 +15,9 @@ const styles = StyleSheet.create({
     }
 });
 
-function getPlayersData(firebase, gameId) {
-
-}
-
-function getGamesData(firebase) {
-    const games = getAllGames(firebase);
-    return _.map(games, (g, i) => `${i + 1},${getPlayersData(firebase, g.id)}`).join('\n');
-}
-
 function getData(firebase) {
-    return 'Game,Players\n' + getGamesData(firebase);
+    const games = getAllGames(firebase);
+    return converter.json2csv(games);
 }
 
 @connect(state => ({

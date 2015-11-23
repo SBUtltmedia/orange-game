@@ -11,6 +11,7 @@
     "express": "~4.0.0",
     "firebase": "^2.2.9",
     "griddle-react": "^0.2.13",
+    "json-2-csv": "^2.0.5",
     "lodash": "^3.9.3",
     "path": "^0.11.14",
     "react": "^0.13.3",
