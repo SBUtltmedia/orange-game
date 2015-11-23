@@ -19,8 +19,11 @@ const styles = {
       fontWeight: 'bold'
     },
     inner: {
-      paddingLeft: 50,
+      paddingLeft: 30,
       textAlign: 'left'
+    },
+    item: {
+        marginBottom: 10,
     },
     debt: {
       color: 'red',
@@ -62,10 +65,10 @@ export default class Stats extends Component {
     renderPayButton(transaction) {
         const { firebase } = this.props;
         if (canPayOffLoan(firebase, transaction)) {
-            return <a onClick={() => payDebt(transaction)}>pay</a>;
+            return <button onClick={() => payDebt(transaction)}>Repay</button>
         }
         else {
-            return <span></span>;
+            return <button disabled="true">Repay</button>
         }
     }
 
@@ -116,29 +119,29 @@ export default class Stats extends Component {
         return <div style={styles.container}>
             <div style={styles.title}>Your stats</div>
             <div style={styles.inner}>
-                <p>
+                <div style={styles.item}>
                     <span>Day:</span>
                     &nbsp;
                     <span style={styles.value}>{day}</span>
-                </p>
-                <p>
+                </div>
+                <div style={styles.item}>
                     <span>Fitness:</span>
                     &nbsp;
                     <span style={styles.value}>{fitness}</span>
-                </p>
-                <p>
+                </div>
+                <div style={styles.item}>
                     <span>Change:</span>
                     &nbsp;
                     <span style={{...styles.value, color: fitnessChangeColor}}>
                                     {formatChange(fitnessChange)}
                     </span>
-                </p>
-                <p>
+                </div>
+                <div style={styles.item}>
                     <span>Debts:</span> { this.renderDebts() }
-                </p>
-                <p>
+                </div>
+                <div style={styles.item}>
                     <span>Credits:</span> { this.renderCredits() }
-                </p>
+                </div>
             </div>
         </div>;
     }
