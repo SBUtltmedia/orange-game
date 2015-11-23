@@ -68,7 +68,7 @@ export default class Stats extends Component {
             return <button onClick={() => payDebt(transaction)}>Repay</button>
         }
         else {
-            return <button disabled="true">Repay</button>
+            return <button disabled="true" title="Not enough oranges in basket to repay loan">Repay</button>
         }
     }
 
