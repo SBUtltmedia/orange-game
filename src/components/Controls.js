@@ -26,10 +26,12 @@ export default class Controls extends Component {
 
     render() {
         const { firebase } = this.props;
+        const canFinish = canIFinishDay(firebase);
         return <div style={styles.container}>
             <Box />
             <button style={styles.button} onClick={() => playerDone(firebase)}
-                    disabled={!canIFinishDay(firebase)}>
+                    disabled={!canFinish}
+                    title={canFinish ? null : 'Must use all oranges for the day'}>
                 I am done for today
             </button>
         </div>;
