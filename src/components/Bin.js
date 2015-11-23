@@ -6,12 +6,14 @@ import ItemTypes from '../constants/ItemTypes';
 import _ from 'lodash';
 import { dropOrange } from '../actions/GameActions';
 import model from '../model';
+import { shouldDisableMyOranges } from '../gameUtils';
+import { connect } from 'redux/react';
 
 const styles = {
-  inner: {
-      ...verticalCenter
-  },
-  defaultBgColor: 'darkkhaki'
+    inner: {
+        ...verticalCenter
+    },
+    defaultBgColor: 'darkkhaki'
 };
 
 const binTarget = {
@@ -21,30 +23,9 @@ const binTarget = {
     }
 };
 
-function renderOranges(oranges, name) {
-    return _.map(_.range(oranges), i => <DraggableOrange key={i} source={name} />);
-}
-
-function renderNoOranges(oranges) {
-    return 'Empty';
-}
-
-function renderTextual(oranges, name, label, isActive) {
-    return <div>
-        <p>{ isActive ? 'Release to drop' : _.capitalize(name) }</p>
-        <p>{ label }: { oranges }</p>
-    </div>;
-}
-
-function renderGraphical(oranges, name) {
-    if (oranges > 0) {
-        return renderOranges(oranges, name);
-    }
-    else {
-        return renderNoOranges();
-    }
-}
-
+@connect(state => ({
+    firebase: state.firebase
+}))
 @DropTarget(ItemTypes.ORANGE, binTarget, (connect, monitor) => ({
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
@@ -62,6 +43,33 @@ export default class Bin extends Component {
         oranges: PropTypes.number.isRequired
     };
 
+    renderOranges(oranges, name) {
+        const { firebase } = this.props;
+        return _.map(_.range(oranges), i =>
+                    <DraggableOrange key={i} source={name}
+                    disabled={shouldDisableMyOranges(firebase)} />);
+    }
+
+    renderNoOranges(oranges) {
+        return 'Empty';
+    }
+
+    renderTextual(oranges, name, label, isActive) {
+        return <div>
+            <p>{ isActive ? 'Release to drop' : _.capitalize(name) }</p>
+            <p>{ label }: { oranges }</p>
+        </div>;
+    }
+
+    renderGraphical(oranges, name) {
+        if (oranges > 0) {
+            return this.renderOranges(oranges, name);
+        }
+        else {
+            return this.renderNoOranges();
+        }
+    }
+
     render() {
         const { style, name, textual, graphical, label, isOver,
                     canDrop, connectDropTarget, oranges } = this.props;
@@ -77,8 +85,8 @@ export default class Bin extends Component {
         return connectDropTarget(
             <div style={{ ...style, backgroundColor }}>
                 <div style={styles.inner}>
-                    { textual ? renderTextual(oranges, name, label, isActive) : '' }
-                    { graphical ? renderGraphical(oranges, name) : '' }
+                    { textual ? this.renderTextual(oranges, name, label, isActive) : '' }
+                    { graphical ? this.renderGraphical(oranges, name) : '' }
                 </div>
             </div>
         );

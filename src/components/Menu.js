@@ -22,6 +22,7 @@ export default class Menu extends Component {
             <Link to="/" styles={[styles.item]}>Lobby</Link>
             <Link to="admin" styles={[styles.item]}>Admin</Link>
             <Link to="about" styles={[styles.item]}>About</Link>
+            <Link to="data" styles={[styles.item]}>Data</Link>
         </div>;
     }
 }

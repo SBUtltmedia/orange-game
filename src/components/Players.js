@@ -8,7 +8,8 @@ import Negotiation from '../components/Negotiation';
 import { connect } from 'redux/react';
 import { getThisGame, getOrangesInMyBasket, getPlayerOutstandingTransactions,
         derivePlayers, getPlayerLoanBalance, getReputation,
-        getFitness } from '../gameUtils';
+        getFitness, isPlayerDead, shouldDisableOranges,
+        shouldDisableMyOranges } from '../gameUtils';
 
 const styles = {
     container: {
@@ -22,6 +23,36 @@ const styles = {
         height: 16
     }
 };
+
+class NameComponent extends Component {
+    render() {
+        const { name, isAlive } = this.props.data;
+        const color = () => {
+            if (isAlive) {
+                return 'black';
+            }
+            else {
+                return 'red';
+            }
+        }();
+        return <div style={{color: color}}>{name}</div>;
+    }
+}
+
+class FitnessComponent extends Component {
+    render() {
+        const value = this.props.data;
+        const color = () => {
+            if (value > 0) {
+                return 'black';
+            }
+            else {
+                return 'red';
+            }
+        }();
+        return <div style={{color: color}}>{value < 0 ? 0 : value}</div>;
+    }
+}
 
 class CreditComponent extends Component {
     render() {
@@ -38,21 +69,6 @@ class CreditComponent extends Component {
             }
         }();
         return <div style={{color: color}}>{value}</div>;
-    }
-}
-
-class FitnessComponent extends Component {
-    render() {
-        const value = this.props.data;
-        const color = () => {
-            if (value > 0) {
-                return 'black';
-            }
-            else {
-                return 'red';
-            }
-        }();
-        return <div style={{color: color}}>{value < 0 ? 0 : value}</div>;
     }
 }
 
@@ -89,9 +105,12 @@ class LoanComponent extends Component {
             const { player, firebase } = this.props.data;
             if (player && player.oranges) {
                 const myBasketOranges = getOrangesInMyBasket(firebase);
+                const isDead = isPlayerDead(firebase, model.gameId, player.authId);
                 const isSelf = player.authId === model.authId;
-                const canOffer = !isSelf && myBasketOranges > 0;
-                const canAsk = !isSelf && player.oranges.basket > 0;
+                const isDisabled = shouldDisableOranges(firebase, model.gameId, player.authId);
+                const iAmDisabled = shouldDisableMyOranges(firebase);
+                const canOffer = !isDead && !isSelf && !isDisabled && myBasketOranges > 0;
+                const canAsk = !iAmDisabled && !isDead && !isSelf && player.oranges.basket > 0;
                 return <div>
                     { this.createAskButton(player, canAsk, firebase) }
                     { this.createOfferButton(player, canOffer, firebase) }
@@ -116,6 +135,10 @@ class ReadyComponent extends Component {
 }
 
 const COL_META = [
+    {
+        "columnName": "Name",
+        "customComponent": NameComponent
+    },
     {
         "columnName": "Fitness",
         "customComponent": FitnessComponent
@@ -149,7 +172,10 @@ export default class Players extends Component {
         const tableData = _.map(players, player => {
             if (player.oranges) {
                 return {
-                    Name: player.name,
+                    Name: {
+                        name: player.name,
+                        isAlive: !isPlayerDead(firebase, model.gameId, player.authId)
+                    },
                     Fitness: getFitness(firebase, model.gameId, player.authId),
                     Box: player.oranges.box,
                     Basket: player.oranges.basket,
