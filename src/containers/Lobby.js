@@ -32,7 +32,7 @@ export default class Lobby extends Component {
             });
             _.each(joinedGameIds, id => {
                 if (isGameRunning(firebase, id)) {
-                    window.location.href = `/?#/game/${id}`;
+                    window.location.href = `?#/game/${id}`;
                 }
             });
         }
