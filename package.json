@@ -10,7 +10,7 @@
     "classnames": "^1.2.2",
     "express": "~4.0.0",
     "firebase": "^2.2.9",
-    "griddle-react": "^0.2.13",
+    "griddle-react": "0.2.13",
     "lodash": "^3.9.3",
     "path": "^0.11.14",
     "react": "^0.13.3",
