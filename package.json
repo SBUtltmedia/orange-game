@@ -8,10 +8,11 @@
   "dependencies": {
     "babel-runtime": "^5.6.15",
     "classnames": "^1.2.2",
+    "downloadbutton": "^1.0.0",
     "express": "~4.0.0",
     "firebase": "^2.2.9",
     "griddle-react": "^0.2.13",
-    "json-2-csv": "^2.0.5",
+    "json2csv": "^3.0.1",
     "lodash": "^3.9.3",
     "path": "^0.11.14",
     "react": "^0.13.3",

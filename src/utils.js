@@ -37,13 +37,3 @@ export function addObjectKeys(obj) {
 export function addOriginalObjectKeys(origObj, newObj) {
     return _.map(newObj, item => addObjectKey(origObj, item));
 }
-
-export function convertJsonToCsv(json) {
-    if (_.isEmpty(json)) {
-        return '';
-    }
-    function getHeaders(json) {
-        
-    }
-    return getHeaders(json) + '\n' + getData(json);
-}

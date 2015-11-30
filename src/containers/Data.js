@@ -5,8 +5,8 @@ import { connect } from 'redux/react';
 import * as FluxActions from '../actions/FluxActions';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
-import { getAllGames } from '../gameUtils';
-import converter from 'json-2-csv';
+import { getAllGamesCsv } from '../gameUtils';
+import DownloadButton from 'downloadbutton';
 
 const styles = StyleSheet.create({
     page: {
@@ -14,11 +14,6 @@ const styles = StyleSheet.create({
         height: '100%'
     }
 });
-
-function getData(firebase) {
-    const games = getAllGames(firebase);
-    return converter.json2csv(games);
-}
 
 @connect(state => ({
     firebase: state.firebase
@@ -34,12 +29,26 @@ export default class Data extends Component {
         this.fluxActions.disconnectFromFirebase();
     }
 
-    render() {
+    makeFile(callback) {
         const { firebase } = this.props;
-        const data = getData(firebase);
+        getAllGamesCsv(firebase, (error, csv) => {
+            if (error) {
+                console.error(error);
+            }
+            else {
+                console.log(csv);    
+            }
+            callback({
+                mimetype: 'text/csv',
+                filename: 'orange-game_data.csv',
+                contents: csv
+            });
+        });
+    }
+
+    render() {
         return <div styles={[styles.page]}>
-            <a download="orange-game_data.csv"
-                href={"data:text/csv;charset=utf-8,"+ encodeURI(data)}>Download</a>
+            <DownloadButton genFile={this.makeFile.bind(this)} async={true} />
         </div>;
     }
 }

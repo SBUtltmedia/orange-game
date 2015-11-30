@@ -1,5 +1,6 @@
 import model from './model';
 import _ from 'lodash';
+import json2csv from 'json2csv';
 import { deepDifference, deepIndexOf, addObjectKey, addObjectKeys,
             addOriginalObjectKeys, average } from './utils';
 import { CREATING, OPEN, ACCEPTED, REJECTED,
@@ -693,4 +694,16 @@ export function deriveData(appData) {
         day: getThisGameDay(appData),
         players: derivePlayers(appData)
     };
+}
+
+export function getAllGamesCsv(appData, callback) {
+    const games = getAllGames(appData);
+    json2csv({
+        data: [{ game_id: 1, player: 2 }],
+        fields: ['game_id', 'player']
+    }, callback);
+}
+
+export function getGameCsv(appData, gameId) {
+
 }
