@@ -11,7 +11,6 @@
     "downloadbutton": "^1.0.0",
     "express": "~4.0.0",
     "firebase": "^2.2.9",
-    "griddle-react": "^0.2.13",
     "griddle-react": "0.2.13",
     "json2csv": "^3.0.1",
     "lodash": "^3.9.3",
