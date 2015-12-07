@@ -3,7 +3,7 @@ import model from '../model';
 import { getThisPlayer, getThisGame, updateThisPlayer, getEventsInThisGame,
             getThisGameDay, getEventDay, shouldDealNewDay } from '../gameUtils';
 import { saveEvent } from '../firebaseUtils';
-import { ORANGES_DEALT, PLAYER_DONE, ORANGE_MOVED,
+import { ORANGES_FOUND, PLAYER_DONE, ORANGE_MOVED,
             CHAT } from '../constants/EventTypes';
 import { MAX_ORANGES } from '../constants/Settings';
 
@@ -25,7 +25,7 @@ export function dropOrange(source, dest, appData) {
 function dealNewDay(appData) {
     const game = getThisGame(appData);
     const eventData = {
-        type: ORANGES_DEALT,
+        type: ORANGES_FOUND,
         authId: model.authId,
         oranges: getRandomNumberOfOranges()
     };

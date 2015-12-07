@@ -1,8 +1,9 @@
 import json2csv from 'json2csv';
 import { getAllGames } from './gameUtils';
+import { FOUND, ATE, SAVED, BORROWED, LENDED, PAID_BACK } from './constants/CsvEventTypes';
 import _ from 'lodash';
 
-export function flattenGame(game) {
+export function simplifyGameData(game) {
     return _.map(game.events, e => ({
         game: game.id,
         event: e.type,

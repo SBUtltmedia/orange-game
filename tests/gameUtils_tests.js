@@ -6,8 +6,8 @@ import _ from 'lodash';
 import model from '../src/model';
 import { DAYS_IN_GAME, STARTING_FITNESS, MAX_FITNESS_GAIN,
           DAILY_FITNESS_LOSS } from '../src/constants/Settings';
-import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE, LOAN } from '../src/constants/EventTypes';
-import { CREATING, OPEN, ACCEPTED, REJECTED, PAID_OFF } from '../src/constants/NegotiationStates';
+import { ORANGES_FOUND, ORANGE_MOVED, PLAYER_DONE, LOAN } from '../src/constants/EventTypes';
+import { CREATING, OPEN, ACCEPTED, REJECTED, PAID_BACK } from '../src/constants/NegotiationStates';
 
 describe('gameUtils', () => {
 
@@ -88,7 +88,7 @@ describe('gameUtils', () => {
                         DEF: { name: 'Jen' }
                     },
                     events: {
-                        evt1: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 }
+                        evt1: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 1 }
                     }
                 }
             }
@@ -105,11 +105,11 @@ describe('gameUtils', () => {
                         DEF: { name: 'Jen' }
                     },
                     events: {
-                        evt1: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 },
-                        evt2: { type: ORANGES_DEALT, authId: 'DEF', oranges: 1, time: 2 },
-                        evt3: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 3 },
-                        evt4: { type: ORANGES_DEALT, authId: 'DEF', oranges: 1, time: 4 },
-                        evt5: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 5 },
+                        evt1: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 1 },
+                        evt2: { type: ORANGES_FOUND, authId: 'DEF', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 3 },
+                        evt4: { type: ORANGES_FOUND, authId: 'DEF', oranges: 1, time: 4 },
+                        evt5: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 5 },
                     }
                 }
             }
@@ -143,8 +143,8 @@ describe('gameUtils', () => {
                     },
                     events: {
                         evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
-                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 }
+                        evt2: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 3 }
                     }
                 }
             }
@@ -195,8 +195,8 @@ describe('gameUtils', () => {
                     },
                     events: {
                         evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 0, time: 2 },
-                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        evt2: { type: ORANGES_FOUND, authId: 'ABC', oranges: 0, time: 2 },
+                        evt3: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 3 },
                         evt4: { type: PLAYER_DONE, authId: 'ABC', time: 4 }
                     }
                 }
@@ -246,7 +246,7 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' }
                     },
                     events: {
-                        evt1: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 }
+                        evt1: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 1 }
                     }
                 }
             }
@@ -264,9 +264,29 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' }
                     },
                     events: {
-                        evt1: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 },
+                        evt1: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 1 },
+                        evt2: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 2 }
+                    }
+                }
+            }
+        };
+        model.gameId = 'game1';
+        model.authId = 'ABC';
+        expect(GameUtils.getOrangesInMyDish(appData)).to.equal(1);
+    });
+
+    it('clears dish on new day', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' }
+                    },
+                    events: {
+                        evt1: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 1 },
                         evt2: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 2 },
                         evt3: { type: PLAYER_DONE, authId: 'ABC', time: 3 },
+                        evt4: { type: ORANGES_FOUND, authId: 'ABC', oranges: 2, time: 4 },
                     }
                 }
             }
@@ -284,7 +304,7 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' }
                     },
                     events: {
-                        evt1: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 },
+                        evt1: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 1 },
                         evt2: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 2 }
                     }
                 }
@@ -301,7 +321,7 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' }
                     },
                     events: [
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 1 }
+                        { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 1 }
                     ]
                 }
             }
@@ -328,14 +348,14 @@ describe('gameUtils', () => {
                     },
                     events: {
                         evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
+                        evt2: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 2 },
                         evt3: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 3 }
                     }
                 }
             }
         };
         expect(GameUtils.getEventsInGame(appData, 'game1', ORANGE_MOVED).length).to.equal(1);
-        expect(GameUtils.getEventsInGame(appData, 'game1', ORANGES_DEALT).length).to.equal(1);
+        expect(GameUtils.getEventsInGame(appData, 'game1', ORANGES_FOUND).length).to.equal(1);
         expect(GameUtils.getEventsInGame(appData, 'game1').length).to.equal(3);
         expect(GameUtils.getEventsInGame(appData, 'game1', LOAN.OFFER_WINDOW_OPENED).length).to.equal(0);
     });
@@ -350,8 +370,8 @@ describe('gameUtils', () => {
                     },
                     events: {
                         evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
-                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        evt2: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 3 },
                         evt4: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
                         evt5: { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 5 }
                     }
@@ -372,8 +392,8 @@ describe('gameUtils', () => {
                     },
                     events: {
                         evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
-                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        evt2: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 3 },
                         evt4: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
                         evt5: { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 5 },
                         evt6: { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 6 }
@@ -395,8 +415,8 @@ describe('gameUtils', () => {
                     },
                     events: {
                         evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
-                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        evt2: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 3 },
                         evt4: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
                         evt5: { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 5 },
                         evt6: { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 6 },
@@ -426,8 +446,8 @@ describe('gameUtils', () => {
                         DEF: { name: 'Jen' }
                     },
                     events: {
-                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
-                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        evt2: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 3 },
                         evt4: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
                         evt5: event
                     }
@@ -457,8 +477,8 @@ describe('gameUtils', () => {
                     },
                     events: {
                         evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
-                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        evt2: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 3 },
                         evt4: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
                         evt5: { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 5 },
                         evt6: { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 6 },
@@ -488,14 +508,14 @@ describe('gameUtils', () => {
                     },
                     events: {
                         evt1: { type: PLAYER_DONE, authId: 'ABC', time: 1 },
-                        evt2: { type: ORANGES_DEALT, authId: 'ABC', oranges: 1, time: 2 },
-                        evt3: { type: ORANGES_DEALT, authId: 'DEF', oranges: 3, time: 3 },
+                        evt2: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 2 },
+                        evt3: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 3 },
                         evt4: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 4 },
                         evt5: { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 5 },
                         evt6: { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 6 },
                         evt7: { type: LOAN.ACCEPTED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', transactionId: 'ts1', time: 7 },
                         evt8: { type: ORANGE_MOVED, authId: 'DEF', src: 'box', dest: 'basket', time: 8 },
-                        evt9: { type: LOAN.PAID_OFF, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', transactionId: 'ts1', time: 9 }
+                        evt9: { type: LOAN.PAID_BACK, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', transactionId: 'ts1', time: 9 }
                     }
                 }
             }
@@ -503,7 +523,7 @@ describe('gameUtils', () => {
         expect(GameUtils.getOrangesBorrowed(appData, 'game1', 'DEF')).to.equal(1);
         expect(GameUtils.getPlayerLoanBalance(appData, 'game1', 'ABC')).to.equal(0);
         expect(GameUtils.getPlayerLoanBalance(appData, 'game1', 'DEF')).to.equal(0);
-        expect(GameUtils.deriveTransactions(appData, 'game1', 'DEF')[0].state).to.equal(PAID_OFF);
+        expect(GameUtils.deriveTransactions(appData, 'game1', 'DEF')[0].state).to.equal(PAID_BACK);
         expect(_.size(GameUtils.getPlayerOutstandingTransactions(appData, 'game1', 'ABC'))).to.equal(0);
         expect(_.size(GameUtils.getPlayerOutstandingTransactions(appData, 'game1', 'DEF'))).to.equal(0);
         expect(_.size(GameUtils.getPlayerDebts(appData, 'game1', 'ABC'))).to.equal(0);
@@ -522,8 +542,8 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' }
                     },
                     events: [
-                      { type: ORANGES_DEALT, authId: 'ABC', oranges: 8, time: 1 },
-                      { type: ORANGES_DEALT, authId: 'ABC', oranges: 8, time: 2 }
+                      { type: ORANGES_FOUND, authId: 'ABC', oranges: 8, time: 1 },
+                      { type: ORANGES_FOUND, authId: 'ABC', oranges: 8, time: 2 }
                     ]
                 }
             }
@@ -542,7 +562,7 @@ describe('gameUtils', () => {
                         ABC: { name: 'Ken' }
                     },
                     events: [
-                        { type: ORANGES_DEALT, authId: 'ABC', oranges: 8, time: 1 }
+                        { type: ORANGES_FOUND, authId: 'ABC', oranges: 8, time: 1 }
                     ]
                 }
             }
@@ -564,7 +584,10 @@ describe('gameUtils', () => {
             type: PLAYER_DONE, authId: 'ABC', time: 4
         });
         appData.games.game1.events.push({
-            type: ORANGES_DEALT, authId: 'ABC', oranges: 8, time: 5
+            type: PLAYER_DONE, authId: 'ABC', time: 4
+        });
+        appData.games.game1.events.push({
+            type: ORANGES_FOUND, authId: 'ABC', oranges: 8, time: 5
         });
         expect(GameUtils.getMyFitnessChange(appData)).to.equal(0 - DAILY_FITNESS_LOSS);
     });
