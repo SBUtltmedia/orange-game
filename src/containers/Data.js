@@ -5,7 +5,7 @@ import { connect } from 'redux/react';
 import * as FluxActions from '../actions/FluxActions';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
-import { getAllGamesCsv } from '../gameUtils';
+import { getAllGamesCsv } from '../dataUtils';
 import DownloadButton from 'downloadbutton';
 
 const styles = StyleSheet.create({
@@ -36,7 +36,7 @@ export default class Data extends Component {
                 console.error(error);
             }
             else {
-                console.log(csv);    
+                console.log(csv);
             }
             callback({
                 mimetype: 'text/csv',
