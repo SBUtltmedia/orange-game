@@ -1,57 +1,75 @@
 import json2csv from 'json2csv';
-import { getAllGames, getOrangesAteOnDay, getOrangesSavedOnDay, getEventDay } from './gameUtils';
+import { getAllGames, getOrangesAteOnDay, getOrangesSavedOnDay, getEventDay, getGame } from './gameUtils';
 import { GAME_STARTED, ORANGES_FOUND, ORANGE_MOVED, PLAYER_DONE, LOAN } from '../src/constants/EventTypes';
-import { FOUND, ATE, SAVED, BORROWED, LENDED, PAID_BACK } from './constants/CsvEventTypes';
+import { FOUND, ATE, SAVED, LOANED, PAID_BACK } from './constants/CsvEventTypes';
 import _ from 'lodash';
 
-function getOtherPlayerInLoan(event) {
-    if (event.lender === event.authId) {
-        return event.borrower;
-    }
-    else if (event.borrower === event.authId) {
-        return event.lender;
-    }
-}
+export function simplifyGameData(appData, gameId) {
+    const game = getGame(appData, gameId);
 
-export function simplifyGameData(appData, game) {
     function filterEvents(events) {
         const keep = [ ORANGES_FOUND, PLAYER_DONE, LOAN.ACCEPTED, LOAN.PAID_BACK ];
         return _.filter(events, e => _.contains(keep, e.type));
     }
 
-    function getEventPlayer(event) {
-        if (event.type === GAME_STARTED) {
-            return undefined;
-        }
-        else {
-            return e.authId ? game.players[e.authId].name : undefined;
-        }
-    }
-
-    function toSimplifiedEvent(e) {
-        return {
-            event: e.type,
-            time: e.time,
-            player: e.authId ? game.players[e.authId].name : undefined,
-            withPlayer: e.type === LOAN.ACCEPTED ? getOtherPlayerInLoan(e) : undefined
-        }
+    function getPlayerName(authId) {
+        return game.players[authId].name;
     }
 
     function simplifyEvents(events) {
-        return _.map(events, e => {
-            const day = getEventDay(game, e); 
-            const obj = { time: e.time, player: getEventPlayer(e) };
+        return _.flatten(_.map(events, e => {
+            const day = getEventDay(appData, gameId, e);
+            const baseObj = { day: day, time: e.time };
             switch (e.type) {
                 case PLAYER_DONE:
+                    const doneEvents = [];
                     const ate = getOrangesAteOnDay(day);
                     const saved = getOrangesSavedOnDay(day);
-                    const ateEvent = _.extend({ type: ATE, value: ate }, obj);
-                    return [
-
-                    ];
+                    if (ate > 0) {
+                        const ateData = {
+                            event: ATE,
+                            value: ate,
+                            player: getPlayerName(e.authId)
+                        };
+                        doneEvents.push(_.extend(ateData, baseObj));
+                    };
+                    if (saved > 0) {
+                        const savedData = {
+                            event: SAVED,
+                            value: saved,
+                            player: getPlayerName(e.authId)
+                        };
+                        doneEvents.push(_.extend(savedData, baseObj));
+                    };
+                    return doneEvents;
+                case LOAN.ACCEPTED:
+                    const loanData = {
+                        event: LOANED,
+                        player: getPlayerName(e.lender),
+                        toPlayer: getPlayerName(e.borrower),
+                        value: e.oranges.now,
+                        value2: e.oranges.later
+                    };
+                    return _.extend(loanData, baseObj);
+                case LOAN.PAID_BACK:
+                    const paidData = {
+                        event: PAID_BACK,
+                        player: getPlayerName(e.borrower),
+                        toPlayer: getPlayerName(e.lender),
+                        value: e.oranges.later
+                    };
+                    return _.extend(paidData, baseObj);
+                case ORANGES_FOUND:
+                    const foundData = {
+                        event: FOUND,
+                        value: e.oranges,
+                        player: getPlayerName(e.authId)
+                    };
+                    return _.extend(foundData, baseObj);
             }
-        });
+        }));
     }
+
     const events = simplifyEvents(filterEvents(game.events));
     return _.map(events, e => _.extend(e, { game: gameId }));
 }
