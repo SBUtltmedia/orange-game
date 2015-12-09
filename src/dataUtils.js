@@ -1,16 +1,8 @@
 import json2csv from 'json2csv';
-import { getAllGames, getOrangesAteOnDay, getOrangesSavedOnDay } from './gameUtils';
+import { getAllGames, getOrangesAteOnDay, getOrangesSavedOnDay, getEventDay } from './gameUtils';
 import { GAME_STARTED, ORANGES_FOUND, ORANGE_MOVED, PLAYER_DONE, LOAN } from '../src/constants/EventTypes';
 import { FOUND, ATE, SAVED, BORROWED, LENDED, PAID_BACK } from './constants/CsvEventTypes';
 import _ from 'lodash';
-
-function getEventValues(event) {
-    switch (event.type) {
-        case ORANGES_FOUND: return event.oranges,
-        case PLAYER_DONE: return
-        default: return []
-    }
-}
 
 function getOtherPlayerInLoan(event) {
     if (event.lender === event.authId) {
@@ -21,14 +13,12 @@ function getOtherPlayerInLoan(event) {
     }
 }
 
-function filterEvents(events) {
-    const keep = [ ORANGES_FOUND, PLAYER_DONE, LOAN.ACCEPTED, LOAN.PAID_BACK ];
-    return _.filter(events, e => _.contains(keep, e.type));
-}
+export function simplifyGameData(appData, game) {
+    function filterEvents(events) {
+        const keep = [ ORANGES_FOUND, PLAYER_DONE, LOAN.ACCEPTED, LOAN.PAID_BACK ];
+        return _.filter(events, e => _.contains(keep, e.type));
+    }
 
-
-
-export function simplifyGameData(game) {
     function getEventPlayer(event) {
         if (event.type === GAME_STARTED) {
             return undefined;
@@ -49,13 +39,13 @@ export function simplifyGameData(game) {
 
     function simplifyEvents(events) {
         return _.map(events, e => {
-            const day = getEventDay(appData, e);  // TODO: Need appData
+            const day = getEventDay(game, e); 
+            const obj = { time: e.time, player: getEventPlayer(e) };
             switch (e.type) {
-                const doneObj = { time: e.time, player: getEventPlayer(e) };
                 case PLAYER_DONE:
                     const ate = getOrangesAteOnDay(day);
                     const saved = getOrangesSavedOnDay(day);
-                    const ateEvent = _.extend({ type: ATE, value: ate }, doneObj);
+                    const ateEvent = _.extend({ type: ATE, value: ate }, obj);
                     return [
 
                     ];
