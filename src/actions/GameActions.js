@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import model from '../model';
 import { getThisPlayer, getThisGame, updateThisPlayer, getEventsInThisGame,
-            getThisGameDay, getEventDay, shouldDealNewDay } from '../gameUtils';
+            getThisGameDay, shouldDealNewDay } from '../gameUtils';
 import { saveEvent } from '../firebaseUtils';
 import { ORANGES_FOUND, PLAYER_DONE, ORANGE_MOVED,
             CHAT } from '../constants/EventTypes';

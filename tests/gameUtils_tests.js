@@ -534,6 +534,135 @@ describe('gameUtils', () => {
         expect(GameUtils.getOrangesInBox(appData, 'game1', 'DEF')).to.equal(3);
     });
 
+    it('gets day start', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: {
+                        evt1: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 1 },
+                        evt2: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 2 },
+                        evt3: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 3 },
+                        evt4: { type: ORANGE_MOVED, authId: 'DEF', src: 'box', dest: 'basket', time: 4 },
+                        evt5: { type: PLAYER_DONE, authId: 'ABC', time: 5 },
+                        evt6: { type: PLAYER_DONE, authId: 'DEF', time: 6 },
+                        evt7: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 7 },
+                        evt8: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 8 }
+                    }
+                }
+            }
+        };
+        expect(GameUtils.getDayStart(appData, 'game1', 'ABC', 1)).to.equal(1);
+        expect(GameUtils.getDayStart(appData, 'game1', 'ABC', 2)).to.equal(7);
+        expect(GameUtils.getDayStart(appData, 'game1', 'ABC', 3)).to.equal(Number.MAX_VALUE);
+    });
+
+    it('gets day end', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: {
+                        evt1: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 1 },
+                        evt2: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 2 },
+                        evt3: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 3 },
+                        evt4: { type: ORANGE_MOVED, authId: 'DEF', src: 'box', dest: 'basket', time: 4 },
+                        evt5: { type: PLAYER_DONE, authId: 'ABC', time: 5 },
+                        evt6: { type: PLAYER_DONE, authId: 'DEF', time: 6 },
+                        evt7: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 7 },
+                        evt8: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 8 }
+                    }
+                }
+            }
+        };
+        expect(GameUtils.getDayEnd(appData, 'game1', 'ABC', 1)).to.equal(5);
+        expect(GameUtils.getDayEnd(appData, 'game1', 'ABC', 2)).to.equal(Number.MAX_VALUE);
+    });
+
+    it('gets oranges eaten on a day', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: {
+                        evt1: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 1 },
+                        evt2: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 2 },
+                        evt3: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 3 },
+                        evt4: { type: ORANGE_MOVED, authId: 'DEF', src: 'box', dest: 'basket', time: 4 },
+                        evt5: { type: PLAYER_DONE, authId: 'ABC', time: 5 },
+                        evt6: { type: PLAYER_DONE, authId: 'DEF', time: 6 },
+                        evt7: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 7 },
+                        evt8: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 8 }
+                    }
+                }
+            }
+        };
+        expect(GameUtils.getOrangesEatenOnDay(appData, 'game1', 'ABC', 1)).to.equal(1);
+        expect(GameUtils.getOrangesEatenOnDay(appData, 'game1', 'DEF', 1)).to.equal(0);
+        expect(GameUtils.getOrangesEatenOnDay(appData, 'game1', 'ABC', 2)).to.equal(0);
+        expect(GameUtils.getOrangesEatenOnDay(appData, 'game1', 'DEF', 2)).to.equal(0);
+    });
+
+    it('gets oranges saved on a day', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: {
+                        evt1: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 1 },
+                        evt2: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 2 },
+                        evt3: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 3 },
+                        evt4: { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 4 },
+                        evt5: { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 5 },
+                        evt6: { type: LOAN.ACCEPTED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', transactionId: 'ts1', time: 6 },
+                        evt7: { type: ORANGE_MOVED, authId: 'DEF', src: 'box', dest: 'basket', time: 7 },
+                        evt8: { type: LOAN.PAID_BACK, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', transactionId: 'ts1', time: 8 }
+                    }
+                }
+            }
+        };
+        expect(GameUtils.getOrangesSavedOnDay(appData, 'game1', 'ABC', 1)).to.equal(0);
+        expect(GameUtils.getOrangesSavedOnDay(appData, 'game1', 'DEF', 1)).to.equal(1);
+        expect(GameUtils.getOrangesSavedOnDay(appData, 'game1', 'ABC', 2)).to.equal(0);
+        expect(GameUtils.getOrangesSavedOnDay(appData, 'game1', 'DEF', 2)).to.equal(0);
+    });
+
+    it('gets day for time', () => {
+        const appData = {
+            games: {
+                game1: {
+                    players: {
+                        ABC: { name: 'Ken' },
+                        DEF: { name: 'Jen' }
+                    },
+                    events: {
+                        evt1: { type: ORANGES_FOUND, authId: 'ABC', oranges: 1, time: 1 },
+                        evt2: { type: ORANGES_FOUND, authId: 'DEF', oranges: 3, time: 2 },
+                        evt3: { type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'basket', time: 3 },
+                        evt4: { type: LOAN.OFFER_WINDOW_OPENED, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 4 },
+                        evt5: { type: LOAN.OFFERED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'ABC', transactionId: 'ts1', time: 5 },
+                        evt6: { type: LOAN.ACCEPTED, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', transactionId: 'ts1', time: 6 },
+                        evt7: { type: ORANGE_MOVED, authId: 'DEF', src: 'box', dest: 'basket', time: 7 },
+                        evt8: { type: LOAN.PAID_BACK, oranges: { now: 1, later: 1 }, lender: 'ABC', borrower: 'DEF', authId: 'DEF', transactionId: 'ts1', time: 8 }
+                    }
+                }
+            }
+        };
+        expect(GameUtils.getDayForTime(appData, 'game1', 2)).to.equal(1);
+    });
+
     it('reduces fitness on a new day', () => {
         const appData = {
             games: {
