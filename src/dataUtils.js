@@ -1,7 +1,7 @@
 import json2csv from 'json2csv';
 import { getAllGames, getOrangesEatenOnDay, getOrangesSavedOnDay, getEventDay, getGame } from './gameUtils';
 import { GAME_STARTED, ORANGES_FOUND, ORANGE_MOVED, PLAYER_DONE, LOAN } from '../src/constants/EventTypes';
-import { FOUND, ATE, SAVED, LOANED, PAID_BACK } from './constants/CsvEventTypes';
+import { FOUND, EATEN, SAVED, LOANED, PAID_BACK } from './constants/CsvEventTypes';
 import _ from 'lodash';
 
 export function simplifyGameData(appData, gameId) {
@@ -23,15 +23,15 @@ export function simplifyGameData(appData, gameId) {
             switch (e.type) {
                 case PLAYER_DONE:
                     const doneEvents = [];
-                    const ate = getOrangesEatenOnDay(day);
-                    const saved = getOrangesSavedOnDay(day);
-                    if (ate > 0) {
-                        const ateData = {
-                            event: ATE,
-                            value: ate,
+                    const eaten = getOrangesEatenOnDay(appData, gameId, e.authId, day);
+                    const saved = getOrangesSavedOnDay(appData, gameId, e.authId, day);
+                    if (eaten > 0) {
+                        const eatenData = {
+                            event: EATEN,
+                            value: eaten,
                             player: getPlayerName(e.authId)
                         };
-                        doneEvents.push(_.extend(ateData, baseObj));
+                        doneEvents.push(_.extend(eatenData, baseObj));
                     };
                     if (saved > 0) {
                         const savedData = {
