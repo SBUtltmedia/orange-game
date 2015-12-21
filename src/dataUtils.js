@@ -73,15 +73,9 @@ export function simplifyGameData(appData, gameId) {
     return _.map(events, e => _.extend(e, { game: gameId }));
 }
 
-export function getAllGamesCsv(appData, callback) {
-    const games = getAllGames(appData);
-    console.log(games);
+export function getGameCsv(appData, gameId, callback) {
     json2csv({
-        data: [{ game_id: 1, player: undefined, event: 'love' }],
-        fields: ['game_id', 'player', 'event']
+        data: simplifyGameData(appData, gameId),
+        fields: ['day', 'event', 'player', 'toPlayer', 'value', 'value2', 'time']
     }, callback);
-}
-
-export function getGameCsv(appData, gameId) {
-
 }

@@ -5,7 +5,8 @@ import { connect } from 'redux/react';
 import * as FluxActions from '../actions/FluxActions';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
-import { getAllGamesCsv } from '../dataUtils';
+import { getGameCsv } from '../dataUtils';
+import { getAllGames } from '../gameUtils';
 import DownloadButton from 'downloadbutton';
 
 const styles = StyleSheet.create({
@@ -29,9 +30,10 @@ export default class Data extends Component {
         this.fluxActions.disconnectFromFirebase();
     }
 
-    makeFile(callback) {
+    makeFile(gameId, callback) {
+        console.log("gameId", gameId);
         const { firebase } = this.props;
-        getAllGamesCsv(firebase, (error, csv) => {
+        getGameCsv(firebase, gameId, (error, csv) => {
             if (error) {
                 console.error(error);
             }
@@ -46,9 +48,18 @@ export default class Data extends Component {
         });
     }
 
+    renderGame(id) {
+        const { firebase } = this.props;
+        return <div>
+            {id}:&nbsp;
+            <DownloadButton genFile={f => this.makeFile(id, f)} async={true} />
+        </div>;
+    }
+
     render() {
+        const { firebase } = this.props;
         return <div styles={[styles.page]}>
-            <DownloadButton genFile={this.makeFile.bind(this)} async={true} />
+            { _.map(getAllGames(firebase), game => this.renderGame(game.id))}
         </div>;
     }
 }
