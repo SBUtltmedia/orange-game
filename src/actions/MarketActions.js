@@ -2,13 +2,13 @@ import _ from 'lodash';
 import model from '../model';
 import { LOAN } from '../constants/EventTypes';
 import { CREATING, OPEN, ACCEPTED, REJECTED,
-            PAID_OFF } from '../constants/NegotiationStates';
+            PAID_BACK } from '../constants/NegotiationStates';
 import { saveEvent, updateFbObject } from '../firebaseUtils';
 import { DEFAULT_LOAN_ORANGES } from '../constants/Settings';
 
 export function payDebt(transaction) {
     const eventData = {
-        type: LOAN.PAID_OFF,
+        type: LOAN.PAID_BACK,
         lender: transaction.lender,
         borrower: transaction.borrower,
         oranges: transaction.oranges,

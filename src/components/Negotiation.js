@@ -7,7 +7,7 @@ import model from '../model';
 import { deriveMyOpenTransactions, derivePlayer } from '../gameUtils';
 import { NumberPicker } from 'react-widgets';
 import { openOffer, updateOffer, rejectOffer, acceptOffer } from '../actions/MarketActions';
-import { CREATING, OPEN, ACCEPTED, REJECTED, PAID_OFF } from '../constants/NegotiationStates';
+import { CREATING, OPEN, ACCEPTED, REJECTED, PAID_BACK } from '../constants/NegotiationStates';
 import { LOAN } from '../constants/EventTypes';
 import { connect } from 'redux/react';
 

@@ -3,8 +3,8 @@ import _ from 'lodash';
 import { deepDifference, deepIndexOf, addObjectKey, addObjectKeys,
             addOriginalObjectKeys, average } from './utils';
 import { CREATING, OPEN, ACCEPTED, REJECTED,
-            PAID_OFF } from './constants/NegotiationStates';
-import { ORANGES_DEALT, ORANGE_MOVED, PLAYER_DONE, GAME_STARTED,
+            PAID_BACK } from './constants/NegotiationStates';
+import { ORANGES_FOUND, ORANGE_MOVED, PLAYER_DONE, GAME_STARTED,
             CHAT, LOAN } from '../src/constants/EventTypes';
 import { MAX_FITNESS_GAIN, DAILY_FITNESS_LOSS, DAYS_IN_GAME, STARTING_FITNESS,
             DEFAULT_LOAN_ORANGES } from './constants/Settings';
@@ -94,10 +94,29 @@ export function getMyReputation(appData) {
     return getReputation(appData, model.gameId, model.authId);
 }
 
-function getTodayStart(appData, gameId, authId) {
-    const doneEvents = getEventsInThisGame(appData, PLAYER_DONE);
-    const playerDoneEvents = _.filter(doneEvents, e => e.authId === authId);
-    return _.isEmpty(playerDoneEvents) ? 0 : _.last(playerDoneEvents).time;
+export function getDayStart(appData, gameId, authId, day) {
+    if (day) {
+        const foundEvents = getEventsInGame(appData, gameId, ORANGES_FOUND);
+        const playerFoundEvents = _.filter(foundEvents, e => e.authId === authId);
+        if (_.size(playerFoundEvents) >= day) {
+            return playerFoundEvents[day - 1].time;
+        }
+        else {
+            return Number.MAX_VALUE;
+        }
+    }
+    return 0;
+}
+
+export function getDayEnd(appData, gameId, authId, day) {
+    if (day) {
+        const doneEvents = getEventsInGame(appData, gameId, PLAYER_DONE);
+        const playerDoneEvents = _.filter(doneEvents, e => e.authId === authId);
+        if (_.size(playerDoneEvents) >= day) {
+            return playerDoneEvents[day - 1].time;
+        }
+    }
+    return Number.MAX_VALUE;
 }
 
 export function getLoansBorrowed(appData, gameId, authId) {
@@ -138,84 +157,95 @@ export function getOrangesOwedFromPlayer(appData, gameId, authId) {
     return _.sum(_.map(loans, loan => loan.oranges.later));
 }
 
-function getOrangeDropEvents(prop, appData, name, gameId, authId, onlyToday) {
-    const events = getEventsAfterTime(
+function getOrangeDropEvents(prop, appData, name, gameId, authId, day) {
+    const events = filterEventsWithinTime(
                         getEventsInGame(appData, gameId, ORANGE_MOVED),
-                        onlyToday ? getTodayStart(appData, gameId, authId) : 0);
+                        getDayStart(appData, gameId, authId, day),
+                        getDayEnd(appData, gameId, authId, day));
     return _.filter(events, e => e[prop] === name && e.authId === authId);
 }
 
-function getOrangesDropped(prop, appData, name, gameId, authId, onlyToday) {
-    return _.size(getOrangeDropEvents(prop, appData, name, gameId, authId, onlyToday));
+function getOrangesDropped(prop, appData, name, gameId, authId, day) {
+    return _.size(getOrangeDropEvents(prop, appData, name, gameId, authId, day));
 }
 
-function getOrangeDropInEvents(appData, name, gameId, authId, onlyToday) {
-    return getOrangeDropEvents('dest', appData, name, gameId, authId, onlyToday);
+function getOrangeDropInEvents(appData, name, gameId, authId, day) {
+    return getOrangeDropEvents('dest', appData, name, gameId, authId, day);
 }
 
-function getOrangesDroppedIn(appData, name, gameId, authId, onlyToday) {
-    return getOrangesDropped('dest', appData, name, gameId, authId, onlyToday);
+function getOrangesDroppedIn(appData, name, gameId, authId, day) {
+    return getOrangesDropped('dest', appData, name, gameId, authId, day);
 }
 
-function getOrangeDropFromEvents(appData, name, gameId, authId, onlyToday) {
-    return getOrangeDropEvents('src', appData, name, gameId, authId, onlyToday);
+function getOrangeDropFromEvents(appData, name, gameId, authId, day) {
+    return getOrangeDropEvents('src', appData, name, gameId, authId, day);
 }
 
-function getOrangesDroppedFrom(appData, name, gameId, authId, onlyToday) {
-    return getOrangesDropped('src', appData, name, gameId, authId, onlyToday);
+function getOrangesDroppedFrom(appData, name, gameId, authId, day) {
+    return getOrangesDropped('src', appData, name, gameId, authId, day);
 }
 
-export function getOrangeDropInDishEvents(appData, gameId, authId, onlyToday) {
-    return getOrangeDropInEvents(appData, 'dish', gameId, authId, onlyToday);
+export function getOrangeDropInDishEvents(appData, gameId, authId, day) {
+    return getOrangeDropInEvents(appData, 'dish', gameId, authId, day);
 }
 
-export function getOrangeDropInBasketEvents(appData, gameId, authId, onlyToday) {
-    return getOrangeDropInEvents(appData, 'basket', gameId, authId, onlyToday);
+export function getOrangeDropInBasketEvents(appData, gameId, authId, day) {
+    return getOrangeDropInEvents(appData, 'basket', gameId, authId, day);
 }
 
-export function getOrangeDropInBoxEvents(appData, gameId, authId, onlyToday) {
-    return getOrangeDropInEvents(appData, 'box', gameId, authId, onlyToday);
+export function getOrangeDropInBoxEvents(appData, gameId, authId, day) {
+    return getOrangeDropInEvents(appData, 'box', gameId, authId, day);
 }
 
-export function getOrangeDropFromDishEvents(appData, gameId, authId, onlyToday) {
-    return getOrangeDropFromEvents(appData, 'dish', gameId, authId, onlyToday);
+export function getOrangeDropFromDishEvents(appData, gameId, authId, day) {
+    return getOrangeDropFromEvents(appData, 'dish', gameId, authId, day);
 }
 
-export function getOrangeDropFromBasketEvents(appData, gameId, authId, onlyToday) {
-    return getOrangeDropFromEvents(appData, 'basket', gameId, authId, onlyToday);
+export function getOrangeDropFromBasketEvents(appData, gameId, authId, day) {
+    return getOrangeDropFromEvents(appData, 'basket', gameId, authId, day);
 }
 
-export function getOrangeDropFromBoxEvents(appData, gameId, authId, onlyToday) {
-    return getOrangeDropFromEvents(appData, 'box', gameId, authId, onlyToday);
+export function getOrangeDropFromBoxEvents(appData, gameId, authId, day) {
+    return getOrangeDropFromEvents(appData, 'box', gameId, authId, day);
 }
 
-export function getOrangesDroppedInDish(appData, gameId, authId) {
-    return getOrangesDroppedIn(appData, 'dish', gameId, authId, true);
+export function getOrangesDroppedInDish(appData, gameId, authId, day) {
+    return getOrangesDroppedIn(appData, 'dish', gameId, authId, day);
 }
 
-export function getOrangesDroppedInBasket(appData, gameId, authId) {
-    return getOrangesDroppedIn(appData, 'basket', gameId, authId);
+export function getOrangesDroppedInBasket(appData, gameId, authId, day) {
+    return getOrangesDroppedIn(appData, 'basket', gameId, authId, day);
 }
 
-export function getOrangesDroppedInBox(appData, gameId, authId) {
-    return getOrangesDroppedIn(appData, 'box', gameId, authId);
+export function getOrangesDroppedInBox(appData, gameId, authId, day) {
+    return getOrangesDroppedIn(appData, 'box', gameId, authId, day);
 }
 
-export function getOrangesDroppedFromDish(appData, gameId, authId) {
-    return getOrangesDroppedFrom(appData, 'dish', gameId, authId, true);
+export function getOrangesDroppedFromDish(appData, gameId, authId, day) {
+    return getOrangesDroppedFrom(appData, 'dish', gameId, authId, day);
 }
 
-export function getOrangesDroppedFromBasket(appData, gameId, authId) {
-    return getOrangesDroppedFrom(appData, 'basket', gameId, authId);
+export function getOrangesDroppedFromBasket(appData, gameId, authId, day) {
+    return getOrangesDroppedFrom(appData, 'basket', gameId, authId, day);
 }
 
-export function getOrangesDroppedFromBox(appData, gameId, authId) {
-    return getOrangesDroppedFrom(appData, 'box', gameId, authId);
+export function getOrangesDroppedFromBox(appData, gameId, authId, day) {
+    return getOrangesDroppedFrom(appData, 'box', gameId, authId, day);
+}
+
+export function getOrangesEatenOnDay(appData, gameId, authId, day) {
+    return getOrangesDroppedInDish(appData, gameId, authId, day) -
+           getOrangesDroppedFromDish(appData, gameId, authId, day);
+}
+
+export function getOrangesSavedOnDay(appData, gameId, authId, day) {
+    return getOrangesDroppedInBasket(appData, gameId, authId, day) -
+           getOrangesDroppedFromBasket(appData, gameId, authId, day);
 }
 
 export function getOrangesInDish(appData, gameId, authId) {
-    return getOrangesDroppedInDish(appData, gameId, authId) -
-           getOrangesDroppedFromDish(appData, gameId, authId);
+    const day = getGameDay(appData, gameId);
+    return getOrangesEatenOnDay(appData, gameId, authId, day);
 }
 
 export function getOrangesInMyDish(appData) {
@@ -234,7 +264,7 @@ export function getOrangesInMyBasket(appData) {
 }
 
 export function getDailyOranges(appData, gameId, authId) {
-    const orangesDealtEvents = getEventsInGame(appData, gameId, ORANGES_DEALT);
+    const orangesDealtEvents = getEventsInGame(appData, gameId, ORANGES_FOUND);
     const playerEvents = _.filter(orangesDealtEvents, e => e.authId === authId);
     return _.map(playerEvents, e => e.oranges);
 }
@@ -295,27 +325,35 @@ function getLowestEventCountByPlayer(appData, events, gameId) {
     }
 }
 
-function getEventsBeforeTime(events, time) {
-    return _.filter(events, e => e.time < time);
+function filterEventsWithinTime(events, start, end) {
+    return _.filter(events, e => e.time >= start && e.time <= end);
 }
 
-function getEventsAfterTime(events, time) {
-    return _.filter(events, e => e.time > time);
+function filterEventsBeforeTime(events, time) {
+    return filterEventsWithinTime(events, 0, time);
+}
+
+function filterEventsAfterTime(events, time) {
+    return filterEventsWithinTime(events, time, Number.MAX_VALUE);
 }
 
 export function getGameDay(appData, gameId) {
-    const dealtEvents = getEventsInGame(appData, gameId, ORANGES_DEALT);
-    return getHighestEventCountByPlayer(appData, dealtEvents, gameId);
+    const foundEvents = getEventsInGame(appData, gameId, ORANGES_FOUND);
+    return getHighestEventCountByPlayer(appData, foundEvents, gameId);
 }
 
 export function getThisGameDay(appData) {
     return getGameDay(appData, model.gameId);
 }
 
-export function getEventDay(appData, event) {
-    const doneEvents = getEventsInThisGame(appData, ORANGES_DEALT);
-    const prevDoneEvents = getEventsBeforeTime(doneEvents, event.time);
-    return getHighestEventCountByPlayer(appData, prevDoneEvents, model.gameId);
+export function getDayForTime(appData, gameId, time) {
+    const foundEvents = getEventsInGame(appData, gameId, ORANGES_FOUND);
+    const prevFoundEvents = filterEventsBeforeTime(foundEvents, time);
+    return getHighestEventCountByPlayer(appData, prevFoundEvents, model.gameId);
+}
+
+export function getEventDay(appData, gameId, event) {
+    return getDayForTime(appData, gameId, event.time);
 }
 
 function getFitnessGainForEatEventsInSameDay(numEatEvents) {
@@ -326,9 +364,9 @@ function getFitnessGainForEatEventsInSameDay(numEatEvents) {
     return accum;
 }
 
-function getFitnessGainForEatEvents(appData, eatEvents, uneatEvents) {
+function getFitnessGainForEatEvents(appData, gameId, eatEvents, uneatEvents) {
     return _.sum(_.map(_.range(1, DAYS_IN_GAME + 1), i => {
-        const f = e => getEventDay(appData, e) === i;
+        const f = e => getEventDay(appData, gameId, e) === i;
         const numDailyEatEvents = _.size(_.filter(eatEvents, f));
         const numDailyUneatEvents = _.size(_.filter(uneatEvents, f));
         const n = numDailyEatEvents - numDailyUneatEvents;
@@ -339,7 +377,7 @@ function getFitnessGainForEatEvents(appData, eatEvents, uneatEvents) {
 export function getFitness(appData, gameId, authId) {
     const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId);
     const uneatEvents = getOrangeDropFromDishEvents(appData, gameId, authId);
-    const fitnessGain = getFitnessGainForEatEvents(appData, eatEvents, uneatEvents);
+    const fitnessGain = getFitnessGainForEatEvents(appData, gameId, eatEvents, uneatEvents);
     const day = getGameDay(appData, gameId);
     const fitnessLoss = (day - 1) * DAILY_FITNESS_LOSS;
     return STARTING_FITNESS + fitnessGain - fitnessLoss;
@@ -350,10 +388,10 @@ export function getMyFitness(appData) {
 }
 
 export function getFitnessChange(appData, gameId, authId) {
-    const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId, true);
-    const uneatEvents = getOrangeDropFromDishEvents(appData, gameId, authId, true);
-    const fitnessGain = getFitnessGainForEatEvents(appData, eatEvents, uneatEvents);
     const day = getGameDay(appData, gameId);
+    const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId, day);
+    const uneatEvents = getOrangeDropFromDishEvents(appData, gameId, authId, day);
+    const fitnessGain = getFitnessGainForEatEvents(appData, gameId, eatEvents, uneatEvents);
     return fitnessGain - (day > 1 ? DAILY_FITNESS_LOSS : 0);
 }
 
@@ -421,7 +459,7 @@ export function getThisPlayerOutstandingTransactions(appData) {
 }
 
 export function getPlayerPaidOffTransactions(appData, gameId, authId) {
-    return getPlayerTransactionsForState(appData, gameId, authId, PAID_OFF);
+    return getPlayerTransactionsForState(appData, gameId, authId, PAID_BACK);
 }
 
 export function getThisPlayerPaidOffTransactions(appData) {
@@ -557,7 +595,7 @@ function areLoansSimilar(transaction1, transaction2) {
 function getLoanPaymentEvent(appData, transaction) {
     const ts = deriveTransactions(appData, transaction.gameId, transaction.lender);
     const similar = _.filter(ts, t => areLoansSimilar(transaction, t));
-    const payments = _.filter(getEventsInGame(appData, gameId, LOAN.PAID_OFF),
+    const payments = _.filter(getEventsInGame(appData, gameId, LOAN.PAID_BACK),
                                  e => areLoansSimilar(transaction, e));
     const index = () => {
         const n = _.size(similar);
@@ -576,8 +614,8 @@ function getLoanPaymentEvent(appData, transaction) {
 export function shouldDisableOranges(appData, gameId, authId) {
     const f = e => e.authId === authId;
     const doneEvents = _.filter(getEventsInGame(appData, gameId, PLAYER_DONE), f);
-    const dealEvents = _.filter(getEventsInGame(appData, gameId, ORANGES_DEALT), f);
-    return _.size(doneEvents) >= _.size(dealEvents);
+    const foundEvents = _.filter(getEventsInGame(appData, gameId, ORANGES_FOUND), f);
+    return _.size(doneEvents) >= _.size(foundEvents);
 }
 
 export function shouldDisableMyOranges(appData) {
@@ -610,7 +648,7 @@ function getTransactionState(event) {
     switch (event.type) {
         case LOAN.OFFER_WINDOW_OPENED:
         case LOAN.ASK_WINDOW_OPENED: return CREATING;
-        case LOAN.PAID_OFF: return PAID_OFF;
+        case LOAN.PAID_BACK: return PAID_BACK;
         case LOAN.ACCEPTED: return ACCEPTED;
         case LOAN.REJECTED: return REJECTED;
         default: return OPEN;

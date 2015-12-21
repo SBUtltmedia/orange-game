@@ -25,7 +25,7 @@ module.exports = {
         {
             test: /\.(js|jsx)?$/,
             loaders: ['react-hot', 'babel-loader?stage=0'],
-            include: path.join(__dirname, 'src')
+            include: [path.join(__dirname, 'src'), path.join(__dirname, 'node_modules/downloadbutton')]
         },
         {
             test: /\.css?$/,
