@@ -663,7 +663,7 @@ describe('gameUtils', () => {
         expect(GameUtils.getDayForTime(appData, 'game1', 2)).to.equal(1);
     });
 
-    it('reduces fitness on a new day', () => {
+    it.only('reduces fitness on a new day', () => {
         const appData = {
             games: {
                 game1: {
@@ -720,4 +720,8 @@ describe('gameUtils', () => {
         });
         expect(GameUtils.getMyFitnessChange(appData)).to.equal(0 - DAILY_FITNESS_LOSS);
     });
+
+    it('gets fitness at end of day', () => {
+        //GameUtils.getFitnessAtEndOfDay
+    })
 });
