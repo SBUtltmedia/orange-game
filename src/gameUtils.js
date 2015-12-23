@@ -286,6 +286,9 @@ export function getOrangesDroppedFromBox(appData, gameId, authId, startTime=0, e
 }
 
 export function getOrangesEatenOnDay(appData, gameId, authId, day) {
+    if (wasPlayerDeadOnDay(appData, gameId, authId, day)) {
+        return 0;
+    }
     const startTime = getDayStart(appData, gameId, authId, day);
     const endTime = getDayEnd(appData, gameId, authId, day);
     return getOrangesDroppedInDish(appData, gameId, authId, startTime, endTime) -
@@ -293,6 +296,9 @@ export function getOrangesEatenOnDay(appData, gameId, authId, day) {
 }
 
 export function getOrangesSavedOnDay(appData, gameId, authId, day) {
+    if (wasPlayerDeadOnDay(appData, gameId, authId, day)) {
+        return 0;
+    }
     const startTime = getDayStart(appData, gameId, authId, day);
     const endTime = getDayEnd(appData, gameId, authId, day);
     return getOrangesDroppedInBasket(appData, gameId, authId, startTime, endTime) -
@@ -438,6 +444,9 @@ export function getMyFitness(appData) {
 }
 
 export function getFitnessChangeOnDay(appData, gameId, authId, day) {
+    if (wasPlayerDeadOnDay(appData, gameId, authId, day)) {
+        return 0;
+    }
     const startTime = getDayStart(appData, gameId, authId, day);
     const endTime = getDayEnd(appData, gameId, authId, day);
     const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId, startTime, endTime);
@@ -578,7 +587,7 @@ export function shouldDealNewDayDerived(derivedData) {
         return false;
     }
     return _.isEmpty(derivedData.dailyOranges) ||
-           _.every(derivedData.players, p => p.ready);
+           _.every(derivedData.players, p => p.ready || p.dead);
 }
 
 export function derivePlayer(appData, gameId, authId) {
@@ -591,6 +600,7 @@ export function derivePlayer(appData, gameId, authId) {
             authId: authId,
             name: game.players[authId].name,
             ready: oranges.box === 0 && _.size(playerDoneEvents) >= getGameDay(appData, gameId),
+            dead: isPlayerDead(appData, gameId, authId),
             oranges: oranges
         };
     }
@@ -650,6 +660,10 @@ export function isPlayerDead(appData, gameId, authId) {
 
 export function isThisPlayerDead(appData) {
     return isPlayerDead(appData, model.gameId, model.authId);
+}
+
+export function wasPlayerDeadOnDay(appData, gameId, authId, day) {
+    return getFitnessAtEndOfDay(appData, gameId, authId, day) <= 0;
 }
 
 function isLoanPaidOff(appData, transaction) {
