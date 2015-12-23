@@ -1,6 +1,6 @@
 import json2csv from 'json2csv';
 import { getAllGames, getOrangesEatenOnDay, getOrangesSavedOnDay, getEventDay, getFitnessChangeOnDay,
-            getFitnessAtEndOfDay, getGame, getThisPlayerLoanBalanceAtEndOfDay } from './gameUtils';
+            getFitnessAtEndOfDay, getGame, getThisPlayerLoanBalanceAtEndOfDay, wasPlayerDeadOnDay } from './gameUtils';
 import { GAME_STARTED, ORANGES_FOUND, ORANGE_MOVED, PLAYER_DONE, LOAN } from '../src/constants/EventTypes';
 import { FOUND, EATEN, SAVED, LOANED, PAID_BACK, CHAT, END_OF_DAY } from './constants/CsvEventTypes';
 import _ from 'lodash';
@@ -26,24 +26,18 @@ export function simplifyGameData(appData, gameId) {
             switch (e.type) {
                 case PLAYER_DONE:
                     const doneEvents = [];
-                    const eaten = getOrangesEatenOnDay(appData, gameId, e.authId, day);
-                    const saved = getOrangesSavedOnDay(appData, gameId, e.authId, day);
-                    if (eaten > 0) {
-                        const eatenData = {
-                            event: EATEN,
-                            value: eaten,
-                            player: getPlayerName(e.authId)
-                        };
-                        doneEvents.push(_.extend(eatenData, baseObj));
+                    const eatenData = {
+                        event: EATEN,
+                        value: getOrangesEatenOnDay(appData, gameId, e.authId, day),
+                        player: getPlayerName(e.authId)
                     };
-                    if (saved > 0) {
-                        const savedData = {
-                            event: SAVED,
-                            value: saved,
-                            player: getPlayerName(e.authId)
-                        };
-                        doneEvents.push(_.extend(savedData, baseObj));
+                    doneEvents.push(_.extend(eatenData, baseObj));
+                    const savedData = {
+                        event: SAVED,
+                        value: getOrangesSavedOnDay(appData, gameId, e.authId, day),
+                        player: getPlayerName(e.authId)
                     };
+                    doneEvents.push(_.extend(savedData, baseObj));
                     const endOfDayData = {
                         event: END_OF_DAY,
                         player: getPlayerName(e.authId),
@@ -71,17 +65,20 @@ export function simplifyGameData(appData, gameId) {
                     };
                     return _.extend(paidData, baseObj);
                 case ORANGES_FOUND:
-                    const foundData = {
-                        event: FOUND,
-                        value: e.oranges,
-                        player: getPlayerName(e.authId)
-                    };
-                    return _.extend(foundData, baseObj);
+                    if (!wasPlayerDeadOnDay(appData, gameId, e.authId, day)) {
+                        const foundData = {
+                            event: FOUND,
+                            value: e.oranges,
+                            player: getPlayerName(e.authId)
+                        };
+                        return _.extend(foundData, baseObj);
+                    }
+                    break;
                 case CHAT:
                     const chatData = {
                         event: CHAT,
                         value: e.message,
-                        player: player.getPlayerName(e.authId)
+                        player: getPlayerName(e.authId)
                     };
                     return _.extend(chatData, baseObj);
             }
