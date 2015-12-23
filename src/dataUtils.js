@@ -1,7 +1,8 @@
 import json2csv from 'json2csv';
-import { getAllGames, getOrangesEatenOnDay, getOrangesSavedOnDay, getEventDay, getGame } from './gameUtils';
+import { getAllGames, getOrangesEatenOnDay, getOrangesSavedOnDay, getEventDay,
+            getFitnessChangeOnDay, getFitnessAtEndOfDay, getGame, getThisPlayerLoanBalanceAtEndOfDay } from './gameUtils';
 import { GAME_STARTED, ORANGES_FOUND, ORANGE_MOVED, PLAYER_DONE, LOAN } from '../src/constants/EventTypes';
-import { FOUND, EATEN, SAVED, LOANED, PAID_BACK } from './constants/CsvEventTypes';
+import { FOUND, EATEN, SAVED, LOANED, PAID_BACK, CHAT, END_OF_DAY } from './constants/CsvEventTypes';
 import _ from 'lodash';
 
 export function simplifyGameData(appData, gameId) {
@@ -41,6 +42,14 @@ export function simplifyGameData(appData, gameId) {
                         };
                         doneEvents.push(_.extend(savedData, baseObj));
                     };
+                    const endOfDayData = {
+                        event: END_OF_DAY,
+                        player: getPlayerName(e.authId),
+                        fitnessChange: getFitnessChangeOnDay(appData, gameId, e.authId, day),
+                        fitness: getFitnessAtEndOfDay(appData, gameId, e.authId, day),
+                        debt: getThisPlayerLoanBalanceAtEndOfDay(appData, gameId, e.authId, day)
+                    };
+                    doneEvents.push(_.extend(endOfDayData, baseObj));
                     return doneEvents;
                 case LOAN.ACCEPTED:
                     const loanData = {
@@ -66,6 +75,13 @@ export function simplifyGameData(appData, gameId) {
                         player: getPlayerName(e.authId)
                     };
                     return _.extend(foundData, baseObj);
+                case CHAT:
+                    const chatData = {
+                        event: CHAT,
+                        value: e.message,
+                        player: player.getPlayerName(e.authId)
+                    };
+                    return _.extend(chatData, baseObj);
             }
         }));
     }
@@ -76,6 +92,7 @@ export function simplifyGameData(appData, gameId) {
 export function getGameCsv(appData, gameId, callback) {
     json2csv({
         data: simplifyGameData(appData, gameId),
-        fields: ['day', 'event', 'player', 'toPlayer', 'value', 'value2', 'time']
+        fields: ['day', 'event', 'player', 'toPlayer', 'value', 'value2',
+                    'time', 'fitnessChange', 'fitness', 'debt']
     }, callback);
 }
