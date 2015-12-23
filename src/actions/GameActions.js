@@ -1,10 +1,9 @@
 import _ from 'lodash';
 import model from '../model';
-import { getThisPlayer, getThisGame, updateThisPlayer, getEventsInThisGame,
-            getThisGameDay, shouldDealNewDay } from '../gameUtils';
+import { getThisPlayer, getThisGame, updateThisPlayer, getEventsInThisGame, getThisGameDay, shouldDealNewDay,
+        isThisPlayerDead } from '../gameUtils';
 import { saveEvent } from '../firebaseUtils';
-import { ORANGES_FOUND, PLAYER_DONE, ORANGE_MOVED,
-            CHAT } from '../constants/EventTypes';
+import { ORANGES_FOUND, PLAYER_DONE, ORANGE_MOVED, CHAT } from '../constants/EventTypes';
 import { MAX_ORANGES } from '../constants/Settings';
 
 function getRandomNumberOfOranges() {
@@ -27,7 +26,7 @@ function dealNewDay(appData) {
     const eventData = {
         type: ORANGES_FOUND,
         authId: model.authId,
-        oranges: getRandomNumberOfOranges()
+        oranges: isThisPlayerDead(appData) ? 0 : getRandomNumberOfOranges()
     };
     saveEvent(model.gameId, eventData);
 }

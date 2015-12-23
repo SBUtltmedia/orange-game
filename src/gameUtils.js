@@ -89,8 +89,8 @@ function filterEventsAfterTime(events, time) {
  */
 export function getEventsInGame(appData, gameId, eventType=null, startTime=0, endTime=Number.MAX_VALUE) {
     const game = getGame(appData, gameId);
-    const events = filterEventsWithinTime(game.events, startTime, endTime);
     if (game) {
+        const events = filterEventsWithinTime(game.events, startTime, endTime);
         if (eventType) {
             return _.filter(events, e => e.type === eventType);
         }
@@ -286,6 +286,9 @@ export function getOrangesDroppedFromBox(appData, gameId, authId, startTime=0, e
 }
 
 export function getOrangesEatenOnDay(appData, gameId, authId, day) {
+    if (wasPlayerDeadOnDay(appData, gameId, authId, day)) {
+        return 0;
+    }
     const startTime = getDayStart(appData, gameId, authId, day);
     const endTime = getDayEnd(appData, gameId, authId, day);
     return getOrangesDroppedInDish(appData, gameId, authId, startTime, endTime) -
@@ -293,6 +296,9 @@ export function getOrangesEatenOnDay(appData, gameId, authId, day) {
 }
 
 export function getOrangesSavedOnDay(appData, gameId, authId, day) {
+    if (wasPlayerDeadOnDay(appData, gameId, authId, day)) {
+        return 0;
+    }
     const startTime = getDayStart(appData, gameId, authId, day);
     const endTime = getDayEnd(appData, gameId, authId, day);
     return getOrangesDroppedInBasket(appData, gameId, authId, startTime, endTime) -
@@ -438,6 +444,9 @@ export function getMyFitness(appData) {
 }
 
 export function getFitnessChangeOnDay(appData, gameId, authId, day) {
+    if (wasPlayerDeadOnDay(appData, gameId, authId, day)) {
+        return 0;
+    }
     const startTime = getDayStart(appData, gameId, authId, day);
     const endTime = getDayEnd(appData, gameId, authId, day);
     const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId, startTime, endTime);
@@ -538,8 +547,7 @@ export function canIFinishDay(appData) {
 }
 
 export function shouldDealNewDay(appData) {
-    const b = shouldDealNewDayDerived(deriveData(appData));
-    return b;
+    return !isGameFinished() && shouldDealNewDayDerived(deriveData(appData));
 }
 
 export function isGameStarted(appData, gameId) {
@@ -551,7 +559,15 @@ export function isThisGameStarted(appData) {
 }
 
 export function isGameFinished(appData, gameId) {
-    return getGameDay(appData, gameId) > DAYS_IN_GAME;
+    const game = getGame(appData, gameId);
+    if (!game) {
+        return false;
+    }
+    const doneEvents = getEventsInGame(appData, gameId, PLAYER_DONE);
+    function isPlayerDoneWithGame(authId) {
+        return _.size(_.filter(doneEvents, e => e.authId === authId)) >= DAYS_IN_GAME || isPlayerDead(appData, gameId, authId);
+    }
+    return _.every(_.keys(game.players), authId => isPlayerDoneWithGame(authId));
 }
 
 export function isThisGameFinished(appData) {
@@ -577,8 +593,10 @@ export function shouldDealNewDayDerived(derivedData) {
     if (!derivedData || _.isEmpty(derivedData) || _.isEmpty(derivedData.players)) {
         return false;
     }
-    return _.isEmpty(derivedData.dailyOranges) ||
-           _.every(derivedData.players, p => p.ready);
+    if (_.isEmpty(derivedData.dailyOranges)) {
+        return true;
+    }
+    return _.every(derivedData.players, p => p.ready || p.dead);
 }
 
 export function derivePlayer(appData, gameId, authId) {
@@ -591,6 +609,7 @@ export function derivePlayer(appData, gameId, authId) {
             authId: authId,
             name: game.players[authId].name,
             ready: oranges.box === 0 && _.size(playerDoneEvents) >= getGameDay(appData, gameId),
+            dead: isPlayerDead(appData, gameId, authId),
             oranges: oranges
         };
     }
@@ -599,8 +618,7 @@ export function derivePlayer(appData, gameId, authId) {
 export function derivePlayers(appData) {
     const game = getThisGame(appData);
     if (game) {
-        return _.map(_.keys(game.players), authId =>
-                derivePlayer(appData, model.gameId, authId));
+        return _.map(_.keys(game.players), authId => derivePlayer(appData, model.gameId, authId));
     }
     else {
         return [];
@@ -650,6 +668,10 @@ export function isPlayerDead(appData, gameId, authId) {
 
 export function isThisPlayerDead(appData) {
     return isPlayerDead(appData, model.gameId, model.authId);
+}
+
+export function wasPlayerDeadOnDay(appData, gameId, authId, day) {
+    return getFitnessAtEndOfDay(appData, gameId, authId, day) <= 0;
 }
 
 function isLoanPaidOff(appData, transaction) {
