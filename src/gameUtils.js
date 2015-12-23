@@ -547,8 +547,7 @@ export function canIFinishDay(appData) {
 }
 
 export function shouldDealNewDay(appData) {
-    const b = shouldDealNewDayDerived(deriveData(appData));
-    return b;
+    return !isGameFinished() && shouldDealNewDayDerived(deriveData(appData));
 }
 
 export function isGameStarted(appData, gameId) {
@@ -560,7 +559,15 @@ export function isThisGameStarted(appData) {
 }
 
 export function isGameFinished(appData, gameId) {
-    return getGameDay(appData, gameId) > DAYS_IN_GAME;
+    const game = getGame(appData, gameId);
+    if (!game) {
+        return false;
+    }
+    const doneEvents = getEventsInGame(appData, gameId, PLAYER_DONE);
+    function isPlayerDoneWithGame(authId) {
+        return _.size(_.filter(doneEvents, e => e.authId === authId)) >= DAYS_IN_GAME || isPlayerDead(appData, gameId, authId);
+    }
+    return _.every(_.keys(game.players), authId => isPlayerDoneWithGame(authId));
 }
 
 export function isThisGameFinished(appData) {

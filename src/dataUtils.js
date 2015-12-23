@@ -65,15 +65,12 @@ export function simplifyGameData(appData, gameId) {
                     };
                     return _.extend(paidData, baseObj);
                 case ORANGES_FOUND:
-                    if (!wasPlayerDeadOnDay(appData, gameId, e.authId, day)) {
-                        const foundData = {
-                            event: FOUND,
-                            value: e.oranges,
-                            player: getPlayerName(e.authId)
-                        };
-                        return _.extend(foundData, baseObj);
-                    }
-                    break;
+                    const foundData = {
+                        event: FOUND,
+                        value: e.oranges,
+                        player: getPlayerName(e.authId)
+                    };
+                    return _.extend(foundData, baseObj);
                 case CHAT:
                     const chatData = {
                         event: CHAT,

@@ -162,6 +162,7 @@ describe('gameUtils', () => {
                     authId: 'ABC',
                     name: 'Ken',
                     ready: false,
+                    dead: false,
                     oranges: {
                         basket: 0,
                         box: 1,
@@ -172,6 +173,7 @@ describe('gameUtils', () => {
                     authId: 'DEF',
                     name: 'Jen',
                     ready: false,
+                    dead: false,
                     oranges: {
                         basket: 0,
                         box: 3,
@@ -215,6 +217,7 @@ describe('gameUtils', () => {
                     authId: 'ABC',
                     name: 'Ken',
                     ready: true,
+                    dead: false,
                     oranges: {
                         basket: 0,
                         box: 0,
@@ -225,6 +228,7 @@ describe('gameUtils', () => {
                     authId: 'DEF',
                     name: 'Jen',
                     ready: false,
+                    dead: false,
                     oranges: {
                         basket: 0,
                         box: 3,

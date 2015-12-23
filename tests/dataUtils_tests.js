@@ -11,7 +11,7 @@ describe('dataUtils', () => {
     it('simplifies game data', () => {
         const appData = {
             games: {
-                game1: {
+                "-game1": {
                     timeCreated: 0,
                     players: {
                         'ABC': { name: 'Ken' },
@@ -36,9 +36,11 @@ describe('dataUtils', () => {
             { game: 'game1', event: SAVED, player: 'Ken', value: 1, time: 6, day: 1 },
             { game: "game1", event: END_OF_DAY, player: 'Ken', debt: 0, fitness: STARTING_FITNESS + MAX_FITNESS_GAIN,
                         fitnessChange: MAX_FITNESS_GAIN, time: 6, day: 1 },
+            { game: 'game1', event: EATEN, player: 'Thom', value: 0, time: 7, day: 1 },
+            { game: 'game1', event: SAVED, player: 'Thom', value: 0, time: 7, day: 1 },
             { game: "game1", event: END_OF_DAY, player: 'Thom', debt: 0, fitness: STARTING_FITNESS,
                         fitnessChange: 0, time: 7, day: 1 }
         ];
-        expect(DataUtils.simplifyGameData(appData, 'game1')).to.deep.equal(expected);
+        expect(DataUtils.simplifyGameData(appData, '-game1')).to.deep.equal(expected);
     });
 });
