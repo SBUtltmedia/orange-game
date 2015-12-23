@@ -3,7 +3,7 @@ import { areaTheme, verticalCenter } from '../styles/Themes';
 import model from '../model';
 import { connect } from 'redux/react';
 import { getThisPlayerDebts, getThisPlayerCredits, getThisGameDay, getMyFitness,
-        getMyFitnessChange, canPayOffLoan, derivePlayer } from '../gameUtils';
+        getMyFitnessChangeToday, canPayOffLoan, derivePlayer } from '../gameUtils';
 import _ from 'lodash';
 import { payDebt } from '../actions/MarketActions';
 
@@ -113,7 +113,7 @@ export default class Stats extends Component {
     render() {
         const { firebase } = this.props;
         const fitness = getMyFitness(firebase);
-        const fitnessChange = getMyFitnessChange(firebase);
+        const fitnessChange = getMyFitnessChangeToday(firebase);
         const day = getThisGameDay(firebase);
         var fitnessChangeColor = getFitnessChangeColor(fitnessChange);
         return <div style={styles.container}>

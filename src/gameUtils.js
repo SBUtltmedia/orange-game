@@ -89,8 +89,8 @@ function filterEventsAfterTime(events, time) {
  */
 export function getEventsInGame(appData, gameId, eventType=null, startTime=0, endTime=Number.MAX_VALUE) {
     const game = getGame(appData, gameId);
-    const events = filterEventsWithinTime(game.events, startTime, endTime);
     if (game) {
+        const events = filterEventsWithinTime(game.events, startTime, endTime);
         if (eventType) {
             return _.filter(events, e => e.type === eventType);
         }
