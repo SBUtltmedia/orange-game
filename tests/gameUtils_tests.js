@@ -683,7 +683,7 @@ describe('gameUtils', () => {
         expect(GameUtils.getMyFitnessChangeToday(appData)).to.equal(0 - DAILY_FITNESS_LOSS);
     });
 
-    it.only('increases fitness when orange is eaten', () => {
+    it('increases fitness when orange is eaten', () => {
         const appData = {
             games: {
                 game1: {

@@ -438,8 +438,8 @@ export function getMyFitness(appData) {
 }
 
 export function getFitnessChangeOnDay(appData, gameId, authId, day) {
-    const startTime = getDayStart(day);
-    const endTime = getDayEnd(day);
+    const startTime = getDayStart(appData, gameId, authId, day);
+    const endTime = getDayEnd(appData, gameId, authId, day);
     const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId, startTime, endTime);
     const uneatEvents = getOrangeDropFromDishEvents(appData, gameId, authId, startTime, endTime);
     const fitnessGain = getFitnessGainForEatEvents(appData, gameId, eatEvents, uneatEvents);
