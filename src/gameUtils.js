@@ -586,8 +586,7 @@ export function shouldDealNewDayDerived(derivedData) {
     if (!derivedData || _.isEmpty(derivedData) || _.isEmpty(derivedData.players)) {
         return false;
     }
-    return _.isEmpty(derivedData.dailyOranges) ||
-           _.every(derivedData.players, p => p.ready || p.dead);
+    return _.isEmpty(derivedData.dailyOranges) || _.every(derivedData.players, p => p.ready || p.dead);
 }
 
 export function derivePlayer(appData, gameId, authId) {
@@ -609,8 +608,7 @@ export function derivePlayer(appData, gameId, authId) {
 export function derivePlayers(appData) {
     const game = getThisGame(appData);
     if (game) {
-        return _.map(_.keys(game.players), authId =>
-                derivePlayer(appData, model.gameId, authId));
+        return _.map(_.keys(game.players), authId => derivePlayer(appData, model.gameId, authId));
     }
     else {
         return [];
