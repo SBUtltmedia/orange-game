@@ -1,9 +1,11 @@
 import json2csv from 'json2csv';
-import { getAllGames, getOrangesEatenOnDay, getOrangesSavedOnDay, getEventDay,
-            getFitnessChangeOnDay, getFitnessAtEndOfDay, getGame, getThisPlayerLoanBalanceAtEndOfDay } from './gameUtils';
+import { getAllGames, getOrangesEatenOnDay, getOrangesSavedOnDay, getEventDay, getFitnessChangeOnDay,
+            getFitnessAtEndOfDay, getGame, getThisPlayerLoanBalanceAtEndOfDay } from './gameUtils';
 import { GAME_STARTED, ORANGES_FOUND, ORANGE_MOVED, PLAYER_DONE, LOAN } from '../src/constants/EventTypes';
 import { FOUND, EATEN, SAVED, LOANED, PAID_BACK, CHAT, END_OF_DAY } from './constants/CsvEventTypes';
 import _ from 'lodash';
+
+const CSV_FIELDS = ['day', 'event', 'player', 'toPlayer', 'value', 'value2', 'time', 'fitnessChange', 'fitness', 'debt'];
 
 export function simplifyGameData(appData, gameId) {
     const game = getGame(appData, gameId);
@@ -86,13 +88,20 @@ export function simplifyGameData(appData, gameId) {
         }));
     }
     const events = simplifyEvents(filterEvents(game.events));
-    return _.map(events, e => _.extend(e, { game: gameId }));
+    return _.map(events, e => _.extend(e, { game: gameId.substring(1) }));
 }
 
 export function getGameCsv(appData, gameId, callback) {
     json2csv({
         data: simplifyGameData(appData, gameId),
-        fields: ['day', 'event', 'player', 'toPlayer', 'value', 'value2',
-                    'time', 'fitnessChange', 'fitness', 'debt']
+        fields: CSV_FIELDS
+    }, callback);
+}
+
+export function getAllGamesCsv(appData, callback) {
+    const games = getAllGames(appData);
+    json2csv({
+        data: _.flatten(_.map(games, g => simplifyGameData(appData, g.id))),
+        fields: _.union(['game'], CSV_FIELDS)
     }, callback);
 }
