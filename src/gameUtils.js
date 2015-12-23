@@ -586,7 +586,10 @@ export function shouldDealNewDayDerived(derivedData) {
     if (!derivedData || _.isEmpty(derivedData) || _.isEmpty(derivedData.players)) {
         return false;
     }
-    return _.isEmpty(derivedData.dailyOranges) || _.every(derivedData.players, p => p.ready || p.dead);
+    if (_.isEmpty(derivedData.dailyOranges)) {
+        return true;
+    }
+    return _.every(derivedData.players, p => p.ready || p.dead);
 }
 
 export function derivePlayer(appData, gameId, authId) {
