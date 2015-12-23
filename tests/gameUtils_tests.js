@@ -663,7 +663,7 @@ describe('gameUtils', () => {
         expect(GameUtils.getDayForTime(appData, 'game1', 2)).to.equal(1);
     });
 
-    it.only('reduces fitness on a new day', () => {
+    it('reduces fitness on a new day', () => {
         const appData = {
             games: {
                 game1: {
@@ -680,10 +680,10 @@ describe('gameUtils', () => {
         model.gameId = 'game1';
         model.authId = 'ABC';
         expect(GameUtils.getMyFitness(appData)).to.equal(STARTING_FITNESS - DAILY_FITNESS_LOSS);
-        expect(GameUtils.getMyFitnessChange(appData)).to.equal(0 - DAILY_FITNESS_LOSS);
+        expect(GameUtils.getMyFitnessChangeToday(appData)).to.equal(0 - DAILY_FITNESS_LOSS);
     });
 
-    it('increases fitness when orange is eaten', () => {
+    it.only('increases fitness when orange is eaten', () => {
         const appData = {
             games: {
                 game1: {
@@ -699,26 +699,15 @@ describe('gameUtils', () => {
         model.gameId = 'game1';
         model.authId = 'ABC';
         expect(GameUtils.getMyFitness(appData)).to.equal(STARTING_FITNESS);
-        appData.games.game1.events.push({
-            type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 2
-        });
+        appData.games.game1.events.push({ type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 2 });
         expect(GameUtils.getMyFitness(appData)).to.equal(STARTING_FITNESS + MAX_FITNESS_GAIN);
-        expect(GameUtils.getMyFitnessChange(appData)).to.equal(MAX_FITNESS_GAIN);
-        appData.games.game1.events.push({
-            type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 3
-        });
+        expect(GameUtils.getMyFitnessChangeToday(appData)).to.equal(MAX_FITNESS_GAIN);
+        appData.games.game1.events.push({ type: ORANGE_MOVED, authId: 'ABC', src: 'box', dest: 'dish', time: 3 });
         expect(GameUtils.getMyFitness(appData)).to.equal(STARTING_FITNESS + MAX_FITNESS_GAIN * 2 - 1);
-        expect(GameUtils.getMyFitnessChange(appData)).to.equal(MAX_FITNESS_GAIN * 2 - 1);
-        appData.games.game1.events.push({
-            type: PLAYER_DONE, authId: 'ABC', time: 4
-        });
-        appData.games.game1.events.push({
-            type: PLAYER_DONE, authId: 'ABC', time: 4
-        });
-        appData.games.game1.events.push({
-            type: ORANGES_FOUND, authId: 'ABC', oranges: 8, time: 5
-        });
-        expect(GameUtils.getMyFitnessChange(appData)).to.equal(0 - DAILY_FITNESS_LOSS);
+        expect(GameUtils.getMyFitnessChangeToday(appData)).to.equal(MAX_FITNESS_GAIN * 2 - 1);
+        appData.games.game1.events.push({ type: PLAYER_DONE, authId: 'ABC', time: 4 });
+        appData.games.game1.events.push({ type: ORANGES_FOUND, authId: 'ABC', oranges: 8, time: 5 });
+        expect(GameUtils.getMyFitnessChangeToday(appData)).to.equal(0 - DAILY_FITNESS_LOSS);
     });
 
     it('gets fitness at end of day', () => {

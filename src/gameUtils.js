@@ -89,9 +89,6 @@ function filterEventsAfterTime(events, time) {
  */
 export function getEventsInGame(appData, gameId, eventType=null, startTime=0, endTime=Number.MAX_VALUE) {
     const game = getGame(appData, gameId);
-
-    console.log("2", appData, gameId, game);
-
     const events = filterEventsWithinTime(game.events, startTime, endTime);
     if (game) {
         if (eventType) {
@@ -386,9 +383,6 @@ function getLowestEventCountByPlayer(appData, events, gameId) {
 
 export function getGameDay(appData, gameId) {
     const foundEvents = getEventsInGame(appData, gameId, ORANGES_FOUND);
-
-    console.log(foundEvents);
-
     return getHighestEventCountByPlayer(appData, foundEvents, gameId);
 }
 
@@ -407,11 +401,7 @@ export function getEventDay(appData, gameId, event) {
 }
 
 function getFitnessGainForEatEventsInSameDay(numEatEvents) {
-    var accum = 0;
-    for (var i = 0; i < numEatEvents; i++) {
-        accum += MAX_FITNESS_GAIN - i;
-    }
-    return accum;
+    return _.reduce(_.range(0, numEatEvents), function(total, i) { return total + MAX_FITNESS_GAIN - i }, 0)
 }
 
 function getFitnessGainForEatEvents(appData, gameId, eatEvents, uneatEvents) {
@@ -425,7 +415,7 @@ function getFitnessGainForEatEvents(appData, gameId, eatEvents, uneatEvents) {
 }
 
 function getFitnessAtTime(appData, gameId, authId, time) {
-    const day = getDayForTime(time);
+    const day = getDayForTime(appData, gameId, time);
     const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId, 0, time);
     const uneatEvents = getOrangeDropFromDishEvents(appData, gameId, authId, 0, time);
     const fitnessGain = getFitnessGainForEatEvents(appData, gameId, eatEvents, uneatEvents);
@@ -448,15 +438,16 @@ export function getMyFitness(appData) {
 }
 
 export function getFitnessChangeOnDay(appData, gameId, authId, day) {
-    const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId, day);
-    const uneatEvents = getOrangeDropFromDishEvents(appData, gameId, authId, day);
+    const startTime = getDayStart(day);
+    const endTime = getDayEnd(day);
+    const eatEvents = getOrangeDropInDishEvents(appData, gameId, authId, startTime, endTime);
+    const uneatEvents = getOrangeDropFromDishEvents(appData, gameId, authId, startTime, endTime);
     const fitnessGain = getFitnessGainForEatEvents(appData, gameId, eatEvents, uneatEvents);
     return fitnessGain - (day > 1 ? DAILY_FITNESS_LOSS : 0);
 }
 
 export function getFitnessChangeToday(appData, gameId, authId) {
-    const day = getGameDay(appData, gameId);
-    return getFitnessChangeOnDay(appData, gameId, authId, day);
+    return getFitnessChangeOnDay(appData, gameId, authId, getGameDay(appData, gameId));
 }
 
 export function getMyFitnessChangeToday(appData) {
