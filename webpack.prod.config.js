@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
+  devtool: 'cheap-module-source-map',
   entry: [
     './src/index'
   ],
@@ -12,7 +13,12 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin({minimize: true}),
-    new webpack.optimize.DedupePlugin()
+    new webpack.optimize.DedupePlugin(),
+    new webpack.DefinePlugin({
+        'process.env': {
+          'NODE_ENV': JSON.stringify('production')
+        }
+    })
   ],
   resolve: {
     extensions: ['', '.css', '.js', '.jsx']
@@ -22,7 +28,7 @@ module.exports = {
         {
             test: /\.(js|jsx)?$/,
             loaders: ['babel-loader?stage=0'],
-            include: path.join(__dirname, 'src')
+            include: [path.join(__dirname, 'src'), path.join(__dirname, 'node_modules/downloadbutton')]
         },
         {
             test: /\.css?$/,

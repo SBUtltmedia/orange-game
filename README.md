@@ -15,7 +15,7 @@ Use `gulp tests` to run the tests, and `gulp watch` to repeatedly run the tests.
 ### Production build
 
 ```
-webpack -p --config webpack.prod.config.js
+npm run build:prod
 ```
 
 Then copy the files `index.html`, `main.css`, `favicon.ico`
