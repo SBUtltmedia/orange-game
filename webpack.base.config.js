@@ -2,21 +2,11 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  devtool: 'cheap-module-eval-source-map',
-  entry: [
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
-    './src/index'
-  ],
   output: {
     path: path.join(__dirname, 'static'),
     filename: 'bundle.js',
     publicPath: '/static/'
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
-  ],
   resolve: {
     extensions: ['', '.css', '.js', '.jsx']
   },
@@ -24,7 +14,7 @@ module.exports = {
     loaders: [
         {
             test: /\.(js|jsx)?$/,
-            loaders: ['react-hot', 'babel-loader?stage=0'],
+            loaders: ['babel-loader?stage=0'],
             include: [path.join(__dirname, 'src'), path.join(__dirname, 'node_modules/downloadbutton')]
         },
         {

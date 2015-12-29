@@ -4,7 +4,7 @@
     "start": "node server.js",
     "postinstall": "node deploy.js",
     "lint": "eslint src",
-    "build:dev": "webpack",
+    "build:dev": "webpack --config webpack.dev.config.js",
     "build:prod": "webpack --config webpack.prod.config.js",
     "build": "npm run build:dev && npm run build:prod"
   },

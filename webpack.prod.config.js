@@ -1,59 +1,27 @@
-var path = require('path');
 var webpack = require('webpack');
+var baseConfig = require('./webpack.base.config');
+var config = Object.create(baseConfig);
 
-module.exports = {
-  devtool: 'cheap-module-source-map',
-  entry: [
+config.devtool = 'cheap-module-source-map';
+
+config.entry = [
     './src/index'
-  ],
-  output: {
-    path: path.join(__dirname, 'static'),
-    filename: 'bundle.js',
-    publicPath: '/static/'
-  },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({minimize: true}),
+];
+
+config.plugins = [
     new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+        minimize: true,
+        compressor: {
+            screw_ie8: true,
+            warnings: false
+        }
+    }),
     new webpack.DefinePlugin({
         'process.env': {
           'NODE_ENV': JSON.stringify('production')
         }
     })
-  ],
-  resolve: {
-    extensions: ['', '.css', '.js', '.jsx']
-  },
-  module: {
-    loaders: [
-        {
-            test: /\.(js|jsx)?$/,
-            loaders: ['babel-loader?stage=0'],
-            include: [path.join(__dirname, 'src'), path.join(__dirname, 'node_modules/downloadbutton')]
-        },
-        {
-            test: /\.css?$/,
-            loader: 'style-loader!css-loader'
-        },
-        {
-            test: /\.png?$/,
-            loader: "url-loader?limit=10000"
-        },
-        {
-            test: /\.gif?$/,
-            loader: "url-loader?mimetype=image/png"
-        },
-        {
-            test: /\.jpg?$/,
-            loader: "url-loader?limit=10000"
-        },
-        {
-            test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            loader: "url-loader?limit=10000&minetype=application/font-woff"
-        },
-        {
-            test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            loader: "file-loader?name=[name].[ext]"
-        }
-    ]
-  }
-};
+];
+
+module.exports = config;
