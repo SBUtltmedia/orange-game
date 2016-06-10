@@ -26,7 +26,8 @@
     "react-style": "^0.5.5",
     "react-tools": "^0.13.3",
     "react-widgets": "^2.8.0",
-    "redux": "^0.12.0"
+    "redux": "^0.12.0",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "babel-core": "^5.8.22",
